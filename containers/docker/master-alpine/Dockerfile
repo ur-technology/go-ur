@@ -8,7 +8,7 @@ RUN \
   apk del go git make gcc musl-dev                  && \
   rm -rf /go-ethereum && rm -rf /var/cache/apk/*
 
-EXPOSE 8545
-EXPOSE 30303
+EXPOSE 9595
+EXPOSE 19595
 
 ENTRYPOINT ["/geth"]
