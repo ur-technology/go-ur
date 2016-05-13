@@ -110,7 +110,7 @@ type Storage interface {
 	GetFile(num uint64, t FileType) File
 
 	// GetFiles returns a slice of files that match the given file types.
-	// The file types may be OR'ed together.
+	// The file types may be OR'ed togur.
 	GetFiles(t FileType) ([]File, error)
 
 	// GetManifest returns a manifest file. Returns os.ErrNotExist if manifest

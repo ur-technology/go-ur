@@ -1,18 +1,18 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package comms
 
@@ -25,10 +25,10 @@ import (
 
 	"strconv"
 
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/rpc/codec"
-	"github.com/ethereum/go-ethereum/rpc/shared"
+	"github.com/ur/go-ur/logger"
+	"github.com/ur/go-ur/logger/glog"
+	"github.com/ur/go-ur/rpc/codec"
+	"github.com/ur/go-ur/rpc/shared"
 )
 
 const (
@@ -48,7 +48,7 @@ var (
 	}, ",")
 )
 
-type EthereumClient interface {
+type URClient interface {
 	// Close underlying connection
 	Close()
 	// Send request
@@ -59,7 +59,7 @@ type EthereumClient interface {
 	SupportedModules() (map[string]string, error)
 }
 
-func handle(id int, conn net.Conn, api shared.EthereumApi, c codec.Codec) {
+func handle(id int, conn net.Conn, api shared.URApi, c codec.Codec) {
 	codec := c.New(conn)
 
 	defer func() {
@@ -111,9 +111,9 @@ func handle(id int, conn net.Conn, api shared.EthereumApi, c codec.Codec) {
 
 // Endpoint must be in the form of:
 // ${protocol}:${path}
-// e.g. ipc:/tmp/geth.ipc
-//      rpc:localhost:8545
-func ClientFromEndpoint(endpoint string, c codec.Codec) (EthereumClient, error) {
+// e.g. ipc:/tmp/gur.ipc
+//      rpc:localhost:9595
+func ClientFromEndpoint(endpoint string, c codec.Codec) (URClient, error) {
 	if strings.HasPrefix(endpoint, "ipc:") {
 		cfg := IpcConfig{
 			Endpoint: endpoint[4:],
@@ -124,7 +124,7 @@ func ClientFromEndpoint(endpoint string, c codec.Codec) (EthereumClient, error) 
 	if strings.HasPrefix(endpoint, "rpc:") {
 		parts := strings.Split(endpoint, ":")
 		addr := "http://localhost"
-		port := uint(8545)
+		port := uint(9595)
 		if len(parts) >= 3 {
 			addr = parts[1] + ":" + parts[2]
 		}

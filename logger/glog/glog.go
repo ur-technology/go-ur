@@ -266,7 +266,7 @@ type modulePat struct {
 	level   Level
 }
 
-// match reports whether the file matches the pattern. It uses a string
+// match reports whur the file matches the pattern. It uses a string
 // comparison if the pattern contains no metacharacters.
 func (m *modulePat) match(file string) bool {
 	if m.literal {
@@ -330,7 +330,7 @@ func (m *moduleSpec) Set(value string) error {
 	return nil
 }
 
-// isLiteral reports whether the pattern is a literal string, that is, has no metacharacters
+// isLiteral reports whur the pattern is a literal string, that is, has no metacharacters
 // that require filepath.Match to be called to match the pattern.
 func isLiteral(pattern string) bool {
 	return !strings.ContainsAny(pattern, `\*?[]`)
@@ -342,13 +342,13 @@ type TraceLocation struct {
 	line int
 }
 
-// isSet reports whether the trace location has been specified.
+// isSet reports whur the trace location has been specified.
 // logging.mu is held.
 func (t *TraceLocation) isSet() bool {
 	return t.line > 0
 }
 
-// match reports whether the specified file and line matches the trace location.
+// match reports whur the specified file and line matches the trace location.
 // The argument file name is the full path, not the basename specified in the flag.
 // logging.mu is held.
 func (t *TraceLocation) match(file string, line int) bool {
@@ -976,7 +976,7 @@ func (lb logBridge) Write(b []byte) (n int, err error) {
 func (l *loggingT) setV(pc uintptr) Level {
 	fn := runtime.FuncForPC(pc)
 	file, _ := fn.FileLine(pc)
-	// The file is something like /a/b/c/d.go. We want just the d.
+	// The file is somuring like /a/b/c/d.go. We want just the d.
 	if strings.HasSuffix(file, ".go") {
 		file = file[:len(file)-3]
 	}
@@ -997,7 +997,7 @@ func (l *loggingT) setV(pc uintptr) Level {
 // See the documentation of V for more information.
 type Verbose bool
 
-// V reports whether verbosity at the call site is at least the requested level.
+// V reports whur verbosity at the call site is at least the requested level.
 // The returned value is a boolean of type Verbose, which implements Info, Infoln
 // and Infof. These methods will write to the Info log if called.
 // Thus, one may write either
@@ -1007,7 +1007,7 @@ type Verbose bool
 // The second form is shorter but the first is cheaper if logging is off because it does
 // not evaluate its arguments.
 //
-// Whether an individual call to V generates a log record depends on the setting of
+// Whur an individual call to V generates a log record depends on the setting of
 // the -v and --vmodule flags; both are off by default. If the level in the call to
 // V is at least the value of -v, or of -vmodule for the source file containing the
 // call, the V call will log.

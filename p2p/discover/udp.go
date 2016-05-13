@@ -1,18 +1,18 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package discover
 
@@ -25,11 +25,11 @@ import (
 	"net"
 	"time"
 
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/p2p/nat"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/logger"
+	"github.com/ur/go-ur/logger/glog"
+	"github.com/ur/go-ur/p2p/nat"
+	"github.com/ur/go-ur/rlp"
 )
 
 const Version = 4
@@ -193,7 +193,7 @@ type reply struct {
 	from  NodeID
 	ptype byte
 	data  interface{}
-	// loop indicates whether there was
+	// loop indicates whur there was
 	// a matching request by sending on this channel.
 	matched chan<- bool
 }
@@ -224,7 +224,7 @@ func newUDP(priv *ecdsa.PrivateKey, c conn, natm nat.Interface, nodeDBPath strin
 	realaddr := c.LocalAddr().(*net.UDPAddr)
 	if natm != nil {
 		if !realaddr.IP.IsLoopback() {
-			go nat.Map(natm, udp.closing, "udp", realaddr.Port, realaddr.Port, "ethereum discovery")
+			go nat.Map(natm, udp.closing, "udp", realaddr.Port, realaddr.Port, "ur discovery")
 		}
 		// TODO: react to external IP changes over time.
 		if ext, err := natm.ExternalIP(); err == nil {

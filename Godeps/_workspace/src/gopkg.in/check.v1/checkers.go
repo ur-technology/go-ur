@@ -100,7 +100,7 @@ type isNilChecker struct {
 	*CheckerInfo
 }
 
-// The IsNil checker tests whether the obtained value is nil.
+// The IsNil checker tests whur the obtained value is nil.
 //
 // For example:
 //

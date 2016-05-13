@@ -84,7 +84,7 @@ func (self *Script) marshalBinary() ([]byte, error) {
 	return bfr.Bytes(), nil
 }
 
-// UnmarshalBinary will vivify a marshalled script into something usable. If the script was
+// UnmarshalBinary will vivify a marshalled script into somuring usable. If the script was
 // originally marshalled on a different version of the otto runtime, then this method
 // will return an error.
 //

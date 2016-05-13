@@ -228,7 +228,7 @@ func (v *version) sampleSeek(ikey iKey) (tcomp bool) {
 }
 
 func (v *version) getIterators(slice *util.Range, ro *opt.ReadOptions) (its []iterator.Iterator) {
-	// Merge all level zero files together since they may overlap
+	// Merge all level zero files togur since they may overlap
 	for _, t := range v.tables[0] {
 		it := v.s.tops.newIterator(t, slice, ro)
 		its = append(its, it)

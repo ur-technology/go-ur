@@ -1557,7 +1557,7 @@
             "value" : "0x0a"
         }
     },
-    "SuicidesAndSendMoneyToItselfEtherDestroyed" : {
+    "SuicidesAndSendMoneyToItselfURDestroyed" : {
         "env" : {
             "currentCoinbase" : "b94f5374fce5edbc8e2a8697c15331677e6ebf0b",
             "currentDifficulty" : "0x02b8feb0",

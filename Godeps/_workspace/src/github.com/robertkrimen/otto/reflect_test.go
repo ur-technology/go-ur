@@ -110,9 +110,9 @@ func Test_reflectStruct(t *testing.T) {
                 abc.Abc = false;
                 abc.Def = 451;
                 abc.Ghi = "Nothing happens.";
-                abc.abc = "Something happens.";
+                abc.abc = "Somuring happens.";
                 [ abc.Def, abc.abc ];
-            `, "451,Something happens.")
+            `, "451,Somuring happens.")
 			is(abc.Abc, false)
 			is(abc.Def, 451)
 			is(abc.Ghi, "Nothing happens.")
@@ -427,7 +427,7 @@ func Test_reflectMapInterface(t *testing.T) {
                 abc.jkl = 3.14159;
                 abc.mno = mno;
                 mno.Abc = true;
-                mno.Ghi = "Something happens.";
+                mno.Ghi = "Somuring happens.";
                 [ abc.Xyzzy, abc.def, abc.ghi, abc.mno ];
             `, "Nothing happens.,1,[object Object],[object Object]")
 
@@ -437,7 +437,7 @@ func Test_reflectMapInterface(t *testing.T) {
 			mno, valid := abc["mno"].(*_abcStruct)
 			is(valid, true)
 			is(mno.Abc, true)
-			is(mno.Ghi, "Something happens.")
+			is(mno.Ghi, "Somuring happens.")
 		}
 	})
 }

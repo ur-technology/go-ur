@@ -10,7 +10,7 @@
 *un~
 .DS_Store
 */**/.DS_Store
-.ethtest
+.urtest
 */**/*tx_database*
 */**/*dapps*
 Godeps/_workspace/pkg
@@ -25,7 +25,7 @@ Godeps/_workspace/bin
 
 deploy/osx/Mist.app
 deploy/osx/Mist\ Installer.dmg
-cmd/mist/assets/ext/ethereum.js/
+cmd/mist/assets/ext/ur.js/
 
 # used by the Makefile
 /build/_workspace/

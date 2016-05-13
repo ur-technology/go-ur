@@ -1,18 +1,18 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of go-ethereum.
+// Copyright 2015 The go-ur Authors
+// This file is part of go-ur.
 //
-// go-ethereum is free software: you can redistribute it and/or modify
+// go-ur is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// go-ethereum is distributed in the hope that it will be useful,
+// go-ur is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with go-ethereum. If not, see <http://www.gnu.org/licenses/>.
+// along with go-ur. If not, see <http://www.gnu.org/licenses/>.
 
 package utils
 
@@ -30,26 +30,26 @@ import (
 	"strconv"
 
 	"github.com/codegangsta/cli"
-	"github.com/ethereum/ethash"
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/metrics"
-	"github.com/ethereum/go-ethereum/p2p/nat"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rpc/api"
-	"github.com/ethereum/go-ethereum/rpc/codec"
-	"github.com/ethereum/go-ethereum/rpc/comms"
-	"github.com/ethereum/go-ethereum/rpc/shared"
-	"github.com/ethereum/go-ethereum/rpc/useragent"
-	"github.com/ethereum/go-ethereum/xeth"
+	"github.com/ur/urash"
+	"github.com/ur/go-ur/accounts"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/core"
+	"github.com/ur/go-ur/core/vm"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/ur"
+	"github.com/ur/go-ur/urdb"
+	"github.com/ur/go-ur/event"
+	"github.com/ur/go-ur/logger"
+	"github.com/ur/go-ur/logger/glog"
+	"github.com/ur/go-ur/metrics"
+	"github.com/ur/go-ur/p2p/nat"
+	"github.com/ur/go-ur/params"
+	"github.com/ur/go-ur/rpc/api"
+	"github.com/ur/go-ur/rpc/codec"
+	"github.com/ur/go-ur/rpc/comms"
+	"github.com/ur/go-ur/rpc/shared"
+	"github.com/ur/go-ur/rpc/useragent"
+	"github.com/ur/go-ur/xur"
 )
 
 func init() {
@@ -107,7 +107,7 @@ var (
 	NetworkIdFlag = cli.IntFlag{
 		Name:  "networkid",
 		Usage: "Network identifier (integer, 0=Olympic, 1=Frontier, 2=Morden)",
-		Value: eth.NetworkId,
+		Value: ur.NetworkId,
 	}
 	OlympicFlag = cli.BoolFlag{
 		Name:  "olympic",
@@ -175,8 +175,8 @@ var (
 		Name:  "autodag",
 		Usage: "Enable automatic DAG pregeneration",
 	}
-	EtherbaseFlag = cli.StringFlag{
-		Name:  "etherbase",
+	URbaseFlag = cli.StringFlag{
+		Name:  "urbase",
 		Usage: "Public address for block mining rewards (default = first account created)",
 		Value: "0",
 	}
@@ -268,7 +268,7 @@ var (
 	RPCPortFlag = cli.IntFlag{
 		Name:  "rpcport",
 		Usage: "HTTP-RPC server listening port",
-		Value: 8545,
+		Value: 9595,
 	}
 	RPCCORSDomainFlag = cli.StringFlag{
 		Name:  "rpccorsdomain",
@@ -312,7 +312,7 @@ var (
 	ListenPortFlag = cli.IntFlag{
 		Name:  "port",
 		Usage: "Network listening port",
-		Value: 30303,
+		Value: 19595,
 	}
 	BootnodesFlag = cli.StringFlag{
 		Name:  "bootnodes",
@@ -413,19 +413,19 @@ func MakeNodeKey(ctx *cli.Context) (key *ecdsa.PrivateKey) {
 	return key
 }
 
-// MakeEthConfig creates ethereum options from set command line flags.
-func MakeEthConfig(clientID, version string, ctx *cli.Context) *eth.Config {
+// MakeEthConfig creates ur options from set command line flags.
+func MakeEthConfig(clientID, version string, ctx *cli.Context) *ur.Config {
 	customName := ctx.GlobalString(IdentityFlag.Name)
 	if len(customName) > 0 {
 		clientID += "/" + customName
 	}
 	am := MakeAccountManager(ctx)
-	etherbase, err := ParamToAddress(ctx.GlobalString(EtherbaseFlag.Name), am)
+	urbase, err := ParamToAddress(ctx.GlobalString(URbaseFlag.Name), am)
 	if err != nil {
-		glog.V(logger.Error).Infoln("WARNING: No etherbase set and no accounts found as default")
+		glog.V(logger.Error).Infoln("WARNING: No urbase set and no accounts found as default")
 	}
-	// Assemble the entire eth configuration and return
-	cfg := &eth.Config{
+	// Assemble the entire ur configuration and return
+	cfg := &ur.Config{
 		Name:                    common.MakeName(clientID, version),
 		DataDir:                 MustDataDir(ctx),
 		GenesisFile:             ctx.GlobalString(GenesisFileFlag.Name),
@@ -436,7 +436,7 @@ func MakeEthConfig(clientID, version string, ctx *cli.Context) *eth.Config {
 		NetworkId:               ctx.GlobalInt(NetworkIdFlag.Name),
 		LogFile:                 ctx.GlobalString(LogFileFlag.Name),
 		Verbosity:               ctx.GlobalInt(VerbosityFlag.Name),
-		Etherbase:               common.HexToAddress(etherbase),
+		URbase:               common.HexToAddress(urbase),
 		MinerThreads:            ctx.GlobalInt(MinerThreadsFlag.Name),
 		AccountManager:          am,
 		VmDebug:                 ctx.GlobalBool(VMDebugFlag.Name),
@@ -496,7 +496,7 @@ func MakeEthConfig(clientID, version string, ctx *cli.Context) *eth.Config {
 			cfg.Shh = true
 		}
 		if !ctx.GlobalIsSet(DataDirFlag.Name) {
-			cfg.DataDir = os.TempDir() + "/ethereum_dev_mode"
+			cfg.DataDir = os.TempDir() + "/eth_dev_mode"
 		}
 		cfg.PowTest = true
 		cfg.DevMode = true
@@ -536,12 +536,12 @@ func SetupVM(ctx *cli.Context) {
 }
 
 // MakeChain creates a chain manager from set command line flags.
-func MakeChain(ctx *cli.Context) (chain *core.BlockChain, chainDb ethdb.Database) {
+func MakeChain(ctx *cli.Context) (chain *core.BlockChain, chainDb urdb.Database) {
 	datadir := MustDataDir(ctx)
 	cache := ctx.GlobalInt(CacheFlag.Name)
 
 	var err error
-	if chainDb, err = ethdb.NewLDBDatabase(filepath.Join(datadir, "chaindata"), cache); err != nil {
+	if chainDb, err = urdb.NewLDBDatabase(filepath.Join(datadir, "chaindata"), cache); err != nil {
 		Fatalf("Could not open database: %v", err)
 	}
 	if ctx.GlobalBool(OlympicFlag.Name) {
@@ -552,7 +552,7 @@ func MakeChain(ctx *cli.Context) (chain *core.BlockChain, chainDb ethdb.Database
 	}
 
 	eventMux := new(event.TypeMux)
-	pow := ethash.New()
+	pow := urash.New()
 	//genesis := core.GenesisBlock(uint64(ctx.GlobalInt(GenesisNonceFlag.Name)), blockDB)
 	chain, err = core.NewBlockChain(chainDb, pow, eventMux)
 	if err != nil {
@@ -597,7 +597,7 @@ func IpcSocketPath(ctx *cli.Context) (ipcpath string) {
 	} else {
 		ipcpath = common.DefaultIpcPath()
 		if ctx.GlobalIsSet(DataDirFlag.Name) {
-			ipcpath = filepath.Join(ctx.GlobalString(DataDirFlag.Name), "geth.ipc")
+			ipcpath = filepath.Join(ctx.GlobalString(DataDirFlag.Name), "gur.ipc")
 		}
 		if ctx.GlobalIsSet(IPCPathFlag.Name) {
 			ipcpath = ctx.GlobalString(IPCPathFlag.Name)
@@ -607,35 +607,35 @@ func IpcSocketPath(ctx *cli.Context) (ipcpath string) {
 	return
 }
 
-func StartIPC(eth *eth.Ethereum, ctx *cli.Context) error {
+func StartIPC(ur *ur.UR, ctx *cli.Context) error {
 	config := comms.IpcConfig{
 		Endpoint: IpcSocketPath(ctx),
 	}
 
-	initializer := func(conn net.Conn) (comms.Stopper, shared.EthereumApi, error) {
-		fe := useragent.NewRemoteFrontend(conn, eth.AccountManager())
-		xeth := xeth.New(eth, fe)
-		apis, err := api.ParseApiString(ctx.GlobalString(IPCApiFlag.Name), codec.JSON, xeth, eth)
+	initializer := func(conn net.Conn) (comms.Stopper, shared.URApi, error) {
+		fe := useragent.NewRemoteFrontend(conn, ur.AccountManager())
+		xur := xur.New(ur, fe)
+		apis, err := api.ParseApiString(ctx.GlobalString(IPCApiFlag.Name), codec.JSON, xur, ur)
 		if err != nil {
 			return nil, nil, err
 		}
-		return xeth, api.Merge(apis...), nil
+		return xur, api.Merge(apis...), nil
 	}
 
 	return comms.StartIpc(config, codec.JSON, initializer)
 }
 
-func StartRPC(eth *eth.Ethereum, ctx *cli.Context) error {
+func StartRPC(ur *ur.UR, ctx *cli.Context) error {
 	config := comms.HttpConfig{
 		ListenAddress: ctx.GlobalString(RPCListenAddrFlag.Name),
 		ListenPort:    uint(ctx.GlobalInt(RPCPortFlag.Name)),
 		CorsDomain:    ctx.GlobalString(RPCCORSDomainFlag.Name),
 	}
 
-	xeth := xeth.New(eth, nil)
+	xur := xur.New(ur, nil)
 	codec := codec.JSON
 
-	apis, err := api.ParseApiString(ctx.GlobalString(RpcApiFlag.Name), codec, xeth, eth)
+	apis, err := api.ParseApiString(ctx.GlobalString(RpcApiFlag.Name), codec, xur, ur)
 	if err != nil {
 		return err
 	}

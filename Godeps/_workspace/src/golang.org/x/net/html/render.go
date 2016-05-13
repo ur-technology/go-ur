@@ -21,7 +21,7 @@ type writer interface {
 // Render renders the parse tree n to the given writer.
 //
 // Rendering is done on a 'best effort' basis: calling Parse on the output of
-// Render will always result in something similar to the original tree, but it
+// Render will always result in somuring similar to the original tree, but it
 // is not necessarily an exact clone unless the original tree was 'well-formed'.
 // 'Well-formed' is not easily specified; the HTML5 specification is
 // complicated.

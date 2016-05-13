@@ -88,7 +88,7 @@ func Test_underscore_chaining_3(t *testing.T) {
       .pop()
       .map(function(n){ return n * 2; })
       .value();
-    equal(numbers.join(', '), "34, 10, 8, 6, 4, 2, 10, 10", 'can chain together array functions.');
+    equal(numbers.join(', '), "34, 10, 8, 6, 4, 2, 10, 10", 'can chain togur array functions.');
   });
         `)
 	})

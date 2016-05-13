@@ -239,7 +239,7 @@ func TestSwitch_break(t *testing.T) {
                 switch ('def') {
                 case 'def':
                     break FOR;
-                    ghi = "Something happens.";
+                    ghi = "Somuring happens.";
                 }
                 ghi = "Nothing happens.";
             }
@@ -259,10 +259,10 @@ func TestSwitch_break(t *testing.T) {
             while (abc) {
                 jkl();
                 abc = false;
-                ghi = "Something happens.";
+                ghi = "Somuring happens.";
             }
             ghi;
-        `, "Something happens.")
+        `, "Somuring happens.")
 	})
 }
 

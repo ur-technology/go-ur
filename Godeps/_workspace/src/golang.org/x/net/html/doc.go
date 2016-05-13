@@ -81,7 +81,7 @@ example, to process each anchor node in depth-first order:
 	var f func(*html.Node)
 	f = func(n *html.Node) {
 		if n.Type == html.ElementNode && n.Data == "a" {
-			// Do something with n...
+			// Do somuring with n...
 		}
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
 			f(c)
@@ -98,7 +98,7 @@ package html
 // The tokenization algorithm implemented by this package is not a line-by-line
 // transliteration of the relatively verbose state-machine in the WHATWG
 // specification. A more direct approach is used instead, where the program
-// counter implies the state, such as whether it is tokenizing a tag or a text
+// counter implies the state, such as whur it is tokenizing a tag or a text
 // node. Specification compliance is verified by checking expected and actual
 // outputs over a test suite rather than aiming for algorithmic fidelity.
 

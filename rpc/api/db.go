@@ -1,26 +1,26 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package api
 
 import (
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/rpc/codec"
-	"github.com/ethereum/go-ethereum/rpc/shared"
-	"github.com/ethereum/go-ethereum/xeth"
+	"github.com/ur/go-ur/ur"
+	"github.com/ur/go-ur/rpc/codec"
+	"github.com/ur/go-ur/rpc/shared"
+	"github.com/ur/go-ur/xur"
 )
 
 const (
@@ -42,17 +42,17 @@ type dbhandler func(*dbApi, *shared.Request) (interface{}, error)
 
 // db api provider
 type dbApi struct {
-	xeth     *xeth.XEth
-	ethereum *eth.Ethereum
+	xur     *xur.XEth
+	ur *ur.UR
 	methods  map[string]dbhandler
 	codec    codec.ApiCoder
 }
 
 // create a new db api instance
-func NewDbApi(xeth *xeth.XEth, ethereum *eth.Ethereum, coder codec.Codec) *dbApi {
+func NewDbApi(xur *xur.XEth, ur *ur.UR, coder codec.Codec) *dbApi {
 	return &dbApi{
-		xeth:     xeth,
-		ethereum: ethereum,
+		xur:     xur,
+		ur: ur,
 		methods:  DbMapping,
 		codec:    coder.New(nil),
 	}
@@ -96,7 +96,7 @@ func (self *dbApi) GetString(req *shared.Request) (interface{}, error) {
 		return nil, err
 	}
 
-	ret, err := self.xeth.DbGet([]byte(args.Database + args.Key))
+	ret, err := self.xur.DbGet([]byte(args.Database + args.Key))
 	return string(ret), err
 }
 
@@ -110,7 +110,7 @@ func (self *dbApi) PutString(req *shared.Request) (interface{}, error) {
 		return nil, err
 	}
 
-	return self.xeth.DbPut([]byte(args.Database+args.Key), args.Value), nil
+	return self.xur.DbPut([]byte(args.Database+args.Key), args.Value), nil
 }
 
 func (self *dbApi) GetHex(req *shared.Request) (interface{}, error) {
@@ -123,7 +123,7 @@ func (self *dbApi) GetHex(req *shared.Request) (interface{}, error) {
 		return nil, err
 	}
 
-	if res, err := self.xeth.DbGet([]byte(args.Database + args.Key)); err == nil {
+	if res, err := self.xur.DbGet([]byte(args.Database + args.Key)); err == nil {
 		return newHexData(res), nil
 	} else {
 		return nil, err
@@ -140,5 +140,5 @@ func (self *dbApi) PutHex(req *shared.Request) (interface{}, error) {
 		return nil, err
 	}
 
-	return self.xeth.DbPut([]byte(args.Database+args.Key), args.Value), nil
+	return self.xur.DbPut([]byte(args.Database+args.Key), args.Value), nil
 }

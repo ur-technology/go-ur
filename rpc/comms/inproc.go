@@ -1,30 +1,30 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package comms
 
 import (
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/rpc/codec"
-	"github.com/ethereum/go-ethereum/rpc/shared"
+	"github.com/ur/go-ur/rpc/codec"
+	"github.com/ur/go-ur/rpc/shared"
 )
 
 type InProcClient struct {
-	api         shared.EthereumApi
+	api         shared.URApi
 	codec       codec.Codec
 	lastId      interface{}
 	lastJsonrpc string
@@ -44,7 +44,7 @@ func (self *InProcClient) Close() {
 }
 
 // Need to setup api support
-func (self *InProcClient) Initialize(offeredApi shared.EthereumApi) {
+func (self *InProcClient) Initialize(offeredApi shared.URApi) {
 	self.api = offeredApi
 }
 

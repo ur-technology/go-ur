@@ -54,7 +54,7 @@ const ktSeek = ktVal
 
 const (
 	// Maximum value possible for sequence number; the 8-bits are
-	// used by value type, so its can packed together in single
+	// used by value type, so its can packed togur in single
 	// 64-bit integer.
 	kMaxSeq uint64 = (uint64(1) << 56) - 1
 	// Maximum value possible for packed sequence number and type.

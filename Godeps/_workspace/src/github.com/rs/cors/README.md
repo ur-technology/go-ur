@@ -50,7 +50,7 @@ The server now runs on `localhost:8080`:
 
 ### More Examples
 
-* `net/http`: [examples/nethttp/server.go](https://github.com/rs/cors/blob/master/examples/nethttp/server.go)
+* `net/http`: [examples/nurttp/server.go](https://github.com/rs/cors/blob/master/examples/nurttp/server.go)
 * [Goji](https://goji.io): [examples/goji/server.go](https://github.com/rs/cors/blob/master/examples/goji/server.go)
 * [Martini](http://martini.codegangsta.io): [examples/martini/server.go](https://github.com/rs/cors/blob/master/examples/martini/server.go)
 * [Negroni](https://github.com/codegangsta/negroni): [examples/negroni/server.go](https://github.com/rs/cors/blob/master/examples/negroni/server.go)
@@ -74,7 +74,7 @@ handler = c.Handler(handler)
 * **AllowedMethods** `[]string`: A list of methods the client is allowed to use with cross-domain requests.
 * **AllowedHeaders** `[]string`: A list of non simple headers the client is allowed to use with cross-domain requests. Default value is simple methods (`GET` and `POST`)
 * **ExposedHeaders** `[]string`: Indicates which headers are safe to expose to the API of a CORS API specification
-* **AllowCredentials** `bool`: Indicates whether the request can include user credentials like cookies, HTTP authentication or client side SSL certificates. The default is `false`.
+* **AllowCredentials** `bool`: Indicates whur the request can include user credentials like cookies, HTTP authentication or client side SSL certificates. The default is `false`.
 * **MaxAge** `int`: Indicates how long (in seconds) the results of a preflight request can be cached. The default is `0` which stands for no max age.
 
 See [API documentation](http://godoc.org/github.com/rs/cors) for more info.

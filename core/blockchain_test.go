@@ -1,18 +1,18 @@
-// Copyright 2014 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2014 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package core
 
@@ -26,17 +26,17 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/ethereum/ethash"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/pow"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ur/urash"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/core/state"
+	"github.com/ur/go-ur/core/types"
+	"github.com/ur/go-ur/core/vm"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/urdb"
+	"github.com/ur/go-ur/event"
+	"github.com/ur/go-ur/params"
+	"github.com/ur/go-ur/pow"
+	"github.com/ur/go-ur/rlp"
 	"github.com/hashicorp/golang-lru"
 )
 
@@ -45,11 +45,11 @@ func init() {
 }
 
 func thePow() pow.PoW {
-	pow, _ := ethash.NewForTesting()
+	pow, _ := urash.NewForTesting()
 	return pow
 }
 
-func theBlockChain(db ethdb.Database, t *testing.T) *BlockChain {
+func theBlockChain(db urdb.Database, t *testing.T) *BlockChain {
 	var eventMux event.TypeMux
 	WriteTestNetGenesisBlock(db, 0)
 	blockchain, err := NewBlockChain(db, thePow(), &eventMux)
@@ -201,7 +201,7 @@ func insertChain(done chan bool, blockchain *BlockChain, chain types.Blocks, t *
 }
 
 func TestLastBlock(t *testing.T) {
-	db, _ := ethdb.NewMemDatabase()
+	db, _ := urdb.NewMemDatabase()
 
 	bchain := theBlockChain(db, t)
 	block := makeBlockChain(bchain.CurrentBlock(), 1, db, 0)[0]
@@ -348,7 +348,7 @@ func testBrokenChain(t *testing.T, full bool) {
 func TestChainInsertions(t *testing.T) {
 	t.Skip("Skipped: outdated test files")
 
-	db, _ := ethdb.NewMemDatabase()
+	db, _ := urdb.NewMemDatabase()
 
 	chain1, err := loadChain("valid1", t)
 	if err != nil {
@@ -386,7 +386,7 @@ func TestChainInsertions(t *testing.T) {
 func TestChainMultipleInsertions(t *testing.T) {
 	t.Skip("Skipped: outdated test files")
 
-	db, _ := ethdb.NewMemDatabase()
+	db, _ := urdb.NewMemDatabase()
 
 	const max = 4
 	chains := make([]types.Blocks, max)
@@ -469,7 +469,7 @@ func makeBlockChainWithDiff(genesis *types.Block, d []int, seed byte) []*types.B
 	return chain
 }
 
-func chm(genesis *types.Block, db ethdb.Database) *BlockChain {
+func chm(genesis *types.Block, db urdb.Database) *BlockChain {
 	var eventMux event.TypeMux
 	bc := &BlockChain{chainDb: db, genesisBlock: genesis, eventMux: &eventMux, pow: FakePow{}, rand: rand.New(rand.NewSource(0))}
 	bc.headerCache, _ = lru.New(100)
@@ -505,7 +505,7 @@ func testReorgShort(t *testing.T, full bool) {
 
 func testReorg(t *testing.T, first, second []int, td int64, full bool) {
 	// Create a pristine block chain
-	db, _ := ethdb.NewMemDatabase()
+	db, _ := urdb.NewMemDatabase()
 	genesis, _ := WriteTestNetGenesisBlock(db, 0)
 	bc := chm(genesis, db)
 
@@ -552,7 +552,7 @@ func TestBadBlockHashes(t *testing.T)  { testBadHashes(t, true) }
 
 func testBadHashes(t *testing.T, full bool) {
 	// Create a pristine block chain
-	db, _ := ethdb.NewMemDatabase()
+	db, _ := urdb.NewMemDatabase()
 	genesis, _ := WriteTestNetGenesisBlock(db, 0)
 	bc := chm(genesis, db)
 
@@ -579,7 +579,7 @@ func TestReorgBadBlockHashes(t *testing.T)  { testReorgBadHashes(t, true) }
 
 func testReorgBadHashes(t *testing.T, full bool) {
 	// Create a pristine block chain
-	db, _ := ethdb.NewMemDatabase()
+	db, _ := urdb.NewMemDatabase()
 	genesis, _ := WriteTestNetGenesisBlock(db, 0)
 	bc := chm(genesis, db)
 
@@ -699,7 +699,7 @@ func testInsertNonceError(t *testing.T, full bool) {
 func TestFastVsFullChains(t *testing.T) {
 	// Configure and generate a sample block chain
 	var (
-		gendb, _ = ethdb.NewMemDatabase()
+		gendb, _ = urdb.NewMemDatabase()
 		key, _   = crypto.HexToECDSA("b71c71a67e1177ad4e901695e1b4b9ee17ae16c6668d313eac2f96dbcda3f291")
 		address  = crypto.PubkeyToAddress(key.PublicKey)
 		funds    = big.NewInt(1000000000)
@@ -724,7 +724,7 @@ func TestFastVsFullChains(t *testing.T) {
 		}
 	})
 	// Import the chain as an archive node for the comparison baseline
-	archiveDb, _ := ethdb.NewMemDatabase()
+	archiveDb, _ := urdb.NewMemDatabase()
 	WriteGenesisBlockForTesting(archiveDb, GenesisAccount{address, funds})
 
 	archive, _ := NewBlockChain(archiveDb, FakePow{}, new(event.TypeMux))
@@ -733,7 +733,7 @@ func TestFastVsFullChains(t *testing.T) {
 		t.Fatalf("failed to process block %d: %v", n, err)
 	}
 	// Fast import the chain as a non-archive node to test
-	fastDb, _ := ethdb.NewMemDatabase()
+	fastDb, _ := urdb.NewMemDatabase()
 	WriteGenesisBlockForTesting(fastDb, GenesisAccount{address, funds})
 	fast, _ := NewBlockChain(fastDb, FakePow{}, new(event.TypeMux))
 
@@ -781,7 +781,7 @@ func TestFastVsFullChains(t *testing.T) {
 func TestLightVsFastVsFullChainHeads(t *testing.T) {
 	// Configure and generate a sample block chain
 	var (
-		gendb, _ = ethdb.NewMemDatabase()
+		gendb, _ = urdb.NewMemDatabase()
 		key, _   = crypto.HexToECDSA("b71c71a67e1177ad4e901695e1b4b9ee17ae16c6668d313eac2f96dbcda3f291")
 		address  = crypto.PubkeyToAddress(key.PublicKey)
 		funds    = big.NewInt(1000000000)
@@ -808,7 +808,7 @@ func TestLightVsFastVsFullChainHeads(t *testing.T) {
 		}
 	}
 	// Import the chain as an archive node and ensure all pointers are updated
-	archiveDb, _ := ethdb.NewMemDatabase()
+	archiveDb, _ := urdb.NewMemDatabase()
 	WriteGenesisBlockForTesting(archiveDb, GenesisAccount{address, funds})
 
 	archive, _ := NewBlockChain(archiveDb, FakePow{}, new(event.TypeMux))
@@ -821,7 +821,7 @@ func TestLightVsFastVsFullChainHeads(t *testing.T) {
 	assert(t, "archive", archive, height/2, height/2, height/2)
 
 	// Import the chain as a non-archive node and ensure all pointers are updated
-	fastDb, _ := ethdb.NewMemDatabase()
+	fastDb, _ := urdb.NewMemDatabase()
 	WriteGenesisBlockForTesting(fastDb, GenesisAccount{address, funds})
 	fast, _ := NewBlockChain(fastDb, FakePow{}, new(event.TypeMux))
 
@@ -840,7 +840,7 @@ func TestLightVsFastVsFullChainHeads(t *testing.T) {
 	assert(t, "fast", fast, height/2, height/2, 0)
 
 	// Import the chain as a light node and ensure all pointers are updated
-	lightDb, _ := ethdb.NewMemDatabase()
+	lightDb, _ := urdb.NewMemDatabase()
 	WriteGenesisBlockForTesting(lightDb, GenesisAccount{address, funds})
 	light, _ := NewBlockChain(lightDb, FakePow{}, new(event.TypeMux))
 
@@ -864,7 +864,7 @@ func TestChainTxReorgs(t *testing.T) {
 		addr1   = crypto.PubkeyToAddress(key1.PublicKey)
 		addr2   = crypto.PubkeyToAddress(key2.PublicKey)
 		addr3   = crypto.PubkeyToAddress(key3.PublicKey)
-		db, _   = ethdb.NewMemDatabase()
+		db, _   = urdb.NewMemDatabase()
 	)
 	genesis := WriteGenesisBlockForTesting(db,
 		GenesisAccount{addr1, big.NewInt(1000000)},

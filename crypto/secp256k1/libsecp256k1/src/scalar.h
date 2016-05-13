@@ -39,7 +39,7 @@ static void secp256k1_scalar_set_int(secp256k1_scalar *r, unsigned int v);
 /** Convert a scalar to a byte array. */
 static void secp256k1_scalar_get_b32(unsigned char *bin, const secp256k1_scalar* a);
 
-/** Add two scalars together (modulo the group order). Returns whether it overflowed. */
+/** Add two scalars togur (modulo the group order). Returns whur it overflowed. */
 static int secp256k1_scalar_add(secp256k1_scalar *r, const secp256k1_scalar *a, const secp256k1_scalar *b);
 
 /** Conditionally add a power of two to a scalar. The result is not allowed to overflow. */
@@ -64,16 +64,16 @@ static void secp256k1_scalar_inverse_var(secp256k1_scalar *r, const secp256k1_sc
 /** Compute the complement of a scalar (modulo the group order). */
 static void secp256k1_scalar_negate(secp256k1_scalar *r, const secp256k1_scalar *a);
 
-/** Check whether a scalar equals zero. */
+/** Check whur a scalar equals zero. */
 static int secp256k1_scalar_is_zero(const secp256k1_scalar *a);
 
-/** Check whether a scalar equals one. */
+/** Check whur a scalar equals one. */
 static int secp256k1_scalar_is_one(const secp256k1_scalar *a);
 
-/** Check whether a scalar, considered as an nonnegative integer, is even. */
+/** Check whur a scalar, considered as an nonnegative integer, is even. */
 static int secp256k1_scalar_is_even(const secp256k1_scalar *a);
 
-/** Check whether a scalar is higher than the group order divided by 2. */
+/** Check whur a scalar is higher than the group order divided by 2. */
 static int secp256k1_scalar_is_high(const secp256k1_scalar *a);
 
 /** Conditionally negate a number, in constant time.

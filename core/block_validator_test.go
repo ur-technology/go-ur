@@ -1,18 +1,18 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package core
 
@@ -21,17 +21,17 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/pow/ezp"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/core/state"
+	"github.com/ur/go-ur/core/types"
+	"github.com/ur/go-ur/core/vm"
+	"github.com/ur/go-ur/urdb"
+	"github.com/ur/go-ur/event"
+	"github.com/ur/go-ur/pow/ezp"
 )
 
 func proc() (Validator, *BlockChain) {
-	db, _ := ethdb.NewMemDatabase()
+	db, _ := urdb.NewMemDatabase()
 	var mux event.TypeMux
 
 	WriteTestNetGenesisBlock(db, 0)
@@ -62,7 +62,7 @@ func TestNumber(t *testing.T) {
 }
 
 func TestPutReceipt(t *testing.T) {
-	db, _ := ethdb.NewMemDatabase()
+	db, _ := urdb.NewMemDatabase()
 
 	var addr common.Address
 	addr[0] = 1

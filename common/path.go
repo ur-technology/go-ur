@@ -1,18 +1,18 @@
-// Copyright 2014 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2014 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package common
 
@@ -25,7 +25,7 @@ import (
 	"strings"
 )
 
-// MakeName creates a node name that follows the ethereum convention
+// MakeName creates a node name that follows the ur convention
 // for such names. It adds the operation system name and Go runtime version
 // the name.
 func MakeName(name, version string) string {
@@ -36,7 +36,7 @@ func ExpandHomePath(p string) (path string) {
 	path = p
 	sep := fmt.Sprintf("%s", os.PathSeparator)
 
-	// Check in case of paths like "/something/~/something/"
+	// Check in case of paths like "/somuring/~/somuring/"
 	if len(p) > 1 && p[:1+len(sep)] == "~"+sep {
 		usr, _ := user.Current()
 		dir := usr.HomeDir
@@ -77,11 +77,11 @@ func DefaultDataDir() string {
 	home := HomeDir()
 	if home != "" {
 		if runtime.GOOS == "darwin" {
-			return filepath.Join(home, "Library", "Ethereum")
+			return filepath.Join(home, "Library", "UR")
 		} else if runtime.GOOS == "windows" {
-			return filepath.Join(home, "AppData", "Roaming", "Ethereum")
+			return filepath.Join(home, "AppData", "Roaming", "UR")
 		} else {
-			return filepath.Join(home, ".ethereum")
+			return filepath.Join(home, ".ur")
 		}
 	}
 	// As we cannot guess a stable location, return empty and handle later
@@ -90,7 +90,7 @@ func DefaultDataDir() string {
 
 func DefaultIpcPath() string {
 	if runtime.GOOS == "windows" {
-		return `\\.\pipe\geth.ipc`
+		return `\\.\pipe\gur.ipc`
 	}
-	return filepath.Join(DefaultDataDir(), "geth.ipc")
+	return filepath.Join(DefaultDataDir(), "gur.ipc")
 }

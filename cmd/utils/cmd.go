@@ -1,20 +1,20 @@
-// Copyright 2014 The go-ethereum Authors
-// This file is part of go-ethereum.
+// Copyright 2014 The go-ur Authors
+// This file is part of go-ur.
 //
-// go-ethereum is free software: you can redistribute it and/or modify
+// go-ur is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// go-ethereum is distributed in the hope that it will be useful,
+// go-ur is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with go-ethereum. If not, see <http://www.gnu.org/licenses/>.
+// along with go-ur. If not, see <http://www.gnu.org/licenses/>.
 
-// Package utils contains internal helper functions for go-ethereum commands.
+// Package utils contains internal helper functions for go-ur commands.
 package utils
 
 import (
@@ -26,13 +26,13 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/core"
+	"github.com/ur/go-ur/core/types"
+	"github.com/ur/go-ur/ur"
+	"github.com/ur/go-ur/logger"
+	"github.com/ur/go-ur/logger/glog"
+	"github.com/ur/go-ur/rlp"
 	"github.com/peterh/liner"
 )
 
@@ -111,10 +111,10 @@ func Fatalf(format string, args ...interface{}) {
 	os.Exit(1)
 }
 
-func StartEthereum(ethereum *eth.Ethereum) {
-	glog.V(logger.Info).Infoln("Starting", ethereum.Name())
-	if err := ethereum.Start(); err != nil {
-		Fatalf("Error starting Ethereum: %v", err)
+func StartUR(ur *ur.UR) {
+	glog.V(logger.Info).Infoln("Starting", ur.Name())
+	if err := ur.Start(); err != nil {
+		Fatalf("Error starting UR: %v", err)
 	}
 	go func() {
 		sigc := make(chan os.Signal, 1)
@@ -122,7 +122,7 @@ func StartEthereum(ethereum *eth.Ethereum) {
 		defer signal.Stop(sigc)
 		<-sigc
 		glog.V(logger.Info).Infoln("Got interrupt, shutting down...")
-		go ethereum.Stop()
+		go ur.Stop()
 		logger.Flush()
 		for i := 10; i > 0; i-- {
 			<-sigc

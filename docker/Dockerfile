@@ -8,14 +8,14 @@ RUN apt-get update
 RUN apt-get upgrade -q -y
 RUN apt-get dist-upgrade -q -y
 
-# Install Ethereum
+# Install UR
 RUN apt-get install -q -y software-properties-common
-RUN add-apt-repository ppa:ethereum/ethereum
-RUN add-apt-repository ppa:ethereum/ethereum-dev
+RUN add-apt-repository ppa:ur/ur
+RUN add-apt-repository ppa:ur/ur-dev
 RUN apt-get update
-RUN apt-get install -q -y geth
+RUN apt-get install -q -y gur
 
 EXPOSE 8545
 EXPOSE 30303
 
-ENTRYPOINT ["/usr/bin/geth"]
+ENTRYPOINT ["/usr/bin/gur"]

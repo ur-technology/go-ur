@@ -1,18 +1,18 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package api
 
@@ -21,15 +21,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ethereum/ethash"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/rpc/codec"
-	"github.com/ethereum/go-ethereum/rpc/shared"
-	"github.com/ethereum/go-ethereum/xeth"
+	"github.com/ur/urash"
+	"github.com/ur/go-ur/core"
+	"github.com/ur/go-ur/core/state"
+	"github.com/ur/go-ur/core/vm"
+	"github.com/ur/go-ur/ur"
+	"github.com/ur/go-ur/rlp"
+	"github.com/ur/go-ur/rpc/codec"
+	"github.com/ur/go-ur/rpc/shared"
+	"github.com/ur/go-ur/xur"
 	"github.com/rcrowley/go-metrics"
 )
 
@@ -55,17 +55,17 @@ type debughandler func(*debugApi, *shared.Request) (interface{}, error)
 
 // admin api provider
 type debugApi struct {
-	xeth     *xeth.XEth
-	ethereum *eth.Ethereum
+	xur     *xur.XEth
+	ur *ur.UR
 	methods  map[string]debughandler
 	codec    codec.ApiCoder
 }
 
 // create a new debug api instance
-func NewDebugApi(xeth *xeth.XEth, ethereum *eth.Ethereum, coder codec.Codec) *debugApi {
+func NewDebugApi(xur *xur.XEth, ur *ur.UR, coder codec.Codec) *debugApi {
 	return &debugApi{
-		xeth:     xeth,
-		ethereum: ethereum,
+		xur:     xur,
+		ur: ur,
 		methods:  DebugMapping,
 		codec:    coder.New(nil),
 	}
@@ -105,7 +105,7 @@ func (self *debugApi) PrintBlock(req *shared.Request) (interface{}, error) {
 		return nil, shared.NewDecodeParamError(err.Error())
 	}
 
-	block := self.xeth.EthBlockByNumber(args.BlockNumber)
+	block := self.xur.EthBlockByNumber(args.BlockNumber)
 	return fmt.Sprintf("%s", block), nil
 }
 
@@ -115,12 +115,12 @@ func (self *debugApi) DumpBlock(req *shared.Request) (interface{}, error) {
 		return nil, shared.NewDecodeParamError(err.Error())
 	}
 
-	block := self.xeth.EthBlockByNumber(args.BlockNumber)
+	block := self.xur.EthBlockByNumber(args.BlockNumber)
 	if block == nil {
 		return nil, fmt.Errorf("block #%d not found", args.BlockNumber)
 	}
 
-	stateDb, err := state.New(block.Root(), self.ethereum.ChainDb())
+	stateDb, err := state.New(block.Root(), self.ur.ChainDb())
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +134,7 @@ func (self *debugApi) GetBlockRlp(req *shared.Request) (interface{}, error) {
 		return nil, shared.NewDecodeParamError(err.Error())
 	}
 
-	block := self.xeth.EthBlockByNumber(args.BlockNumber)
+	block := self.xur.EthBlockByNumber(args.BlockNumber)
 	if block == nil {
 		return nil, fmt.Errorf("block #%d not found", args.BlockNumber)
 	}
@@ -147,7 +147,7 @@ func (self *debugApi) SetHead(req *shared.Request) (interface{}, error) {
 	if err := self.codec.Decode(req.Params, &args); err != nil {
 		return nil, shared.NewDecodeParamError(err.Error())
 	}
-	self.ethereum.BlockChain().SetHead(uint64(args.BlockNumber))
+	self.ur.BlockChain().SetHead(uint64(args.BlockNumber))
 
 	return nil, nil
 }
@@ -158,7 +158,7 @@ func (self *debugApi) ProcessBlock(req *shared.Request) (interface{}, error) {
 		return nil, shared.NewDecodeParamError(err.Error())
 	}
 
-	block := self.xeth.EthBlockByNumber(args.BlockNumber)
+	block := self.xur.EthBlockByNumber(args.BlockNumber)
 	if block == nil {
 		return nil, fmt.Errorf("block #%d not found", args.BlockNumber)
 	}
@@ -168,7 +168,7 @@ func (self *debugApi) ProcessBlock(req *shared.Request) (interface{}, error) {
 	vm.Debug = true
 
 	var (
-		blockchain = self.ethereum.BlockChain()
+		blockchain = self.ur.BlockChain()
 		validator  = blockchain.Validator()
 		processor  = blockchain.Processor()
 	)
@@ -177,7 +177,7 @@ func (self *debugApi) ProcessBlock(req *shared.Request) (interface{}, error) {
 	if err != nil {
 		return false, err
 	}
-	statedb, err := state.New(blockchain.GetBlock(block.ParentHash()).Root(), self.ethereum.ChainDb())
+	statedb, err := state.New(blockchain.GetBlock(block.ParentHash()).Root(), self.ur.ChainDb())
 	if err != nil {
 		return false, err
 	}
@@ -199,7 +199,7 @@ func (self *debugApi) SeedHash(req *shared.Request) (interface{}, error) {
 		return nil, shared.NewDecodeParamError(err.Error())
 	}
 
-	if hash, err := ethash.GetSeedHash(uint64(args.BlockNumber)); err == nil {
+	if hash, err := urash.GetSeedHash(uint64(args.BlockNumber)); err == nil {
 		return fmt.Sprintf("0x%x", hash), nil
 	} else {
 		return nil, err

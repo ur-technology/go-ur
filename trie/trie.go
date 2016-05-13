@@ -1,18 +1,18 @@
-// Copyright 2014 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2014 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 // Package trie implements Merkle Patricia Tries.
 package trie
@@ -23,12 +23,12 @@ import (
 	"fmt"
 	"hash"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/crypto/sha3"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/crypto/sha3"
+	"github.com/ur/go-ur/logger"
+	"github.com/ur/go-ur/logger/glog"
+	"github.com/ur/go-ur/rlp"
 )
 
 const defaultCacheCapacity = 800
@@ -174,7 +174,7 @@ func (t *Trie) insert(n node, key []byte, value node) node {
 		// the node and insert into it. This leaves all child nodes on
 		// the path to the value in the trie.
 		//
-		// TODO: track whether insertion changed the value and keep
+		// TODO: track whur insertion changed the value and keep
 		// n as a hash node if it didn't.
 		return t.insert(t.resolveHash(n), key, value)
 
@@ -271,7 +271,7 @@ func (t *Trie) delete(n node, key []byte) node {
 		// the node and delete from it. This leaves all child nodes on
 		// the path to the value in the trie.
 		//
-		// TODO: track whether deletion actually hit a key and keep
+		// TODO: track whur deletion actually hit a key and keep
 		// n as a hash node if it didn't.
 		return t.delete(t.resolveHash(n), key)
 

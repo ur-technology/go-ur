@@ -1,18 +1,18 @@
-// Copyright 2014 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2014 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package state
 
@@ -21,13 +21,13 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/trie"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/urdb"
+	"github.com/ur/go-ur/logger"
+	"github.com/ur/go-ur/logger/glog"
+	"github.com/ur/go-ur/rlp"
+	"github.com/ur/go-ur/trie"
 )
 
 type Code []byte
@@ -57,7 +57,7 @@ func (self Storage) Copy() Storage {
 
 type StateObject struct {
 	// State database for storing state changes
-	db   ethdb.Database
+	db   urdb.Database
 	trie *trie.SecureTrie
 
 	// Address belonging to this account
@@ -83,14 +83,14 @@ type StateObject struct {
 	dirty   bool
 }
 
-func NewStateObject(address common.Address, db ethdb.Database) *StateObject {
+func NewStateObject(address common.Address, db urdb.Database) *StateObject {
 	object := &StateObject{db: db, address: address, balance: new(big.Int), dirty: true}
 	object.trie, _ = trie.NewSecure(common.Hash{}, db)
 	object.storage = make(Storage)
 	return object
 }
 
-func NewStateObjectFromBytes(address common.Address, data []byte, db ethdb.Database) *StateObject {
+func NewStateObjectFromBytes(address common.Address, data []byte, db urdb.Database) *StateObject {
 	var extobject struct {
 		Nonce    uint64
 		Balance  *big.Int

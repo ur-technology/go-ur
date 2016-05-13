@@ -1,18 +1,18 @@
-// Copyright 2014 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2014 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package types
 
@@ -26,11 +26,11 @@ import (
 	"sort"
 	"sync/atomic"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/logger"
+	"github.com/ur/go-ur/logger/glog"
+	"github.com/ur/go-ur/rlp"
 )
 
 var ErrInvalidSig = errors.New("invalid v, r, s values")
@@ -161,7 +161,7 @@ func (tx *Transaction) Size() common.StorageSize {
 // eliptic curve and an error if it failed deriving or upon an incorrect
 // signature.
 //
-// From Uses the homestead consensus rules to determine whether the signature is
+// From Uses the homestead consensus rules to determine whur the signature is
 // valid.
 //
 // From caches the address, allowing it to be used regardless of
@@ -179,7 +179,7 @@ func (tx *Transaction) From() (common.Address, error) {
 // secp256k1 eliptic curve and an error if it failed deriving or upon an
 // incorrect signature.
 //
-// FromFrantier uses the frontier consensus rules to determine whether the
+// FromFrantier uses the frontier consensus rules to determine whur the
 // signature is valid.
 //
 // FromFrontier caches the address, allowing it to be used regardless of
@@ -379,7 +379,7 @@ func (s *TxByPrice) Pop() interface{} {
 //
 // This method first sorts the separates the list of transactions into individual
 // sender accounts and sorts them by nonce. After the account nonce ordering is
-// satisfied, the results are merged back together by price, always comparing only
+// satisfied, the results are merged back togur by price, always comparing only
 // the head transaction from each account. This is done via a heap to keep it fast.
 func SortByPriceAndNonce(txs []*Transaction) {
 	// Separate the transactions by account and sort by nonce

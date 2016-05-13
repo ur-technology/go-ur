@@ -34,7 +34,7 @@ func CaptureDebugGCStats(r Registry, d time.Duration) {
 //
 // Be careful (but much less so) with this because debug.ReadGCStats calls
 // the C function runtime·lock(runtime·mheap) which, while not a stop-the-world
-// operation, isn't something you want to be doing all the time.
+// operation, isn't somuring you want to be doing all the time.
 func CaptureDebugGCStatsOnce(r Registry) {
 	lastGC := gcStats.LastGC
 	t := time.Now()

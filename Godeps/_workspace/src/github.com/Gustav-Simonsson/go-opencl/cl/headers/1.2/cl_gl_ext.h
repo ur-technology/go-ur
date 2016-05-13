@@ -16,7 +16,7 @@
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
  * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
- * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHURKER IN AN ACTION OF CONTRACT,
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
  **********************************************************************************/
@@ -44,7 +44,7 @@ extern "C" {
  * ... define new APIs, if any
  *
  *  If you need GLtypes here, mirror them with a cl_GLtype, rather than including a GL header
- *  This allows us to avoid having to decide whether to include GL headers or GLES here.
+ *  This allows us to avoid having to decide whur to include GL headers or GLES here.
  */
 
 /* 

@@ -494,7 +494,7 @@ Line: 1 Col: 55 Expected closing tag. Unexpected end of file.
 #data
 <
 #errors
-Line: 1 Col: 1 Expected tag name. Got something else instead
+Line: 1 Col: 1 Expected tag name. Got somuring else instead
 Line: 1 Col: 1 Unexpected non-space characters. Expected DOCTYPE.
 #document
 | <html>
@@ -505,7 +505,7 @@ Line: 1 Col: 1 Unexpected non-space characters. Expected DOCTYPE.
 #data
 <#
 #errors
-Line: 1 Col: 1 Expected tag name. Got something else instead
+Line: 1 Col: 1 Expected tag name. Got somuring else instead
 Line: 1 Col: 1 Unexpected non-space characters. Expected DOCTYPE.
 #document
 | <html>

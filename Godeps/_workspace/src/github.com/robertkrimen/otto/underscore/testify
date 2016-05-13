@@ -10,7 +10,7 @@ Usage:
 
     testify ./underscore/test
 
-    # Should look something like:
+    # Should look somuring like:
     arrays.js
     chaining.js
     collections.js

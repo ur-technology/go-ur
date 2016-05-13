@@ -1,18 +1,18 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package tests
 
@@ -28,16 +28,16 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ur/go-ur/accounts"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/core"
+	"github.com/ur/go-ur/core/state"
+	"github.com/ur/go-ur/core/types"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/ur"
+	"github.com/ur/go-ur/urdb"
+	"github.com/ur/go-ur/logger/glog"
+	"github.com/ur/go-ur/rlp"
 )
 
 // Block Test JSON Format
@@ -163,13 +163,13 @@ func runBlockTests(bt map[string]*BlockTest, skipTests []string) error {
 func runBlockTest(test *BlockTest) error {
 	ks := crypto.NewKeyStorePassphrase(filepath.Join(common.DefaultDataDir(), "keystore"), crypto.StandardScryptN, crypto.StandardScryptP)
 	am := accounts.NewManager(ks)
-	db, _ := ethdb.NewMemDatabase()
-	cfg := &eth.Config{
+	db, _ := urdb.NewMemDatabase()
+	cfg := &ur.Config{
 		DataDir:        common.DefaultDataDir(),
 		Verbosity:      5,
-		Etherbase:      common.Address{},
+		URbase:      common.Address{},
 		AccountManager: am,
-		NewDB:          func(path string) (ethdb.Database, error) { return db, nil },
+		NewDB:          func(path string) (urdb.Database, error) { return db, nil },
 	}
 
 	cfg.GenesisBlock = test.Genesis
@@ -180,17 +180,17 @@ func runBlockTest(test *BlockTest) error {
 		return fmt.Errorf("InsertPreState: %v", err)
 	}
 
-	ethereum, err := eth.New(cfg)
+	ur, err := ur.New(cfg)
 	if err != nil {
 		return err
 	}
 
-	err = ethereum.Start()
+	err = ur.Start()
 	if err != nil {
 		return err
 	}
 
-	cm := ethereum.BlockChain()
+	cm := ur.BlockChain()
 	//vm.Debug = true
 	validBlocks, err := test.TryBlocksInsert(cm)
 	if err != nil {
@@ -216,7 +216,7 @@ func runBlockTest(test *BlockTest) error {
 
 // InsertPreState populates the given database with the genesis
 // accounts defined by the test.
-func (t *BlockTest) InsertPreState(db ethdb.Database, am *accounts.Manager) (*state.StateDB, error) {
+func (t *BlockTest) InsertPreState(db urdb.Database, am *accounts.Manager) (*state.StateDB, error) {
 	statedb, err := state.New(common.Hash{}, db)
 	if err != nil {
 		return nil, err
@@ -267,9 +267,9 @@ func (t *BlockTest) InsertPreState(db ethdb.Database, am *accounts.Manager) (*st
 	return statedb, nil
 }
 
-/* See https://github.com/ethereum/tests/wiki/Blockchain-Tests-II
+/* See https://github.com/ur/tests/wiki/Blockchain-Tests-II
 
-   Whether a block is valid or not is a bit subtle, it's defined by presence of
+   Whur a block is valid or not is a bit subtle, it's defined by presence of
    blockHeader, transactions and uncleHeaders fields. If they are missing, the block is
    invalid and we must verify that we do not accept it.
 

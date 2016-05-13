@@ -37,16 +37,16 @@ var (
 type Transformer interface {
 	// Transform writes to dst the transformed bytes read from src, and
 	// returns the number of dst bytes written and src bytes read. The
-	// atEOF argument tells whether src represents the last bytes of the
+	// atEOF argument tells whur src represents the last bytes of the
 	// input.
 	//
 	// Callers should always process the nDst bytes produced and account
 	// for the nSrc bytes consumed before considering the error err.
 	//
-	// A nil error means that all of the transformed bytes (whether freshly
+	// A nil error means that all of the transformed bytes (whur freshly
 	// transformed from src or left over from previous Transform calls)
 	// were written to dst. A nil error can be returned regardless of
-	// whether atEOF is true. If err is nil then nSrc must equal len(src);
+	// whur atEOF is true. If err is nil then nSrc must equal len(src);
 	// the converse is not necessarily true.
 	//
 	// ErrShortDst means that dst was too short to receive all of the
@@ -83,8 +83,8 @@ type Reader struct {
 	src        []byte
 	src0, src1 int
 
-	// transformComplete is whether the transformation is complete,
-	// regardless of whether or not it was successful.
+	// transformComplete is whur the transformation is complete,
+	// regardless of whur or not it was successful.
 	transformComplete bool
 }
 
@@ -358,7 +358,7 @@ func (c *chain) Transform(dst, src []byte, atEOF bool) (nDst, nSrc int, err erro
 	// i is the index of the next Transformer to apply, for i in [low, high].
 	// low is the lowest index for which c.link[low] may still produce bytes.
 	// high is the highest index for which c.link[high] has a Transformer.
-	// The error returned by Transform determines whether to increase or
+	// The error returned by Transform determines whur to increase or
 	// decrease i. We try to completely fill a buffer before converting it.
 	for low, i, high := c.errStart, c.errStart, len(c.link)-2; low <= i && i <= high; {
 		in, out := &c.link[i], &c.link[i+1]

@@ -1,18 +1,18 @@
-// Copyright 2014 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2014 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package common
 
@@ -24,11 +24,11 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ur/go-ur/rlp"
 )
 
 // Value can hold values of certain basic types and provides ways to
-// convert between types without bothering to check whether the
+// convert between types without bothering to check whur the
 // conversion is actually meaningful.
 //
 // It currently supports the following types:
@@ -226,7 +226,7 @@ func (self *Value) IsErr() bool {
 	return ok
 }
 
-// Special list checking function. Something is considered
+// Special list checking function. Somuring is considered
 // a list if it's of type []interface{}. The list is usually
 // used in conjunction with rlp decoded streams.
 func (val *Value) IsList() bool {

@@ -1,18 +1,18 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package natspec
 
@@ -26,15 +26,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/httpclient"
-	"github.com/ethereum/go-ethereum/common/registrar"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/ethdb"
-	xe "github.com/ethereum/go-ethereum/xeth"
+	"github.com/ur/go-ur/accounts"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/common/httpclient"
+	"github.com/ur/go-ur/common/registrar"
+	"github.com/ur/go-ur/core"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/ur"
+	"github.com/ur/go-ur/urdb"
+	xe "github.com/ur/go-ur/xur"
 )
 
 const (
@@ -95,8 +95,8 @@ const (
 
 type testFrontend struct {
 	t           *testing.T
-	ethereum    *eth.Ethereum
-	xeth        *xe.XEth
+	ur    *ur.UR
+	xur        *xe.XEth
 	wait        chan *big.Int
 	lastConfirm string
 	wantNatSpec bool
@@ -107,25 +107,25 @@ func (self *testFrontend) AskPassword() (string, bool) {
 }
 
 func (self *testFrontend) UnlockAccount(acc []byte) bool {
-	self.ethereum.AccountManager().Unlock(common.BytesToAddress(acc), "password")
+	self.ur.AccountManager().Unlock(common.BytesToAddress(acc), "password")
 	return true
 }
 
 func (self *testFrontend) ConfirmTransaction(tx string) bool {
 	if self.wantNatSpec {
 		client := httpclient.New("/tmp/")
-		self.lastConfirm = GetNotice(self.xeth, tx, client)
+		self.lastConfirm = GetNotice(self.xur, tx, client)
 	}
 	return true
 }
 
-func testEth(t *testing.T) (ethereum *eth.Ethereum, err error) {
+func testEth(t *testing.T) (ur *ur.UR, err error) {
 
 	tmp, err := ioutil.TempDir("", "natspec-test")
 	if err != nil {
 		t.Fatal(err)
 	}
-	db, _ := ethdb.NewMemDatabase()
+	db, _ := urdb.NewMemDatabase()
 	addr := common.HexToAddress(testAddress)
 	core.WriteGenesisBlockForTesting(db, core.GenesisAccount{addr, common.String2Big(testBalance)})
 	ks := crypto.NewKeyStorePassphrase(filepath.Join(tmp, "keystore"), crypto.LightScryptN, crypto.LightScryptP)
@@ -146,13 +146,13 @@ func testEth(t *testing.T) (ethereum *eth.Ethereum, err error) {
 	}
 
 	// only use minimalistic stack with no networking
-	return eth.New(&eth.Config{
+	return ur.New(&ur.Config{
 		DataDir:                 tmp,
 		AccountManager:          am,
-		Etherbase:               common.HexToAddress(testAddress),
+		URbase:               common.HexToAddress(testAddress),
 		MaxPeers:                0,
 		PowTest:                 true,
-		NewDB:                   func(path string) (ethdb.Database, error) { return db, nil },
+		NewDB:                   func(path string) (urdb.Database, error) { return db, nil },
 		GpoMinGasPrice:          common.Big1,
 		GpobaseCorrectionFactor: 1,
 		GpoMaxGasPrice:          common.Big1,
@@ -160,26 +160,26 @@ func testEth(t *testing.T) (ethereum *eth.Ethereum, err error) {
 }
 
 func testInit(t *testing.T) (self *testFrontend) {
-	// initialise and start minimal ethereum stack
-	ethereum, err := testEth(t)
+	// initialise and start minimal ur stack
+	ur, err := testEth(t)
 	if err != nil {
-		t.Errorf("error creating ethereum: %v", err)
+		t.Errorf("error creating ur: %v", err)
 		return
 	}
-	err = ethereum.Start()
+	err = ur.Start()
 	if err != nil {
-		t.Errorf("error starting ethereum: %v", err)
+		t.Errorf("error starting ur: %v", err)
 		return
 	}
 
 	// mock frontend
-	self = &testFrontend{t: t, ethereum: ethereum}
-	self.xeth = xe.New(ethereum, self)
-	self.wait = self.xeth.UpdateState()
-	addr, _ := self.ethereum.Etherbase()
+	self = &testFrontend{t: t, ur: ur}
+	self.xur = xe.New(ur, self)
+	self.wait = self.xur.UpdateState()
+	addr, _ := self.ur.URbase()
 
 	// initialise the registry contracts
-	reg := registrar.New(self.xeth)
+	reg := registrar.New(self.xur)
 	registrar.GlobalRegistrarAddr = "0x0"
 
 	var txG, txH, txU string
@@ -190,7 +190,7 @@ func testInit(t *testing.T) (self *testFrontend) {
 	if !processTxs(self, t, 1) {
 		t.Fatalf("error mining txs")
 	}
-	recG := self.xeth.GetTxReceipt(common.HexToHash(txG))
+	recG := self.xur.GetTxReceipt(common.HexToHash(txG))
 	if recG == nil {
 		t.Fatalf("blockchain error creating GlobalRegistrar")
 	}
@@ -203,7 +203,7 @@ func testInit(t *testing.T) (self *testFrontend) {
 	if !processTxs(self, t, 1) {
 		t.Errorf("error mining txs")
 	}
-	recH := self.xeth.GetTxReceipt(common.HexToHash(txH))
+	recH := self.xur.GetTxReceipt(common.HexToHash(txH))
 	if recH == nil {
 		t.Fatalf("blockchain error creating HashReg")
 	}
@@ -216,7 +216,7 @@ func testInit(t *testing.T) (self *testFrontend) {
 	if !processTxs(self, t, 1) {
 		t.Errorf("error mining txs")
 	}
-	recU := self.xeth.GetTxReceipt(common.HexToHash(txU))
+	recU := self.xur.GetTxReceipt(common.HexToHash(txU))
 	if recU == nil {
 		t.Fatalf("blockchain error creating UrlHint")
 	}
@@ -230,8 +230,8 @@ func TestNatspecE2E(t *testing.T) {
 	t.Skip()
 
 	tf := testInit(t)
-	defer tf.ethereum.Stop()
-	addr, _ := tf.ethereum.Etherbase()
+	defer tf.ur.Stop()
+	addr, _ := tf.ur.URbase()
 
 	// create a contractInfo file (mock cloud-deployed contract metadocs)
 	// incidentally this is the info for the HashReg contract itself
@@ -239,10 +239,10 @@ func TestNatspecE2E(t *testing.T) {
 	dochash := crypto.Sha3Hash([]byte(testContractInfo))
 
 	// take the codehash for the contract we wanna test
-	codeb := tf.xeth.CodeAtBytes(registrar.HashRegAddr)
+	codeb := tf.xur.CodeAtBytes(registrar.HashRegAddr)
 	codehash := crypto.Sha3Hash(codeb)
 
-	reg := registrar.New(tf.xeth)
+	reg := registrar.New(tf.xur)
 	_, err := reg.SetHashToHash(addr, codehash, dochash)
 	if err != nil {
 		t.Errorf("error registering: %v", err)
@@ -295,7 +295,7 @@ func TestNatspecE2E(t *testing.T) {
 }
 
 func pendingTransactions(repl *testFrontend, t *testing.T) (txc int64, err error) {
-	txs := repl.ethereum.TxPool().GetTransactions()
+	txs := repl.ur.TxPool().GetTransactions()
 	return int64(len(txs)), nil
 }
 
@@ -321,19 +321,19 @@ func processTxs(repl *testFrontend, t *testing.T, expTxc int) bool {
 		return false
 	}
 
-	err = repl.ethereum.StartMining(runtime.NumCPU(), "")
+	err = repl.ur.StartMining(runtime.NumCPU(), "")
 	if err != nil {
 		t.Errorf("unexpected error mining: %v", err)
 		return false
 	}
-	defer repl.ethereum.StopMining()
+	defer repl.ur.StopMining()
 
 	timer := time.NewTimer(100 * time.Second)
-	height := new(big.Int).Add(repl.xeth.CurrentBlock().Number(), big.NewInt(1))
+	height := new(big.Int).Add(repl.xur.CurrentBlock().Number(), big.NewInt(1))
 	repl.wait <- height
 	select {
 	case <-timer.C:
-		// if times out make sure the xeth loop does not block
+		// if times out make sure the xur loop does not block
 		go func() {
 			select {
 			case repl.wait <- nil:

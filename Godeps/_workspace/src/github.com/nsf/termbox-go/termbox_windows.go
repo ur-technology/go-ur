@@ -786,19 +786,19 @@ func input_event_producer() {
 			// single or double click
 			switch mr.event_flags {
 			case 0:
-				cur_state := mr.button_state
+				ceth_state := mr.button_state
 				switch {
-				case last_state&mouse_lmb == 0 && cur_state&mouse_lmb != 0:
+				case last_state&mouse_lmb == 0 && ceth_state&mouse_lmb != 0:
 					last_button = MouseLeft
-				case last_state&mouse_rmb == 0 && cur_state&mouse_rmb != 0:
+				case last_state&mouse_rmb == 0 && ceth_state&mouse_rmb != 0:
 					last_button = MouseRight
-				case last_state&mouse_mmb == 0 && cur_state&mouse_mmb != 0:
+				case last_state&mouse_mmb == 0 && ceth_state&mouse_mmb != 0:
 					last_button = MouseMiddle
 				default:
-					last_state = cur_state
+					last_state = ceth_state
 					continue
 				}
-				last_state = cur_state
+				last_state = ceth_state
 				fallthrough
 			case 2:
 				input_comm <- Event{

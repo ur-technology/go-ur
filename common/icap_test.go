@@ -1,28 +1,28 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package common
 
 import "testing"
 
 /* More test vectors:
-https://github.com/ethereum/web3.js/blob/master/test/iban.fromAddress.js
-https://github.com/ethereum/web3.js/blob/master/test/iban.toAddress.js
-https://github.com/ethereum/web3.js/blob/master/test/iban.isValid.js
-https://github.com/ethereum/libethereum/blob/develop/test/libethcore/icap.cpp
+https://github.com/ur/web3.js/blob/master/test/iban.fromAddress.js
+https://github.com/ur/web3.js/blob/master/test/iban.toAddress.js
+https://github.com/ur/web3.js/blob/master/test/iban.isValid.js
+https://github.com/ur/libur/blob/develop/test/liburcore/icap.cpp
 */
 
 type icapTest struct {
@@ -44,10 +44,10 @@ var icapInvalidTests = []icapTest{
 	{"DirectInvalidLength36", "", "XE499OG1EH8ZZI0KXC6N83EKGT1BM97P2O77"},
 	{"DirectInvalidLength33", "", "XE499OG1EH8ZZI0KXC6N83EKGT1BM97P2"},
 
-	{"IndirectInvalidCheckSum", "", "XE35ETHXREGGOPHERSSS"},
-	{"IndirectInvalidAssetIdentifier", "", "XE34ETHXREGGOPHERSSS"},
-	{"IndirectInvalidLength19", "", "XE34ETHXREGGOPHERSS"},
-	{"IndirectInvalidLength21", "", "XE34ETHXREGGOPHERSSSS"},
+	{"IndirectInvalidCheckSum", "", "XE35URKXREGGOPHERSSS"},
+	{"IndirectInvalidAssetIdentifier", "", "XE34URKXREGGOPHERSSS"},
+	{"IndirectInvalidLength19", "", "XE34URKXREGGOPHERSS"},
+	{"IndirectInvalidLength21", "", "XE34URKXREGGOPHERSSSS"},
 }
 
 func TestICAPOK(t *testing.T) {

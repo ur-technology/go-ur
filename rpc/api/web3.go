@@ -1,27 +1,27 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package api
 
 import (
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/rpc/codec"
-	"github.com/ethereum/go-ethereum/rpc/shared"
-	"github.com/ethereum/go-ethereum/xeth"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/rpc/codec"
+	"github.com/ur/go-ur/rpc/shared"
+	"github.com/ur/go-ur/xur"
 )
 
 const (
@@ -41,15 +41,15 @@ type web3handler func(*web3Api, *shared.Request) (interface{}, error)
 
 // web3 api provider
 type web3Api struct {
-	xeth    *xeth.XEth
+	xur    *xur.XEth
 	methods map[string]web3handler
 	codec   codec.ApiCoder
 }
 
 // create a new web3 api instance
-func NewWeb3Api(xeth *xeth.XEth, coder codec.Codec) *web3Api {
+func NewWeb3Api(xur *xur.XEth, coder codec.Codec) *web3Api {
 	return &web3Api{
-		xeth:    xeth,
+		xur:    xur,
 		methods: Web3Mapping,
 		codec:   coder.New(nil),
 	}
@@ -93,7 +93,7 @@ func (self *web3Api) Sha3(req *shared.Request) (interface{}, error) {
 	return common.ToHex(crypto.Sha3(common.FromHex(args.Data))), nil
 }
 
-// returns the xeth client vrsion
+// returns the xur client vrsion
 func (self *web3Api) ClientVersion(req *shared.Request) (interface{}, error) {
-	return self.xeth.ClientVersion(), nil
+	return self.xur.ClientVersion(), nil
 }

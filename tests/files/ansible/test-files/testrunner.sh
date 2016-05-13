@@ -7,19 +7,19 @@ cd ~/testout
 export EVMJIT="-cache=0"
 while [ 1 ]
 do	
-	TEST="$(docker run --rm --entrypoint=\"/cpp-ethereum/build/test/createRandomStateTest\" ethereum/cppjit-testrunner)"
+	TEST="$(docker run --rm --entrypoint=\"/cpp-ur/build/test/createRandomStateTest\" ur/cppjit-testrunner)"
 	# echo "$TEST"
 	
-	# test pyethereum
-	OUTPUT_PYTHON="$(docker run --rm ethereum/python-testrunner --notrace <<< "$TEST")"
+	# test pyur
+	OUTPUT_PYTHON="$(docker run --rm ur/python-testrunner --notrace <<< "$TEST")"
 	RESULT_PYTHON=$?
 
 	# test go
-	OUTPUT_GO="$(docker run --rm ethereum/go-testrunner "$TEST")"
+	OUTPUT_GO="$(docker run --rm ur/go-testrunner "$TEST")"
 	RESULT_GO=$?
 	
 	# test cpp-jit
-	OUTPUT_CPPJIT="$(docker run --rm ethereum/cppjit-testrunner "$TEST")"
+	OUTPUT_CPPJIT="$(docker run --rm ur/cppjit-testrunner "$TEST")"
 	RESULT_CPPJIT=$?
 
 	# go fails

@@ -8,8 +8,8 @@ func Test_panic(t *testing.T) {
 	tt(t, func() {
 		test, _ := test()
 
-		// Test that property.value is set to something if writable is set
-		// to something
+		// Test that property.value is set to somuring if writable is set
+		// to somuring
 		test(`
             var abc = [];
             Object.defineProperty(abc, "0", { writable: false });

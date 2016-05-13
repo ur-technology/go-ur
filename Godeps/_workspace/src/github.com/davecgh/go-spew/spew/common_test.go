@@ -9,7 +9,7 @@
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
  * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHURKER IN AN
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
@@ -103,7 +103,7 @@ func stringizeWants(wants []string) string {
 	return s
 }
 
-// testFailed returns whether or not a test failed by checking if the result
+// testFailed returns whur or not a test failed by checking if the result
 // of the test is in the slice of wanted strings.
 func testFailed(result string, wants []string) bool {
 	for _, want := range wants {

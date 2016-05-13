@@ -1,0 +1,17 @@
+include setup.py
+
+# C sources
+include src/liburash/internal.c
+include src/liburash/sha3.c
+include src/liburash/util.c
+include src/python/core.c
+
+# Headers
+include src/liburash/compiler.h
+include src/liburash/data_sizes.h
+include src/liburash/endian.h
+include src/liburash/urash.h
+include src/liburash/fnv.h
+include src/liburash/internal.h
+include src/liburash/sha3.h
+include src/liburash/util.h

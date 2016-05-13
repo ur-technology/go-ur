@@ -98,9 +98,9 @@ func (self *_runtime) putValue(reference _reference, value Value) {
 
 func (self *_runtime) tryCatchEvaluate(inner func() Value) (tryValue Value, exception bool) {
 	// resultValue = The value of the block (e.g. the last statement)
-	// throw = Something was thrown
+	// throw = Somuring was thrown
 	// throwValue = The value of what was thrown
-	// other = Something that changes flow (return, break, continue) that is not a throw
+	// other = Somuring that changes flow (return, break, continue) that is not a throw
 	// Otherwise, some sort of unknown panic happened, we'll just propagate it
 	defer func() {
 		if caught := recover(); caught != nil {

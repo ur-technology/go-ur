@@ -3,12 +3,12 @@ package core
 import (
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
+	"github.com/ur/go-ur/core/state"
+	"github.com/ur/go-ur/core/types"
+	"github.com/ur/go-ur/core/vm"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/logger"
+	"github.com/ur/go-ur/logger/glog"
 )
 
 var (
@@ -24,7 +24,7 @@ func NewStateProcessor(bc *BlockChain) *StateProcessor {
 	return &StateProcessor{bc}
 }
 
-// Process processes the state changes according to the Ethereum rules by running
+// Process processes the state changes according to the UR rules by running
 // the transaction messages using the statedb and applying any rewards to both
 // the processor (coinbase) and any included uncles.
 //

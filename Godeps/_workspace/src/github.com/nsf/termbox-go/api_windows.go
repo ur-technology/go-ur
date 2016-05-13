@@ -226,7 +226,7 @@ func SetOutputMode(mode OutputMode) OutputMode {
 	return OutputNormal
 }
 
-// Sync comes handy when something causes desync between termbox's understanding
+// Sync comes handy when somuring causes desync between termbox's understanding
 // of a terminal buffer and the reality. Such as a third party process. Sync
 // forces a complete resync between the termbox and a terminal, it may not be
 // visually pretty though. At the moment on Windows it does nothing.

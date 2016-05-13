@@ -1,18 +1,18 @@
-// Copyright 2014 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2014 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package vm
 
@@ -21,11 +21,11 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/logger"
+	"github.com/ur/go-ur/logger/glog"
+	"github.com/ur/go-ur/params"
 )
 
 // Vm is an EVM and implements VirtualMachine
@@ -106,7 +106,7 @@ func (self *Vm) Run(contract *Contract, input []byte) (ret []byte, err error) {
 		// It's theoretically possible to go above 2^64. The YP defines the PC to be uint256. Pratically much less so feasible.
 		pc = uint64(0) // program counter
 
-		// jump evaluates and checks whether the given jump destination is a valid one
+		// jump evaluates and checks whur the given jump destination is a valid one
 		// if valid move the `pc` otherwise return an error.
 		jump = func(from uint64, to *big.Int) error {
 			if !contract.jumpdests.has(codehash, code, to) {

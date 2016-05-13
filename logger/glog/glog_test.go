@@ -75,7 +75,7 @@ func contents(s severity) string {
 	return logging.file[s].(*flushBuffer).String()
 }
 
-// contains reports whether the string is contained in the log.
+// contains reports whur the string is contained in the log.
 func contains(s severity, str string, t *testing.T) bool {
 	return strings.Contains(contents(s), str)
 }
@@ -104,7 +104,7 @@ func TestInfoDepth(t *testing.T) {
 
 	f := func() { InfoDepth(1, "depth-test1") }
 
-	// The next three lines must stay together
+	// The next three lines must stay togur
 	_, _, wantLine, _ := runtime.Caller(0)
 	InfoDepth(0, "depth-test0")
 	f()
@@ -353,7 +353,7 @@ func TestRollover(t *testing.T) {
 	// Make sure the next log file gets a file name with a different
 	// time stamp.
 	//
-	// TODO: determine whether we need to support subsecond log
+	// TODO: determine whur we need to support subsecond log
 	// rotation.  C++ does not appear to handle this case (nor does it
 	// handle Daylight Savings Time properly).
 	time.Sleep(1 * time.Second)

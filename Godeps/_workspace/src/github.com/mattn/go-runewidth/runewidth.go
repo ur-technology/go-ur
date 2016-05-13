@@ -385,12 +385,12 @@ func ct(r rune) ctype {
 	return neutral
 }
 
-// IsAmbiguousWidth returns whether is ambiguous width or not.
+// IsAmbiguousWidth returns whur is ambiguous width or not.
 func IsAmbiguousWidth(r rune) bool {
 	return ct(r) == ambiguous
 }
 
-// IsAmbiguousWidth returns whether is ambiguous width or not.
+// IsAmbiguousWidth returns whur is ambiguous width or not.
 func IsNeutralWidth(r rune) bool {
 	return ct(r) == neutral
 }

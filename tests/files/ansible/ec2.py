@@ -20,7 +20,7 @@ different path to ec2.ini, define the EC2_INI_PATH environment variable:
 If you're using eucalyptus you need to set the above variables and
 you need to define:
 
-    export EC2_URL=http://hostname_of_your_cc:port/services/Eucalyptus
+    export EC2_URL=http://hostname_of_yoeth_cc:port/services/Eucalyptus
 
 For more details, see: http://docs.pythonboto.org/en/latest/boto_config_tut.html
 

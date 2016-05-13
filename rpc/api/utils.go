@@ -1,18 +1,18 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package api
 
@@ -21,10 +21,10 @@ import (
 
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/rpc/codec"
-	"github.com/ethereum/go-ethereum/rpc/shared"
-	"github.com/ethereum/go-ethereum/xeth"
+	"github.com/ur/go-ur/ur"
+	"github.com/ur/go-ur/rpc/codec"
+	"github.com/ur/go-ur/rpc/shared"
+	"github.com/ur/go-ur/xur"
 )
 
 var (
@@ -70,7 +70,7 @@ var (
 			"seedHash",
 			"setHead",
 		},
-		"eth": []string{
+		"ur": []string{
 			"accounts",
 			"blockNumber",
 			"call",
@@ -111,7 +111,7 @@ var (
 		"miner": []string{
 			"hashrate",
 			"makeDAG",
-			"setEtherbase",
+			"setURbase",
 			"setExtra",
 			"setGasPrice",
 			"startAutoDAG",
@@ -154,36 +154,36 @@ var (
 )
 
 // Parse a comma separated API string to individual api's
-func ParseApiString(apistr string, codec codec.Codec, xeth *xeth.XEth, eth *eth.Ethereum) ([]shared.EthereumApi, error) {
+func ParseApiString(apistr string, codec codec.Codec, xur *xur.XEth, ur *ur.UR) ([]shared.URApi, error) {
 	if len(strings.TrimSpace(apistr)) == 0 {
 		return nil, fmt.Errorf("Empty apistr provided")
 	}
 
 	names := strings.Split(apistr, ",")
-	apis := make([]shared.EthereumApi, len(names))
+	apis := make([]shared.URApi, len(names))
 
 	for i, name := range names {
 		switch strings.ToLower(strings.TrimSpace(name)) {
 		case shared.AdminApiName:
-			apis[i] = NewAdminApi(xeth, eth, codec)
+			apis[i] = NewAdminApi(xur, ur, codec)
 		case shared.DebugApiName:
-			apis[i] = NewDebugApi(xeth, eth, codec)
+			apis[i] = NewDebugApi(xur, ur, codec)
 		case shared.DbApiName:
-			apis[i] = NewDbApi(xeth, eth, codec)
+			apis[i] = NewDbApi(xur, ur, codec)
 		case shared.EthApiName:
-			apis[i] = NewEthApi(xeth, eth, codec)
+			apis[i] = NewEthApi(xur, ur, codec)
 		case shared.MinerApiName:
-			apis[i] = NewMinerApi(eth, codec)
+			apis[i] = NewMinerApi(ur, codec)
 		case shared.NetApiName:
-			apis[i] = NewNetApi(xeth, eth, codec)
+			apis[i] = NewNetApi(xur, ur, codec)
 		case shared.ShhApiName:
-			apis[i] = NewShhApi(xeth, eth, codec)
+			apis[i] = NewShhApi(xur, ur, codec)
 		case shared.TxPoolApiName:
-			apis[i] = NewTxPoolApi(xeth, eth, codec)
+			apis[i] = NewTxPoolApi(xur, ur, codec)
 		case shared.PersonalApiName:
-			apis[i] = NewPersonalApi(xeth, eth, codec)
+			apis[i] = NewPersonalApi(xur, ur, codec)
 		case shared.Web3ApiName:
-			apis[i] = NewWeb3Api(xeth, codec)
+			apis[i] = NewWeb3Api(xur, codec)
 		default:
 			return nil, fmt.Errorf("Unknown API '%s'", name)
 		}

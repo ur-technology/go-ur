@@ -1,24 +1,24 @@
 # common
 
 [![Build
-Status](https://travis-ci.org/ethereum/go-ethereum.png?branch=master)](https://travis-ci.org/ethereum/go-ethereum)
+Status](https://travis-ci.org/ur/go-ur.png?branch=master)](https://travis-ci.org/ur/go-ur)
 
-The common package contains the ethereum utility library.
+The common package contains the ur utility library.
 
 # Installation
 
-As a subdirectory the main go-ethereum repository, you get it with
-`go get github.com/ethereum/go-ethereum`.
+As a subdirectory the main go-ur repository, you get it with
+`go get github.com/ur/go-ur`.
 
 # Usage
 
 ## RLP (Recursive Linear Prefix) Encoding
 
-RLP Encoding is an encoding scheme used by the Ethereum project. It
+RLP Encoding is an encoding scheme used by the UR project. It
 encodes any native value or list to a string.
 
 More in depth information about the encoding scheme see the
-[Wiki](http://wiki.ethereum.org/index.php/RLP) article.
+[Wiki](http://wiki.ur.org/index.php/RLP) article.
 
 ```go
 rlp := common.Encode("doge")
@@ -32,10 +32,10 @@ fmt.Println(decoded) // => ["dog" "cat"]
 
 ## Patricia Trie
 
-Patricie Tree is a merkle trie used by the Ethereum project.
+Patricie Tree is a merkle trie used by the UR project.
 
 More in depth information about the (modified) Patricia Trie can be
-found on the [Wiki](http://wiki.ethereum.org/index.php/Patricia_Tree).
+found on the [Wiki](http://wiki.ur.org/index.php/Patricia_Tree).
 
 The patricia trie uses a db as backend and could be anything as long as
 it satisfies the Database interface found in `common/db.go`.

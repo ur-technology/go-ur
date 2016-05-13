@@ -1,44 +1,44 @@
-// Copyright 2014 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2014 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
-// Package state provides a caching layer atop the Ethereum state trie.
+// Package state provides a caching layer atop the UR state trie.
 package state
 
 import (
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/trie"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/core/vm"
+	"github.com/ur/go-ur/urdb"
+	"github.com/ur/go-ur/logger"
+	"github.com/ur/go-ur/logger/glog"
+	"github.com/ur/go-ur/trie"
 )
 
 // The starting nonce determines the default nonce when new accounts are being
 // created.
 var StartingNonce uint64
 
-// StateDBs within the ethereum protocol are used to store anything
+// StateDBs within the ur protocol are used to store anything
 // within the merkle trie. StateDBs take care of caching and storing
 // nested states. It's the general query interface to retrieve:
 // * Contracts
 // * Accounts
 type StateDB struct {
-	db   ethdb.Database
+	db   urdb.Database
 	trie *trie.SecureTrie
 
 	stateObjects map[string]*StateObject
@@ -52,7 +52,7 @@ type StateDB struct {
 }
 
 // Create a new state from a given trie
-func New(root common.Hash, db ethdb.Database) (*StateDB, error) {
+func New(root common.Hash, db urdb.Database) (*StateDB, error) {
 	tr, err := trie.NewSecure(root, db)
 	if err != nil {
 		return nil, err
@@ -258,7 +258,7 @@ func (self *StateDB) GetOrNewStateObject(addr common.Address) *StateObject {
 	return stateObject
 }
 
-// NewStateObject create a state object whether it exist in the trie or not
+// NewStateObject create a state object whur it exist in the trie or not
 func (self *StateDB) newStateObject(addr common.Address) *StateObject {
 	if glog.V(logger.Core) {
 		glog.Infof("(+) %x\n", addr)
@@ -353,7 +353,7 @@ func (s *StateDB) Commit() (root common.Hash, err error) {
 // CommitBatch commits all state changes to a write batch but does not
 // execute the batch. It is used to validate state changes against
 // the root hash stored in a block.
-func (s *StateDB) CommitBatch() (root common.Hash, batch ethdb.Batch) {
+func (s *StateDB) CommitBatch() (root common.Hash, batch urdb.Batch) {
 	batch = s.db.NewBatch()
 	root, _ = s.commit(batch)
 	return root, batch

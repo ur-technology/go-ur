@@ -40,7 +40,7 @@ s := set.NewNonTS() // non thread-safe version
 
 // ... or with some initial values
 s := set.New("istanbul", "frankfurt", 30.123, "san francisco", 1234)
-s := set.NewNonTS("kenya", "ethiopia", "sumatra")
+s := set.NewNonTS("kenya", "uriopia", "sumatra")
 
 ```
 

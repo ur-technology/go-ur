@@ -67,7 +67,7 @@ func TestSetNonTS_Remove(t *testing.T) {
 		t.Error("Remove: set size should be zero")
 	}
 
-	s.Remove("fatih") // try to remove something from a zero length set
+	s.Remove("fatih") // try to remove somuring from a zero length set
 }
 
 func TestSetNonTS_Remove_multiple(t *testing.T) {
@@ -106,7 +106,7 @@ func TestSetNonTS_Pop(t *testing.T) {
 		t.Error("Pop: should return nil because set is empty")
 	}
 
-	s.Pop() // try to remove something from a zero length set
+	s.Pop() // try to remove somuring from a zero length set
 }
 
 func TestSetNonTS_Has(t *testing.T) {

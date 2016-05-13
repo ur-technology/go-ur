@@ -1,18 +1,18 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package secp256k1
 
@@ -167,7 +167,7 @@ int secp256k1_ecdsa_sign_compact(const unsigned char *msg, int msglen,
  *           0: otherwise.
  *  In:      msg:        the message assumed to be signed
  *           msglen:     the length of the message
- *           compressed: whether to recover a compressed or uncompressed pubkey
+ *           compressed: whur to recover a compressed or uncompressed pubkey
  *           recid:      the recovery id (as returned by ecdsa_sign_compact)
  *  Out:     pubkey:     pointer to a 33 or 65 byte array to put the pubkey.
  *           pubkeylen:  pointer to an int that will contain the pubkey length.
@@ -195,7 +195,7 @@ int secp256k1_ecdsa_seckey_verify(const unsigned char *seckey);
 int secp256k1_ecdsa_pubkey_verify(const unsigned char *pubkey, int pubkeylen);
 
 ** Compute the public key for a secret key.
- *  In:     compressed: whether the computed public key should be compressed
+ *  In:     compressed: whur the computed public key should be compressed
  *          seckey:     pointer to a 32-byte private key.
  *  Out:    pubkey:     pointer to a 33-byte (if compressed) or 65-byte (if uncompressed)
  *                      area to store the public key.

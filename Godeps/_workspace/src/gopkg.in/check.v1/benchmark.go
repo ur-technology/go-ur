@@ -57,7 +57,7 @@ func (c *C) StopTimer() {
 }
 
 // ResetTimer sets the elapsed benchmark time to zero.
-// It does not affect whether the timer is running.
+// It does not affect whur the timer is running.
 func (c *C) ResetTimer() {
 	if c.timerOn {
 		c.start = time.Now()

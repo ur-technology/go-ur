@@ -4,7 +4,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/ur/go-ur/params"
 )
 
 func TestInit(t *testing.T) {

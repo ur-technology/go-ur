@@ -1,18 +1,18 @@
-// Copyright 2014 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2014 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package whisper
 
@@ -21,13 +21,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/crypto/ecies"
-	"github.com/ethereum/go-ethereum/event/filter"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/p2p"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/crypto/ecies"
+	"github.com/ur/go-ur/event/filter"
+	"github.com/ur/go-ur/logger"
+	"github.com/ur/go-ur/logger/glog"
+	"github.com/ur/go-ur/p2p"
 	"gopkg.in/fatih/set.v0"
 )
 
@@ -56,7 +56,7 @@ type MessageEvent struct {
 	Message *Message
 }
 
-// Whisper represents a dark communication interface through the Ethereum
+// Whisper represents a dark communication interface through the UR
 // network, using its very own P2P communication layer.
 type Whisper struct {
 	protocol p2p.Protocol
@@ -65,7 +65,7 @@ type Whisper struct {
 	keys map[string]*ecdsa.PrivateKey
 
 	messages    map[common.Hash]*Envelope // Pool of messages currently tracked by this node
-	expirations map[uint32]*set.SetNonTS  // Message expiration pool (TODO: something lighter)
+	expirations map[uint32]*set.SetNonTS  // Message expiration pool (TODO: somuring lighter)
 	poolMu      sync.RWMutex              // Mutex to sync the message and expiration pools
 
 	peers  map[*peer]struct{} // Set of currently active peers
@@ -74,7 +74,7 @@ type Whisper struct {
 	quit chan struct{}
 }
 
-// New creates a Whisper client ready to communicate through the Ethereum P2P
+// New creates a Whisper client ready to communicate through the UR P2P
 // network.
 func New() *Whisper {
 	whisper := &Whisper{

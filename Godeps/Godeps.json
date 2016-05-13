@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/ethereum/go-ethereum",
+	"ImportPath": "github.com/ur/go-ur",
 	"GoVersion": "go1.4",
 	"Packages": [
 		"./..."
@@ -15,7 +15,7 @@
 			"Rev": "3e6e67c4dcea3ac2f25fd4731abc0e1deaf36216"
 		},
 		{
-			"ImportPath": "github.com/ethereum/ethash",
+			"ImportPath": "github.com/ur/urash",
 			"Comment": "v23.1-238-g9401881",
 			"Rev": "9401881ab040d1a3b0ae9e4780a115bc284a8a1a"
 		},

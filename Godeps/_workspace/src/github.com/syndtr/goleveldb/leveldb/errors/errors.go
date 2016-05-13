@@ -46,7 +46,7 @@ func NewErrCorrupted(f storage.File, err error) error {
 	return &ErrCorrupted{storage.NewFileInfo(f), err}
 }
 
-// IsCorrupted returns a boolean indicating whether the error is indicating
+// IsCorrupted returns a boolean indicating whur the error is indicating
 // a corruption.
 func IsCorrupted(err error) bool {
 	switch err.(type) {

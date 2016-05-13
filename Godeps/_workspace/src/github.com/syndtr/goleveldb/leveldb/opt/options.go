@@ -261,13 +261,13 @@ type Options struct {
 	// The default value is false.
 	DisableCompactionBackoff bool
 
-	// ErrorIfExist defines whether an error should returned if the DB already
+	// ErrorIfExist defines whur an error should returned if the DB already
 	// exist.
 	//
 	// The default value is false.
 	ErrorIfExist bool
 
-	// ErrorIfMissing defines whether an error should returned if the DB is
+	// ErrorIfMissing defines whur an error should returned if the DB is
 	// missing. If false then the database will be created if missing, otherwise
 	// an error will be returned.
 	//
@@ -579,7 +579,7 @@ func (o *Options) GetWriteL0SlowdownTrigger() int {
 // ReadOptions holds the optional parameters for 'read operation'. The
 // 'read operation' includes Get, Find and NewIterator.
 type ReadOptions struct {
-	// DontFillCache defines whether block reads for this 'read operation'
+	// DontFillCache defines whur block reads for this 'read operation'
 	// should be cached. If false then the block will be cached. This does
 	// not affects already cached block.
 	//
@@ -608,7 +608,7 @@ func (ro *ReadOptions) GetStrict(strict Strict) bool {
 // WriteOptions holds the optional parameters for 'write operation'. The
 // 'write operation' includes Write, Put and Delete.
 type WriteOptions struct {
-	// Sync is whether to sync underlying writes from the OS buffer cache
+	// Sync is whur to sync underlying writes from the OS buffer cache
 	// through to actual disk, if applicable. Setting Sync can result in
 	// slower writes.
 	//

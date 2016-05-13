@@ -1,32 +1,32 @@
-// Copyright 2014 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2014 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package vm
 
 import (
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/logger"
+	"github.com/ur/go-ur/logger/glog"
+	"github.com/ur/go-ur/params"
 )
 
-// PrecompiledAccount represents a native ethereum contract
+// PrecompiledAccount represents a native ur contract
 type PrecompiledAccount struct {
 	Gas func(l int) *big.Int
 	fn  func(in []byte) []byte
@@ -37,11 +37,11 @@ func (self PrecompiledAccount) Call(in []byte) []byte {
 	return self.fn(in)
 }
 
-// Precompiled contains the default set of ethereum contracts
+// Precompiled contains the default set of ur contracts
 var Precompiled = PrecompiledContracts()
 
-// PrecompiledContracts returns the default set of precompiled ethereum
-// contracts defined by the ethereum yellow paper.
+// PrecompiledContracts returns the default set of precompiled ur
+// contracts defined by the ur yellow paper.
 func PrecompiledContracts() map[string]*PrecompiledAccount {
 	return map[string]*PrecompiledAccount{
 		// ECRECOVER

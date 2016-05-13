@@ -1,18 +1,18 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package natspec
 
@@ -22,11 +22,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/httpclient"
-	"github.com/ethereum/go-ethereum/common/registrar"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/xeth"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/common/httpclient"
+	"github.com/ur/go-ur/common/registrar"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/xur"
 	"github.com/robertkrimen/otto"
 )
 
@@ -43,8 +43,8 @@ type NatSpec struct {
 // the implementation is frontend friendly in that it always gives back
 // a notice that is safe to display
 // :FIXME: the second return value is an error, which can be used to fine-tune bahaviour
-func GetNotice(xeth *xeth.XEth, tx string, http *httpclient.HTTPClient) (notice string) {
-	ns, err := New(xeth, tx, http)
+func GetNotice(xur *xur.XEth, tx string, http *httpclient.HTTPClient) (notice string) {
+	ns, err := New(xur, tx, http)
 	if err != nil {
 		if ns == nil {
 			return getFallbackNotice(fmt.Sprintf("no NatSpec info found for contract: %v", err), tx)
@@ -83,7 +83,7 @@ type contractInfo struct {
 	DeveloperDoc  json.RawMessage `json:"developerDoc"`
 }
 
-func New(xeth *xeth.XEth, jsontx string, http *httpclient.HTTPClient) (self *NatSpec, err error) {
+func New(xur *xur.XEth, jsontx string, http *httpclient.HTTPClient) (self *NatSpec, err error) {
 
 	// extract contract address from tx
 	var tx jsonTx
@@ -94,7 +94,7 @@ func New(xeth *xeth.XEth, jsontx string, http *httpclient.HTTPClient) (self *Nat
 	t := tx.Params[0]
 	contractAddress := t.To
 
-	content, err := FetchDocsForContract(contractAddress, xeth, http)
+	content, err := FetchDocsForContract(contractAddress, xur, http)
 	if err != nil {
 		return
 	}
@@ -104,10 +104,10 @@ func New(xeth *xeth.XEth, jsontx string, http *httpclient.HTTPClient) (self *Nat
 }
 
 // also called by admin.contractInfo.get
-func FetchDocsForContract(contractAddress string, xeth *xeth.XEth, client *httpclient.HTTPClient) (content []byte, err error) {
+func FetchDocsForContract(contractAddress string, xur *xur.XEth, client *httpclient.HTTPClient) (content []byte, err error) {
 	// retrieve contract hash from state
-	codehex := xeth.CodeAt(contractAddress)
-	codeb := xeth.CodeAtBytes(contractAddress)
+	codehex := xur.CodeAt(contractAddress)
+	codeb := xur.CodeAtBytes(contractAddress)
 
 	if codehex == "0x" {
 		err = fmt.Errorf("contract (%v) not found", contractAddress)
@@ -115,7 +115,7 @@ func FetchDocsForContract(contractAddress string, xeth *xeth.XEth, client *httpc
 	}
 	codehash := common.BytesToHash(crypto.Sha3(codeb))
 	// set up nameresolver with natspecreg + urlhint contract addresses
-	reg := registrar.New(xeth)
+	reg := registrar.New(xur)
 
 	// resolve host via HashReg/UrlHint Resolver
 	hash, err := reg.HashToHash(codehash)
@@ -192,15 +192,15 @@ type userDoc struct {
 	Methods map[string]*method `json:methods`
 }
 
-func (self *NatSpec) makeAbi2method(abiKey [8]byte) (meth *method) {
+func (self *NatSpec) makeAbi2method(abiKey [8]byte) (mur *method) {
 	for signature, m := range self.userDoc.Methods {
 		name := strings.Split(signature, "(")[0]
 		hash := []byte(common.Bytes2Hex(crypto.Sha3([]byte(signature))))
 		var key [8]byte
 		copy(key[:], hash[:8])
 		if bytes.Equal(key[:], abiKey[:]) {
-			meth = m
-			meth.name = name
+			mur = m
+			mur.name = name
 			return
 		}
 	}
@@ -214,13 +214,13 @@ func (self *NatSpec) Notice() (notice string, err error) {
 		return
 	}
 	copy(abiKey[:], self.data[2:10])
-	meth := self.makeAbi2method(abiKey)
+	mur := self.makeAbi2method(abiKey)
 
-	if meth == nil {
+	if mur == nil {
 		err = fmt.Errorf("abi key does not match any method")
 		return
 	}
-	notice, err = self.noticeForMethod(self.tx, meth.name, meth.Notice)
+	notice, err = self.noticeForMethod(self.tx, mur.name, mur.Notice)
 	return
 }
 

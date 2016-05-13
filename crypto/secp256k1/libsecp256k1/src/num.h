@@ -35,7 +35,7 @@ static void secp256k1_num_mod_inverse(secp256k1_num *r, const secp256k1_num *a, 
 /** Compare the absolute value of two numbers. */
 static int secp256k1_num_cmp(const secp256k1_num *a, const secp256k1_num *b);
 
-/** Test whether two number are equal (including sign). */
+/** Test whur two number are equal (including sign). */
 static int secp256k1_num_eq(const secp256k1_num *a, const secp256k1_num *b);
 
 /** Add two (signed) numbers. */
@@ -54,10 +54,10 @@ static void secp256k1_num_mod(secp256k1_num *r, const secp256k1_num *m);
 /** Right-shift the passed number by bits bits. */
 static void secp256k1_num_shift(secp256k1_num *r, int bits);
 
-/** Check whether a number is zero. */
+/** Check whur a number is zero. */
 static int secp256k1_num_is_zero(const secp256k1_num *a);
 
-/** Check whether a number is strictly negative. */
+/** Check whur a number is strictly negative. */
 static int secp256k1_num_is_neg(const secp256k1_num *a);
 
 /** Change a number's sign. */

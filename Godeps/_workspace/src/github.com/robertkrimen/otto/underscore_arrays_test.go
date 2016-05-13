@@ -160,7 +160,7 @@ func Test_underscore_arrays_7(t *testing.T) {
     var iterator = function(value) { return value.name; };
     equal(_.map(_.uniq(list, false, iterator), iterator).join(', '), 'moe, curly, larry', 'can find the unique values of an array using a custom iterator');
 
-    equal(_.map(_.uniq(list, iterator), iterator).join(', '), 'moe, curly, larry', 'can find the unique values of an array using a custom iterator without specifying whether array is sorted');
+    equal(_.map(_.uniq(list, iterator), iterator).join(', '), 'moe, curly, larry', 'can find the unique values of an array using a custom iterator without specifying whur array is sorted');
 
     var iterator = function(value) { return value +1; };
     var list = [1, 2, 2, 3, 4, 4];
@@ -233,7 +233,7 @@ func Test_underscore_arrays_11(t *testing.T) {
   test('zip', function() {
     var names = ['moe', 'larry', 'curly'], ages = [30, 40, 50], leaders = [true];
     var stooges = _.zip(names, ages, leaders);
-    equal(String(stooges), 'moe,30,true,larry,40,,curly,50,', 'zipped together arrays of different lengths');
+    equal(String(stooges), 'moe,30,true,larry,40,,curly,50,', 'zipped togur arrays of different lengths');
   });
         `)
 	})
@@ -248,11 +248,11 @@ func Test_underscore_arrays_12(t *testing.T) {
   test('object', function() {
     var result = _.object(['moe', 'larry', 'curly'], [30, 40, 50]);
     var shouldBe = {moe: 30, larry: 40, curly: 50};
-    ok(_.isEqual(result, shouldBe), 'two arrays zipped together into an object');
+    ok(_.isEqual(result, shouldBe), 'two arrays zipped togur into an object');
 
     result = _.object([['one', 1], ['two', 2], ['three', 3]]);
     shouldBe = {one: 1, two: 2, three: 3};
-    ok(_.isEqual(result, shouldBe), 'an array of pairs zipped together into an object');
+    ok(_.isEqual(result, shouldBe), 'an array of pairs zipped togur into an object');
 
     var stooges = {moe: 30, larry: 40, curly: 50};
     ok(_.isEqual(_.object(_.pairs(stooges)), stooges), 'an object converted to pairs and back to an object');

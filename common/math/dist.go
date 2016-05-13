@@ -1,18 +1,18 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package math
 
@@ -20,7 +20,7 @@ import (
 	"math/big"
 	"sort"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/ur/go-ur/common"
 )
 
 type Summer interface {
@@ -83,7 +83,7 @@ func (v vectorSummer) Sum(i int) *big.Int { return v.by(v.vectors[i]) }
 
 func GasSum(v Vector) *big.Int { return v.Gas }
 
-var etherInWei = new(big.Rat).SetInt(common.String2Big("1000000000000000000"))
+var urInWei = new(big.Rat).SetInt(common.String2Big("1000000000000000000"))
 
 func GasPrice(bp, gl, ep *big.Int) *big.Int {
 	BP := new(big.Rat).SetInt(bp)
@@ -92,5 +92,5 @@ func GasPrice(bp, gl, ep *big.Int) *big.Int {
 	GP := new(big.Rat).Quo(BP, GL)
 	GP = GP.Quo(GP, EP)
 
-	return GP.Mul(GP, etherInWei).Num()
+	return GP.Mul(GP, urInWei).Num()
 }

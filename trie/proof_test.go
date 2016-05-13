@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/rlp"
 )
 
 func init() {

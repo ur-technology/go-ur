@@ -1,18 +1,18 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package api
 
@@ -23,21 +23,21 @@ import (
 	"os"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/compiler"
-	"github.com/ethereum/go-ethereum/common/natspec"
-	"github.com/ethereum/go-ethereum/common/registrar"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/rpc/codec"
-	"github.com/ethereum/go-ethereum/rpc/comms"
-	"github.com/ethereum/go-ethereum/rpc/shared"
-	"github.com/ethereum/go-ethereum/rpc/useragent"
-	"github.com/ethereum/go-ethereum/xeth"
+	"github.com/ur/go-ur/common"
+	"github.com/ur/go-ur/common/compiler"
+	"github.com/ur/go-ur/common/natspec"
+	"github.com/ur/go-ur/common/registrar"
+	"github.com/ur/go-ur/core"
+	"github.com/ur/go-ur/core/types"
+	"github.com/ur/go-ur/crypto"
+	"github.com/ur/go-ur/ur"
+	"github.com/ur/go-ur/logger/glog"
+	"github.com/ur/go-ur/rlp"
+	"github.com/ur/go-ur/rpc/codec"
+	"github.com/ur/go-ur/rpc/comms"
+	"github.com/ur/go-ur/rpc/shared"
+	"github.com/ur/go-ur/rpc/useragent"
+	"github.com/ur/go-ur/xur"
 )
 
 const (
@@ -79,17 +79,17 @@ type adminhandler func(*adminApi, *shared.Request) (interface{}, error)
 
 // admin api provider
 type adminApi struct {
-	xeth     *xeth.XEth
-	ethereum *eth.Ethereum
+	xur     *xur.XEth
+	ur *ur.UR
 	codec    codec.Codec
 	coder    codec.ApiCoder
 }
 
 // create a new admin api instance
-func NewAdminApi(xeth *xeth.XEth, ethereum *eth.Ethereum, codec codec.Codec) *adminApi {
+func NewAdminApi(xur *xur.XEth, ur *ur.UR, codec codec.Codec) *adminApi {
 	return &adminApi{
-		xeth:     xeth,
-		ethereum: ethereum,
+		xur:     xur,
+		ur: ur,
 		codec:    codec,
 		coder:    codec.New(nil),
 	}
@@ -129,7 +129,7 @@ func (self *adminApi) AddPeer(req *shared.Request) (interface{}, error) {
 		return nil, shared.NewDecodeParamError(err.Error())
 	}
 
-	err := self.ethereum.AddPeer(args.Url)
+	err := self.ur.AddPeer(args.Url)
 	if err == nil {
 		return true, nil
 	}
@@ -137,15 +137,15 @@ func (self *adminApi) AddPeer(req *shared.Request) (interface{}, error) {
 }
 
 func (self *adminApi) Peers(req *shared.Request) (interface{}, error) {
-	return self.ethereum.Network().PeersInfo(), nil
+	return self.ur.Network().PeersInfo(), nil
 }
 
 func (self *adminApi) NodeInfo(req *shared.Request) (interface{}, error) {
-	return self.ethereum.Network().NodeInfo(), nil
+	return self.ur.Network().NodeInfo(), nil
 }
 
 func (self *adminApi) DataDir(req *shared.Request) (interface{}, error) {
-	return self.ethereum.DataDir, nil
+	return self.ur.DataDir, nil
 }
 
 func hasAllBlocks(chain *core.BlockChain, bs []*types.Block) bool {
@@ -190,10 +190,10 @@ func (self *adminApi) ImportChain(req *shared.Request) (interface{}, error) {
 			break
 		}
 		// Import the batch.
-		if hasAllBlocks(self.ethereum.BlockChain(), blocks[:i]) {
+		if hasAllBlocks(self.ur.BlockChain(), blocks[:i]) {
 			continue
 		}
-		if _, err := self.ethereum.BlockChain().InsertChain(blocks[:i]); err != nil {
+		if _, err := self.ur.BlockChain().InsertChain(blocks[:i]); err != nil {
 			return false, fmt.Errorf("invalid block %d: %v", n, err)
 		}
 	}
@@ -211,7 +211,7 @@ func (self *adminApi) ExportChain(req *shared.Request) (interface{}, error) {
 		return false, err
 	}
 	defer fh.Close()
-	if err := self.ethereum.BlockChain().Export(fh); err != nil {
+	if err := self.ur.BlockChain().Export(fh); err != nil {
 		return false, err
 	}
 
@@ -234,7 +234,7 @@ func (self *adminApi) SetSolc(req *shared.Request) (interface{}, error) {
 		return nil, shared.NewDecodeParamError(err.Error())
 	}
 
-	solc, err := self.xeth.SetSolc(args.Path)
+	solc, err := self.xur.SetSolc(args.Path)
 	if err != nil {
 		return nil, err
 	}
@@ -253,7 +253,7 @@ func (self *adminApi) StartRPC(req *shared.Request) (interface{}, error) {
 		CorsDomain:    args.CorsDomain,
 	}
 
-	apis, err := ParseApiString(args.Apis, self.codec, self.xeth, self.ethereum)
+	apis, err := ParseApiString(args.Apis, self.codec, self.xur, self.ur)
 	if err != nil {
 		return false, err
 	}
@@ -282,8 +282,8 @@ func (self *adminApi) SleepBlocks(req *shared.Request) (interface{}, error) {
 		timer = time.NewTimer(time.Duration(args.Timeout) * time.Second).C
 	}
 
-	height = new(big.Int).Add(self.xeth.CurrentBlock().Number(), big.NewInt(args.N))
-	height, err = sleepBlocks(self.xeth.UpdateState(), height, timer)
+	height = new(big.Int).Add(self.xur.CurrentBlock().Number(), big.NewInt(args.N))
+	height, err = sleepBlocks(self.xur.UpdateState(), height, timer)
 	if err != nil {
 		return nil, err
 	}
@@ -294,7 +294,7 @@ func sleepBlocks(wait chan *big.Int, height *big.Int, timer <-chan time.Time) (n
 	wait <- height
 	select {
 	case <-timer:
-		// if times out make sure the xeth loop does not block
+		// if times out make sure the xur loop does not block
 		go func() {
 			select {
 			case wait <- nil:
@@ -324,7 +324,7 @@ func (self *adminApi) SetGlobalRegistrar(req *shared.Request) (interface{}, erro
 
 	sender := common.HexToAddress(args.ContractAddress)
 
-	reg := registrar.New(self.xeth)
+	reg := registrar.New(self.xur)
 	txhash, err := reg.SetGlobalRegistrar(args.NameReg, sender)
 	if err != nil {
 		return false, err
@@ -339,7 +339,7 @@ func (self *adminApi) SetHashReg(req *shared.Request) (interface{}, error) {
 		return nil, shared.NewDecodeParamError(err.Error())
 	}
 
-	reg := registrar.New(self.xeth)
+	reg := registrar.New(self.xur)
 	sender := common.HexToAddress(args.Sender)
 	txhash, err := reg.SetHashReg(args.HashReg, sender)
 	if err != nil {
@@ -358,7 +358,7 @@ func (self *adminApi) SetUrlHint(req *shared.Request) (interface{}, error) {
 	urlHint := args.UrlHint
 	sender := common.HexToAddress(args.Sender)
 
-	reg := registrar.New(self.xeth)
+	reg := registrar.New(self.xur)
 	txhash, err := reg.SetUrlHint(urlHint, sender)
 	if err != nil {
 		return nil, err
@@ -389,10 +389,10 @@ func (self *adminApi) Register(req *shared.Request) (interface{}, error) {
 
 	sender := common.HexToAddress(args.Sender)
 	// sender and contract address are passed as hex strings
-	codeb := self.xeth.CodeAtBytes(args.Address)
+	codeb := self.xur.CodeAtBytes(args.Address)
 	codeHash := common.BytesToHash(crypto.Sha3(codeb))
 	contentHash := common.HexToHash(args.ContentHashHex)
-	registry := registrar.New(self.xeth)
+	registry := registrar.New(self.xur)
 
 	_, err := registry.SetHashToHash(sender, codeHash, contentHash)
 	if err != nil {
@@ -409,7 +409,7 @@ func (self *adminApi) RegisterUrl(req *shared.Request) (interface{}, error) {
 	}
 
 	sender := common.HexToAddress(args.Sender)
-	registry := registrar.New(self.xeth)
+	registry := registrar.New(self.xur)
 	_, err := registry.SetUrlToHash(sender, common.HexToHash(args.ContentHash), args.Url)
 	if err != nil {
 		return false, err
@@ -419,12 +419,12 @@ func (self *adminApi) RegisterUrl(req *shared.Request) (interface{}, error) {
 }
 
 func (self *adminApi) StartNatSpec(req *shared.Request) (interface{}, error) {
-	self.ethereum.NatSpec = true
+	self.ur.NatSpec = true
 	return true, nil
 }
 
 func (self *adminApi) StopNatSpec(req *shared.Request) (interface{}, error) {
-	self.ethereum.NatSpec = false
+	self.ur.NatSpec = false
 	return true, nil
 }
 
@@ -434,7 +434,7 @@ func (self *adminApi) GetContractInfo(req *shared.Request) (interface{}, error) 
 		return nil, shared.NewDecodeParamError(err.Error())
 	}
 
-	infoDoc, err := natspec.FetchDocsForContract(args.Contract, self.xeth, self.ethereum.HTTPClient())
+	infoDoc, err := natspec.FetchDocsForContract(args.Contract, self.xur, self.ur.HTTPClient())
 	if err != nil {
 		return nil, err
 	}
@@ -454,7 +454,7 @@ func (self *adminApi) HttpGet(req *shared.Request) (interface{}, error) {
 		return nil, shared.NewDecodeParamError(err.Error())
 	}
 
-	resp, err := self.ethereum.HTTPClient().Get(args.Uri, args.Path)
+	resp, err := self.ur.HTTPClient().Get(args.Uri, args.Path)
 	if err != nil {
 		return nil, err
 	}
@@ -463,7 +463,7 @@ func (self *adminApi) HttpGet(req *shared.Request) (interface{}, error) {
 }
 
 func (self *adminApi) EnableUserAgent(req *shared.Request) (interface{}, error) {
-	if fe, ok := self.xeth.Frontend().(*useragent.RemoteFrontend); ok {
+	if fe, ok := self.xur.Frontend().(*useragent.RemoteFrontend); ok {
 		fe.Enable()
 	}
 	return true, nil

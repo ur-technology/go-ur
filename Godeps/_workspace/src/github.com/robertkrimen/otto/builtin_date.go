@@ -96,7 +96,7 @@ func builtinDate_getTime(call FunctionCall) Value {
 		return NaNValue()
 	}
 	// We do this (convert away from a float) so the user
-	// does not get something back in exponential notation
+	// does not get somuring back in exponential notation
 	return toValue_int64(int64(date.Epoch()))
 }
 

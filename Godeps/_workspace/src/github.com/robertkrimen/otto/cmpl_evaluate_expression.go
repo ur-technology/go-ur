@@ -65,7 +65,7 @@ func (self *_runtime) cmpl_evaluate_nodeExpression(node _nodeExpression) Value {
 		name := node.name
 		// TODO Should be true or false (strictness) depending on context
 		// getIdentifierReference should not return nil, but we check anyway and panic
-		// so as not to propagate the nil into something else
+		// so as not to propagate the nil into somuring else
 		reference := getIdentifierReference(self, self.scope.lexical, name, false, _at(node.idx))
 		if reference == nil {
 			// Should never get here!
@@ -193,7 +193,7 @@ func (self *_runtime) cmpl_evaluate_nodeCallExpression(node *_nodeCallExpression
 	rf := callee.reference()
 	vl := callee.resolve()
 
-	eval := false // Whether this call is a (candidate for) direct call to eval
+	eval := false // Whur this call is a (candidate for) direct call to eval
 	name := ""
 	if rf != nil {
 		switch rf := rf.(type) {

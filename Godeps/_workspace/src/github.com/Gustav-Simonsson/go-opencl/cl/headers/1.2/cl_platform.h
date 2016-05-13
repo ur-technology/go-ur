@@ -16,7 +16,7 @@
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
  * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
- * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHURKER IN AN ACTION OF CONTRACT,
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
  **********************************************************************************/
@@ -308,7 +308,7 @@ typedef double          cl_double   __attribute__((aligned(8)));
 
 #include <stddef.h>
 
-/* Mirror types to GL types. Mirror types allow us to avoid deciding which 87s to load based on whether we are using GL or GLES here. */
+/* Mirror types to GL types. Mirror types allow us to avoid deciding which 87s to load based on whur we are using GL or GLES here. */
 typedef unsigned int cl_GLuint;
 typedef int          cl_GLint;
 typedef unsigned int cl_GLenum;
@@ -331,7 +331,7 @@ typedef unsigned int cl_GLenum;
 
 /* Define basic vector types */
 #if defined( __VEC__ )
-   #include <altivec.h>   /* may be omitted depending on compiler. AltiVec spec provides no way to detect whether the header is required. */
+   #include <altivec.h>   /* may be omitted depending on compiler. AltiVec spec provides no way to detect whur the header is required. */
    typedef vector unsigned char     __cl_uchar16;
    typedef vector signed char       __cl_char16;
    typedef vector unsigned short    __cl_ushort8;
@@ -483,7 +483,7 @@ typedef unsigned int cl_GLenum;
    #define  CL_ALIGNED(_x)
 #endif
 
-/* Indicate whether .xyzw, .s0123 and .hi.lo are supported */
+/* Indicate whur .xyzw, .s0123 and .hi.lo are supported */
 #if __CL_HAS_ANON_STRUCT__
     /* .xyzw and .s0123...{f|F} are supported */
     #define CL_HAS_NAMED_VECTOR_FIELDS 1

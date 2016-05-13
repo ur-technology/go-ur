@@ -1,28 +1,28 @@
-// Copyright 2015 The go-ethereum Authors
-// This file is part of the go-ethereum library.
+// Copyright 2015 The go-ur Authors
+// This file is part of the go-ur library.
 //
-// The go-ethereum library is free software: you can redistribute it and/or modify
+// The go-ur library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// The go-ethereum library is distributed in the hope that it will be useful,
+// The go-ur library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
+// along with the go-ur library. If not, see <http://www.gnu.org/licenses/>.
 
 package api
 
 import (
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/rpc/codec"
-	"github.com/ethereum/go-ethereum/rpc/shared"
-	"github.com/ethereum/go-ethereum/xeth"
+	"github.com/ur/go-ur/ur"
+	"github.com/ur/go-ur/rpc/codec"
+	"github.com/ur/go-ur/rpc/shared"
+	"github.com/ur/go-ur/xur"
 )
 
 const (
@@ -52,17 +52,17 @@ type shhhandler func(*shhApi, *shared.Request) (interface{}, error)
 
 // shh api provider
 type shhApi struct {
-	xeth     *xeth.XEth
-	ethereum *eth.Ethereum
+	xur     *xur.XEth
+	ur *ur.UR
 	methods  map[string]shhhandler
 	codec    codec.ApiCoder
 }
 
 // create a new whisper api instance
-func NewShhApi(xeth *xeth.XEth, eth *eth.Ethereum, coder codec.Codec) *shhApi {
+func NewShhApi(xur *xur.XEth, ur *ur.UR, coder codec.Codec) *shhApi {
 	return &shhApi{
-		xeth:     xeth,
-		ethereum: eth,
+		xur:     xur,
+		ur: ur,
 		methods:  shhMapping,
 		codec:    coder.New(nil),
 	}
@@ -97,7 +97,7 @@ func (self *shhApi) ApiVersion() string {
 }
 
 func (self *shhApi) Version(req *shared.Request) (interface{}, error) {
-	w := self.xeth.Whisper()
+	w := self.xur.Whisper()
 	if w == nil {
 		return nil, newWhisperOfflineError(req.Method)
 	}
@@ -106,7 +106,7 @@ func (self *shhApi) Version(req *shared.Request) (interface{}, error) {
 }
 
 func (self *shhApi) Post(req *shared.Request) (interface{}, error) {
-	w := self.xeth.Whisper()
+	w := self.xur.Whisper()
 	if w == nil {
 		return nil, newWhisperOfflineError(req.Method)
 	}
@@ -125,7 +125,7 @@ func (self *shhApi) Post(req *shared.Request) (interface{}, error) {
 }
 
 func (self *shhApi) HasIdentity(req *shared.Request) (interface{}, error) {
-	w := self.xeth.Whisper()
+	w := self.xur.Whisper()
 	if w == nil {
 		return nil, newWhisperOfflineError(req.Method)
 	}
@@ -139,7 +139,7 @@ func (self *shhApi) HasIdentity(req *shared.Request) (interface{}, error) {
 }
 
 func (self *shhApi) NewIdentity(req *shared.Request) (interface{}, error) {
-	w := self.xeth.Whisper()
+	w := self.xur.Whisper()
 	if w == nil {
 		return nil, newWhisperOfflineError(req.Method)
 	}
@@ -153,7 +153,7 @@ func (self *shhApi) NewFilter(req *shared.Request) (interface{}, error) {
 		return nil, err
 	}
 
-	id := self.xeth.NewWhisperFilter(args.To, args.From, args.Topics)
+	id := self.xur.NewWhisperFilter(args.To, args.From, args.Topics)
 	return newHexNum(big.NewInt(int64(id)).Bytes()), nil
 }
 
@@ -162,11 +162,11 @@ func (self *shhApi) UninstallFilter(req *shared.Request) (interface{}, error) {
 	if err := self.codec.Decode(req.Params, &args); err != nil {
 		return nil, err
 	}
-	return self.xeth.UninstallWhisperFilter(args.Id), nil
+	return self.xur.UninstallWhisperFilter(args.Id), nil
 }
 
 func (self *shhApi) GetFilterChanges(req *shared.Request) (interface{}, error) {
-	w := self.xeth.Whisper()
+	w := self.xur.Whisper()
 	if w == nil {
 		return nil, newWhisperOfflineError(req.Method)
 	}
@@ -177,11 +177,11 @@ func (self *shhApi) GetFilterChanges(req *shared.Request) (interface{}, error) {
 		return nil, err
 	}
 
-	return self.xeth.WhisperMessagesChanged(args.Id), nil
+	return self.xur.WhisperMessagesChanged(args.Id), nil
 }
 
 func (self *shhApi) GetMessages(req *shared.Request) (interface{}, error) {
-	w := self.xeth.Whisper()
+	w := self.xur.Whisper()
 	if w == nil {
 		return nil, newWhisperOfflineError(req.Method)
 	}
@@ -192,5 +192,5 @@ func (self *shhApi) GetMessages(req *shared.Request) (interface{}, error) {
 		return nil, err
 	}
 
-	return self.xeth.WhisperMessages(args.Id), nil
+	return self.xur.WhisperMessages(args.Id), nil
 }

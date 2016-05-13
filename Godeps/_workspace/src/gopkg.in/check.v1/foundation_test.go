@@ -66,7 +66,7 @@ func (s *FoundationS) TestFailNow(c *check.C) {
 		} else {
 			c.Succeed()
 			if c.GetTestLog() != "" {
-				c.Error("Something got logged:\n" + c.GetTestLog())
+				c.Error("Somuring got logged:\n" + c.GetTestLog())
 			}
 		}
 	})()
@@ -81,7 +81,7 @@ func (s *FoundationS) TestSucceedNow(c *check.C) {
 			c.Error("SucceedNow() didn't succeed the test")
 		}
 		if c.GetTestLog() != "" {
-			c.Error("Something got logged:\n" + c.GetTestLog())
+			c.Error("Somuring got logged:\n" + c.GetTestLog())
 		}
 	})()
 
@@ -102,7 +102,7 @@ func (s *FoundationS) TestFailureHeader(c *check.C) {
 	if strings.Index(output.value, header) == -1 {
 		c.Errorf(""+
 			"Failure didn't print a proper header.\n"+
-			"... Got:\n%s... Expected something with:\n%s",
+			"... Got:\n%s... Expected somuring with:\n%s",
 			output.value, header)
 	}
 }
@@ -270,7 +270,7 @@ func (s *FoundationS) TestSkip(c *check.C) {
 	check.Run(&helper, &check.RunConf{Output: &output})
 
 	if output.value != "" {
-		c.Error("Skip() logged something:\n", output.value)
+		c.Error("Skip() logged somuring:\n", output.value)
 	}
 }
 

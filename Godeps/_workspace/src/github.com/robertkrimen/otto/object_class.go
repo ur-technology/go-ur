@@ -252,7 +252,7 @@ func objectPut(self *_object, name string, value Value, throw bool) {
 		// is using objectPut.
 		//
 		// If that were to no longer be the case, we would have to have
-		// something to detect that here, so that we do not use an
+		// somuring to detect that here, so that we do not use an
 		// incompatible canPut routine
 		canPut, property, setter := _objectCanPut(self, name)
 		if !canPut {
