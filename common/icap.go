@@ -66,7 +66,7 @@ func parseIndirectICAP(s string) (Address, error) {
 	if !strings.HasPrefix(s, "XE") {
 		return Address{}, ICAPCountryCodeError
 	}
-	if s[4:7] != "ETH" {
+	if s[4:7] != "UR" {
 		return Address{}, ICAPAssetIdentError
 	}
 	if err := validCheckSum(s); err != nil {
@@ -107,8 +107,8 @@ func clientIdentToIndirectICAP(instCode, clientIdent string) (string, error) {
 		return "", ICAPClientIdentError
 	}
 
-	// currently ETH is only valid asset identifier
-	s := join("ETH", instCode, clientIdent)
+	// currently UR is only valid asset identifier
+	s := join("UR", instCode, clientIdent)
 	return join("XE", checkDigits(s), s), nil
 }
 
