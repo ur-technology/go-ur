@@ -127,7 +127,7 @@ func (args *StartRPCArgs) UnmarshalJSON(b []byte) (err error) {
 	}
 
 	args.ListenAddress = "127.0.0.1"
-	args.ListenPort = 8545
+	args.ListenPort = 9595
 	args.Apis = "net,eth,web3"
 
 	if len(obj) >= 1 && obj[0] != nil {
