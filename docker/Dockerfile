@@ -15,7 +15,7 @@ RUN add-apt-repository ppa:ethereum/ethereum-dev
 RUN apt-get update
 RUN apt-get install -q -y geth
 
-EXPOSE 8545
-EXPOSE 30303
+EXPOSE 9595
+EXPOSE 19595
 
 ENTRYPOINT ["/usr/bin/geth"]
