@@ -4331,7 +4331,7 @@ Iban.fromBban = function (bban) {
  * @return {Iban} the IBAN object
  */
 Iban.createIndirect = function (options) {
-    return Iban.fromBban('ETH' + options.institution + options.identifier);
+    return Iban.fromBban('UR' + options.institution + options.identifier);
 };
 
 /**
@@ -4353,7 +4353,7 @@ Iban.isValid = function (iban) {
  * @returns {Boolean} true if it is, otherwise false
  */
 Iban.prototype.isValid = function () {
-    return /^XE[0-9]{2}(ETH[0-9A-Z]{13}|[0-9A-Z]{30,31})$/.test(this._iban) &&
+    return /^XE[0-9]{2}(UR[0-9A-Z]{13}|[0-9A-Z]{30,31})$/.test(this._iban) &&
         mod9710(iso13616Prepare(this._iban)) === 1;
 };
 
