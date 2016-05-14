@@ -111,7 +111,7 @@ func handle(id int, conn net.Conn, api shared.EthereumApi, c codec.Codec) {
 
 // Endpoint must be in the form of:
 // ${protocol}:${path}
-// e.g. ipc:/tmp/geth.ipc
+// e.g. ipc:/tmp/gur.ipc
 //      rpc:localhost:9595
 func ClientFromEndpoint(endpoint string, c codec.Codec) (EthereumClient, error) {
 	if strings.HasPrefix(endpoint, "ipc:") {
