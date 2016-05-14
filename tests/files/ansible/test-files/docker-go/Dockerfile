@@ -1,4 +1,4 @@
-# Adjusted from https://github.com/ethereum/go-ethereum/blob/develop/Dockerfile
+# Adjusted from https://github.com/urcapital/go-ur/blob/develop/Dockerfile
 FROM ubuntu:14.04
 
 ## Environment setup
@@ -31,7 +31,7 @@ RUN git checkout v1
 RUN go install -v
 
 # this is a workaround, to make sure that docker's cache is invalidated whenever the git repo changes
-ADD https://api.github.com/repos/ethereum/go-ethereum/git/refs/heads/develop unused.txt 
+ADD https://api.github.com/repos/urcapital/go-ur/git/refs/heads/develop unused.txt
 
 ## Fetch and install go-ethereum
 RUN go get -u -v -d github.com/ethereum/go-ethereum/...

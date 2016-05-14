@@ -6,12 +6,12 @@ before_install:
   # for g++4.8 and C++11
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
 
-  # Set up go-ethereum
+  # Set up go-ur
   - sudo apt-get update -y -qq
-  - sudo apt-get install -yqq libgmp3-dev 
-  - git clone --depth=10 https://github.com/ethereum/go-ethereum ${GOPATH}/src/github.com/ethereum/go-ethereum
+  - sudo apt-get install -yqq libgmp3-dev
+  - git clone --depth=10 https://github.com/urcapital/go-ur ${GOPATH}/src/github.com/urcapital/go-ur
   # use canned dependencies from the go-ethereum repository
-  - export GOPATH=$GOPATH:$GOPATH/src/github.com/ethereum/go-ethereum/Godeps/_workspace/
+  - export GOPATH=$GOPATH:$GOPATH/src/github.com/urcapital/go-ur/Godeps/_workspace/
   - echo $GOPATH
 
 install:
