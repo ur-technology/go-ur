@@ -2,100 +2,100 @@
 # with Go source code. If you know what GOPATH is then you probably
 # don't need to bother with make.
 
-.PHONY: geth geth-cross evm all test travis-test-with-coverage xgo clean
-.PHONY: geth-linux geth-linux-386 geth-linux-amd64
-.PHONY: geth-linux-arm geth-linux-arm-5 geth-linux-arm-6 geth-linux-arm-7 geth-linux-arm64
-.PHONY: geth-darwin geth-darwin-386 geth-darwin-amd64
-.PHONY: geth-windows geth-windows-386 geth-windows-amd64
-.PHONY: geth-android geth-ios
+.PHONY: gur gur-cross evm all test travis-test-with-coverage xgo clean
+.PHONY: gur-linux gur-linux-386 gur-linux-amd64
+.PHONY: gur-linux-arm gur-linux-arm-5 gur-linux-arm-6 gur-linux-arm-7 gur-linux-arm64
+.PHONY: gur-darwin gur-darwin-386 gur-darwin-amd64
+.PHONY: gur-windows gur-windows-386 gur-windows-amd64
+.PHONY: gur-android gur-ios
 
 GOBIN = build/bin
 GO ?= latest
 
-geth:
-	build/env.sh go build -i -v $(shell build/flags.sh) -o $(GOBIN)/geth ./cmd/geth
+gur:
+	build/env.sh go build -i -v $(shell build/flags.sh) -o $(GOBIN)/gur ./cmd/geth
 	@echo "Done building."
-	@echo "Run \"$(GOBIN)/geth\" to launch geth."
+	@echo "Run \"$(GOBIN)/gur\" to launch gur."
 
-geth-cross: geth-linux geth-darwin geth-windows geth-android geth-ios
+gur-cross: gur-linux gur-darwin gur-windows gur-android gur-ios
 	@echo "Full cross compilation done:"
-	@ls -ld $(GOBIN)/geth-*
+	@ls -ld $(GOBIN)/gur-*
 
-geth-linux: geth-linux-386 geth-linux-amd64 geth-linux-arm
+gur-linux: gur-linux-386 gur-linux-amd64 gur-linux-arm
 	@echo "Linux cross compilation done:"
-	@ls -ld $(GOBIN)/geth-linux-*
+	@ls -ld $(GOBIN)/gur-linux-*
 
-geth-linux-386: xgo
+gur-linux-386: xgo
 	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/386 -v $(shell build/flags.sh) ./cmd/geth
 	@echo "Linux 386 cross compilation done:"
-	@ls -ld $(GOBIN)/geth-linux-* | grep 386
+	@ls -ld $(GOBIN)/gur-linux-* | grep 386
 
-geth-linux-amd64: xgo
+gur-linux-amd64: xgo
 	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/amd64 -v $(shell build/flags.sh) ./cmd/geth
 	@echo "Linux amd64 cross compilation done:"
-	@ls -ld $(GOBIN)/geth-linux-* | grep amd64
+	@ls -ld $(GOBIN)/gur-linux-* | grep amd64
 
-geth-linux-arm: geth-linux-arm-5 geth-linux-arm-6 geth-linux-arm-7 geth-linux-arm64
+gur-linux-arm: gur-linux-arm-5 gur-linux-arm-6 gur-linux-arm-7 gur-linux-arm64
 	@echo "Linux ARM cross compilation done:"
-	@ls -ld $(GOBIN)/geth-linux-* | grep arm
+	@ls -ld $(GOBIN)/gur-linux-* | grep arm
 
-geth-linux-arm-5: xgo
+gur-linux-arm-5: xgo
 	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/arm-5 -v $(shell build/flags.sh) ./cmd/geth
 	@echo "Linux ARMv5 cross compilation done:"
-	@ls -ld $(GOBIN)/geth-linux-* | grep arm-5
+	@ls -ld $(GOBIN)/gur-linux-* | grep arm-5
 
-geth-linux-arm-6: xgo
+gur-linux-arm-6: xgo
 	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/arm-6 -v $(shell build/flags.sh) ./cmd/geth
 	@echo "Linux ARMv6 cross compilation done:"
-	@ls -ld $(GOBIN)/geth-linux-* | grep arm-6
+	@ls -ld $(GOBIN)/gur-linux-* | grep arm-6
 
-geth-linux-arm-7: xgo
+gur-linux-arm-7: xgo
 	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/arm-7 -v $(shell build/flags.sh) ./cmd/geth
 	@echo "Linux ARMv7 cross compilation done:"
-	@ls -ld $(GOBIN)/geth-linux-* | grep arm-7
+	@ls -ld $(GOBIN)/gur-linux-* | grep arm-7
 
-geth-linux-arm64: xgo
+gur-linux-arm64: xgo
 	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/arm64 -v $(shell build/flags.sh) ./cmd/geth
 	@echo "Linux ARM64 cross compilation done:"
-	@ls -ld $(GOBIN)/geth-linux-* | grep arm64
+	@ls -ld $(GOBIN)/gur-linux-* | grep arm64
 
-geth-darwin: geth-darwin-386 geth-darwin-amd64
+gur-darwin: gur-darwin-386 gur-darwin-amd64
 	@echo "Darwin cross compilation done:"
-	@ls -ld $(GOBIN)/geth-darwin-*
+	@ls -ld $(GOBIN)/gur-darwin-*
 
-geth-darwin-386: xgo
+gur-darwin-386: xgo
 	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=darwin/386 -v $(shell build/flags.sh) ./cmd/geth
 	@echo "Darwin 386 cross compilation done:"
-	@ls -ld $(GOBIN)/geth-darwin-* | grep 386
+	@ls -ld $(GOBIN)/gur-darwin-* | grep 386
 
-geth-darwin-amd64: xgo
+gur-darwin-amd64: xgo
 	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=darwin/amd64 -v $(shell build/flags.sh) ./cmd/geth
 	@echo "Darwin amd64 cross compilation done:"
-	@ls -ld $(GOBIN)/geth-darwin-* | grep amd64
+	@ls -ld $(GOBIN)/gur-darwin-* | grep amd64
 
-geth-windows: geth-windows-386 geth-windows-amd64
+gur-windows: gur-windows-386 gur-windows-amd64
 	@echo "Windows cross compilation done:"
-	@ls -ld $(GOBIN)/geth-windows-*
+	@ls -ld $(GOBIN)/gur-windows-*
 
-geth-windows-386: xgo
+gur-windows-386: xgo
 	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=windows/386 -v $(shell build/flags.sh) ./cmd/geth
 	@echo "Windows 386 cross compilation done:"
-	@ls -ld $(GOBIN)/geth-windows-* | grep 386
+	@ls -ld $(GOBIN)/gur-windows-* | grep 386
 
-geth-windows-amd64: xgo
+gur-windows-amd64: xgo
 	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=windows/amd64 -v $(shell build/flags.sh) ./cmd/geth
 	@echo "Windows amd64 cross compilation done:"
-	@ls -ld $(GOBIN)/geth-windows-* | grep amd64
+	@ls -ld $(GOBIN)/gur-windows-* | grep amd64
 
-geth-android: xgo
+gur-android: xgo
 	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=android-21/aar -v $(shell build/flags.sh) ./cmd/geth
 	@echo "Android cross compilation done:"
-	@ls -ld $(GOBIN)/geth-android-*
+	@ls -ld $(GOBIN)/gur-android-*
 
-geth-ios: xgo
+gur-ios: xgo
 	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=ios-7.0/framework -v $(shell build/flags.sh) ./cmd/geth
 	@echo "iOS framework cross compilation done:"
-	@ls -ld $(GOBIN)/geth-ios-*
+	@ls -ld $(GOBIN)/gur-ios-*
 
 evm:
 	build/env.sh $(GOROOT)/bin/go install -v $(shell build/flags.sh) ./cmd/evm
