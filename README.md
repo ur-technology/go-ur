@@ -1,6 +1,6 @@
-## Ethereum Go
+## UR Go
 
-Official golang implementation of the Ethereum protocol
+Official golang implementation of the UR protocol
 
           | Linux   | OSX | ARM | Windows | Tests
 ----------|---------|-----|-----|---------|------
@@ -22,7 +22,7 @@ The following builds are build automatically by our build servers after each pus
   [trusty](https://build.ethdev.com/builds/Linux%20Go%20develop%20deb%20i386-trusty/latest/) |
   [utopic](https://build.ethdev.com/builds/Linux%20Go%20develop%20deb%20i386-utopic/latest/)
 * [Windows 64-bit](https://build.ethdev.com/builds/Windows%20Go%20develop%20branch/Geth-Win64-latest.zip)
-* [ARM](https://build.ethdev.com/builds/ARM%20Go%20develop%20branch/geth-ARM-latest.tar.bz2)
+* [ARM](https://build.ethdev.com/builds/ARM%20Go%20develop%20branch/gur-ARM-latest.tar.bz2)
 
 ## Building the source
 
@@ -30,11 +30,11 @@ For prerequisites and detailed build instructions please read the
 [Installation Instructions](https://github.com/ur-technology/go-ur/wiki/Building-Ethereum)
 on the Ethereum wiki and replace eth with ur, Ethereum with UR, etc.
 
-Building geth requires both a Go and a C compiler.
+Building gur requires both a Go and a C compiler.
 You can install them using your favourite package manager.
 Once the dependencies are installed, run
 
-    make geth
+    make gur
 
 or, to build the full suite of utilities:
 
@@ -46,7 +46,7 @@ The go-ethereum project comes with several wrappers/executables found in the `cm
 
 | Command    | Description |
 |:----------:|-------------|
-| **`geth`** | Our main Ethereum CLI client. It is the entry point into the Ethereum network (main-, test- or private net), capable of running as a full node (default) archive node (retaining all historical state) or a light node (retrieving data live). It can be used by other processes as an gateway into the Ethereum network via JSON RPC endpoints exposed on top of HTTP, WebSocket and/or IPC transports. Please see our [Command Line Options](https://github.com/ur-technology/go-ur/wiki/Command-Line-Options) wiki page for details. |
+| **`gur`** | Our main UR CLI client. It is the entry point into the Ethereum network (main-, test- or private net), capable of running as a full node (default) archive node (retaining all historical state) or a light node (retrieving data live). It can be used by other processes as an gateway into the Ethereum network via JSON RPC endpoints exposed on top of HTTP, WebSocket and/or IPC transports. Please see our [Command Line Options](https://github.com/ur-technology/go-ur/wiki/Command-Line-Options) wiki page for details. |
 | `abigen` | Source code generator to convert Ethereum contract definitions into easy to use, compile-time type-safe Go packages. It operates on plain [Ethereum contract ABIs](https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI) with expanded functionality if the contract bytecode is also available. However it also accepts Solidity source files, making development much more streamlined. Please see our [Native DApps](https://github.com/ur-technology/go-ur/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts) wiki page for details. |
 | `bootnode` | Stripped down version of our Ethereum client implementation that only takes part in the network node discovery protocol, but does not run any of the higher level application protocols. It can be used as a lightweight bootstrap node to aid in finding peers in private networks. |
 | `disasm` | Bytecode disassembler to convert EVM (Ethereum Virtual Machine) bytecode into more user friendly assembly-like opcodes (e.g. `echo "6001" | disasm`). For details on the individual opcodes, please see pages 22-30 of the [Ethereum Yellow Paper](http://gavwood.com/paper.pdf). |
@@ -69,7 +69,7 @@ the user doesn't care about years-old historical data, so we can fast-sync quick
 state of the network. To do so:
 
 ```
-$ geth --fast --cache=512 console
+$ gur --fast --cache=512 console
 ```
 
 This command will:
