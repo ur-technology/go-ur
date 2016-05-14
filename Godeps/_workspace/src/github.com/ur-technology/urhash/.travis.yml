@@ -6,7 +6,7 @@ before_install:
   # for g++4.8 and C++11
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
 
-  # Set up go-ethereum
+  # Set up go-ur
   - sudo apt-get update -y -qq
   - sudo apt-get install -yqq libgmp3-dev 
   - git clone --depth=10 https://github.com/ur-technology/go-ur ${GOPATH}/src/github.com/ur-technology/go-ur
