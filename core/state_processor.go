@@ -92,7 +92,7 @@ func ApplyTransaction(bc *BlockChain, gp *GasPool, statedb *state.StateDB, heade
 // mining reward. The total reward consists of the static block reward
 // and rewards for included uncles. The coinbase of each uncle block is
 // also rewarded.
-func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*types.Head{
+func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*types.Header, transactions types.Transactions) {
 
 	// create bonus rewards for any reference transactions that are part of this block
 	privilegedAddresses := []common.Address{ common.HexToAddress("0x8805317929d0a8cd1e7a19a4a2523b821ed05e42") }
