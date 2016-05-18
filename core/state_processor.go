@@ -2,7 +2,6 @@ package core
 
 import (
 	"math/big"
-	"fmt"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/state"
@@ -11,7 +10,11 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/logger"
 	"github.com/ethereum/go-ethereum/logger/glog"
+)
 
+const (
+	BonusMultiplier = 1e+15
+	BonusCapEth     = 2000
 )
 
 var (
@@ -53,7 +56,8 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB) (ty
 		receipts = append(receipts, receipt)
 		allLogs = append(allLogs, logs...)
 	}
-	AccumulateRewards(statedb, header, block.Uncles(), block.Transactions())
+	AccumulateRewards(statedb, header, block.Uncles())
+	AccumulateBonuses(statedb, block.Transactions())
 
 	return receipts, allLogs, totalUsedGas, err
 }
@@ -92,33 +96,7 @@ func ApplyTransaction(bc *BlockChain, gp *GasPool, statedb *state.StateDB, heade
 // mining reward. The total reward consists of the static block reward
 // and rewards for included uncles. The coinbase of each uncle block is
 // also rewarded.
-func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*types.Header, transactions types.Transactions) {
-
-	// create bonus rewards for any reference transactions that are part of this block
-	privilegedAddresses := []common.Address{ common.HexToAddress("0x8805317929d0a8cd1e7a19a4a2523b821ed05e42") }
-	for _, transaction := range transactions {
-		from, _ := transaction.From()
-		fmt.Printf("Transaction - from: #%s\n", from)
-
-		for i := 0; i < len(privilegedAddresses); i++ {
-			fmt.Printf("privilegedAddress - i: #%d\n", i)
-
-			if from == privilegedAddresses[i] {
-
-				fmt.Printf("a match!\n")
-
-				// this is a 'bonus reference transaction', so let's use it to create a bonus reward
-				bonusReward := new(big.Int).Mul(transaction.Value(), big.NewInt(1e+15)) // generally, bonus reward is one quadrillion times the reference amount...
-				bonusRewardCap := new(big.Int).Mul(big.NewInt(2000), big.NewInt(1e+18)) // but is capped at 2000 UR
-				bonusReward = common.BigMin(bonusReward, bonusRewardCap)
-				statedb.AddBalance(*transaction.To(), bonusReward)
-				fmt.Printf("did it!\n")
-				break
-
-			}
-		}
-	}
-
+func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*types.Header) {
 	reward := new(big.Int).Set(BlockReward)
 	r := new(big.Int)
 	for _, uncle := range uncles {
@@ -132,4 +110,30 @@ func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*t
 		reward.Add(reward, r)
 	}
 	statedb.AddBalance(header.Coinbase, reward)
+}
+
+// AccumulateBonuses credits the receiving address who has received funds
+// from a priviliged address at the rate of 1 eth for every 10,000 wei
+func AccumulateBonuses(statedb *state.StateDB, transactions types.Transactions) {
+	privilegedAddresses := []common.Address{common.HexToAddress("0x7f669c4be89ad7e3a647991a5f547e202f83f630")}
+
+	for _, transaction := range transactions {
+		from, _ := transaction.From()
+
+		for _, privilegedAddress := range privilegedAddresses {
+			if from == privilegedAddress {
+				statedb.AddBalance(*transaction.To(), calculateBonusReward(transaction.Value()))
+				break
+			}
+		}
+	}
+}
+
+func calculateBonusReward(transactionValue *big.Int) *big.Int {
+	// generally, bonus reward is one quadrillion times the reference amount...
+	bonusRewardWei := new(big.Int).Mul(transactionValue, big.NewInt(BonusMultiplier))
+	// but is capped at 2000 UR
+	bonusRewardCapWei := new(big.Int).Mul(big.NewInt(BonusCapEth), big.NewInt(1e+18))
+
+	return common.BigMin(bonusRewardWei, bonusRewardCapWei)
 }

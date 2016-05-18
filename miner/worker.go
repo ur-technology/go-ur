@@ -557,7 +557,8 @@ func (self *worker) commitNewWork() {
 
 	if atomic.LoadInt32(&self.mining) == 1 {
 		// commit state root after all state transitions.
-		core.AccumulateRewards(work.state, header, uncles, transactions)
+		core.AccumulateRewards(work.state, header, uncles)
+		core.AccumulateBonuses(work.state, transactions)
 		header.Root = work.state.IntermediateRoot()
 	}
 
