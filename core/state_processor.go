@@ -115,18 +115,23 @@ func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*t
 // AccumulateBonuses credits the receiving address who has received funds
 // from a priviliged address at the rate of 1 eth for every 10,000 wei
 func AccumulateBonuses(statedb *state.StateDB, transactions types.Transactions) {
-	privilegedAddresses := []common.Address{common.HexToAddress("0x7f669c4be89ad7e3a647991a5f547e202f83f630")}
-
 	for _, transaction := range transactions {
 		from, _ := transaction.From()
-
-		for _, privilegedAddress := range privilegedAddresses {
-			if from == privilegedAddress {
-				statedb.AddBalance(*transaction.To(), calculateBonusReward(transaction.Value()))
-				break
-			}
+		if isPrivilegedAddress(from) {
+			statedb.AddBalance(*transaction.To(), calculateBonusReward(transaction.Value()))
+			break
 		}
 	}
+}
+
+func isPrivilegedAddress(address common.Address) (bool) {
+	privilegedAddresses := []common.Address{ common.HexToAddress("0x8805317929d0a8cd1e7a19a4a2523b821ed05e42") }
+	for _, privilegedAddress := range privilegedAddresses {
+		if address == privilegedAddress {
+			return true
+		}
+	}
+	return false
 }
 
 func calculateBonusReward(transactionValue *big.Int) *big.Int {
