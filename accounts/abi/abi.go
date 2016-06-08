@@ -22,7 +22,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/urcapital/go-ur/crypto"
 )
 
 // Callable method given a `Name` and whether the method is a constant.

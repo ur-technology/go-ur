@@ -19,8 +19,8 @@ package trie
 import (
 	"hash"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto/sha3"
+	"github.com/urcapital/go-ur/common"
+	"github.com/urcapital/go-ur/crypto/sha3"
 )
 
 var secureKeyPrefix = []byte("secure-key-")

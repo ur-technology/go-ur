@@ -41,7 +41,7 @@ import (
 	"math/big"
 	"unsafe"
 
-	"github.com/ethereum/go-ethereum/crypto/randentropy"
+	"github.com/urcapital/go-ur/crypto/randentropy"
 )
 
 //#define USE_FIELD_5X64

@@ -17,9 +17,9 @@
 package api
 
 import (
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/rpc/shared"
+	"github.com/urcapital/go-ur/logger"
+	"github.com/urcapital/go-ur/logger/glog"
+	"github.com/urcapital/go-ur/rpc/shared"
 )
 
 const (

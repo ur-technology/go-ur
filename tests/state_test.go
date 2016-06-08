@@ -22,8 +22,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/urcapital/go-ur/core/vm"
+	"github.com/urcapital/go-ur/params"
 )
 
 func init() {

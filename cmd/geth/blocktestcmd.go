@@ -21,10 +21,10 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/ethereum/go-ethereum/cmd/utils"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/tests"
+	"github.com/urcapital/go-ur/cmd/utils"
+	"github.com/urcapital/go-ur/eth"
+	"github.com/urcapital/go-ur/ethdb"
+	"github.com/urcapital/go-ur/tests"
 )
 
 var blocktestCommand = cli.Command{

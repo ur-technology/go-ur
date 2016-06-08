@@ -24,9 +24,9 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/rpc/shared"
+	"github.com/urcapital/go-ur/common"
+	"github.com/urcapital/go-ur/core/types"
+	"github.com/urcapital/go-ur/rpc/shared"
 )
 
 type hexdata struct {

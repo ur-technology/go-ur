@@ -23,8 +23,8 @@ import (
 	"path"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/urcapital/go-ur/common"
+	"github.com/urcapital/go-ur/crypto"
 )
 
 func TestGetAuthContent(t *testing.T) {

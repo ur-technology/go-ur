@@ -21,7 +21,7 @@ import (
 	"os"
 	"unicode"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/urcapital/go-ur/common"
 )
 
 // StdErrFormat formats a slice of StructLogs to human readable format

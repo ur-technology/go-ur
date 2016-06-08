@@ -19,7 +19,7 @@ package api
 import (
 	"encoding/json"
 
-	"github.com/ethereum/go-ethereum/rpc/shared"
+	"github.com/urcapital/go-ur/rpc/shared"
 )
 
 type Sha3Args struct {

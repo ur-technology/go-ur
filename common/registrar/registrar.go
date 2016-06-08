@@ -22,10 +22,10 @@ import (
 	"math/big"
 	"regexp"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
+	"github.com/urcapital/go-ur/common"
+	"github.com/urcapital/go-ur/crypto"
+	"github.com/urcapital/go-ur/logger"
+	"github.com/urcapital/go-ur/logger/glog"
 )
 
 /*

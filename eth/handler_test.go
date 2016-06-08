@@ -6,15 +6,15 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/eth/downloader"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/urcapital/go-ur/common"
+	"github.com/urcapital/go-ur/core"
+	"github.com/urcapital/go-ur/core/state"
+	"github.com/urcapital/go-ur/core/types"
+	"github.com/urcapital/go-ur/crypto"
+	"github.com/urcapital/go-ur/eth/downloader"
+	"github.com/urcapital/go-ur/ethdb"
+	"github.com/urcapital/go-ur/p2p"
+	"github.com/urcapital/go-ur/params"
 )
 
 // Tests that protocol versions and modes of operations are matched up properly.
