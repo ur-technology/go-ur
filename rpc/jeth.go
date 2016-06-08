@@ -20,14 +20,14 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/cmd/utils"
-	"github.com/ethereum/go-ethereum/jsre"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/rpc/comms"
-	"github.com/ethereum/go-ethereum/rpc/shared"
-	"github.com/ethereum/go-ethereum/rpc/useragent"
-	"github.com/ethereum/go-ethereum/xeth"
+	"github.com/urcapital/go-ur/cmd/utils"
+	"github.com/urcapital/go-ur/jsre"
+	"github.com/urcapital/go-ur/logger"
+	"github.com/urcapital/go-ur/logger/glog"
+	"github.com/urcapital/go-ur/rpc/comms"
+	"github.com/urcapital/go-ur/rpc/shared"
+	"github.com/urcapital/go-ur/rpc/useragent"
+	"github.com/urcapital/go-ur/xeth"
 
 	"github.com/robertkrimen/otto"
 )

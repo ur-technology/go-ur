@@ -22,11 +22,11 @@ import (
 	"encoding/json"
 	"strconv"
 
-	"github.com/ethereum/go-ethereum/common/compiler"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/rpc/codec"
-	"github.com/ethereum/go-ethereum/rpc/shared"
-	"github.com/ethereum/go-ethereum/xeth"
+	"github.com/urcapital/go-ur/common/compiler"
+	"github.com/urcapital/go-ur/eth"
+	"github.com/urcapital/go-ur/rpc/codec"
+	"github.com/urcapital/go-ur/rpc/shared"
+	"github.com/urcapital/go-ur/xeth"
 )
 
 func TestParseApiString(t *testing.T) {

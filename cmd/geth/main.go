@@ -30,20 +30,20 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/ethereum/ethash"
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/cmd/utils"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/metrics"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/rpc/codec"
-	"github.com/ethereum/go-ethereum/rpc/comms"
+	"github.com/urcapital/go-ur/accounts"
+	"github.com/urcapital/go-ur/cmd/utils"
+	"github.com/urcapital/go-ur/common"
+	"github.com/urcapital/go-ur/core"
+	"github.com/urcapital/go-ur/core/types"
+	"github.com/urcapital/go-ur/eth"
+	"github.com/urcapital/go-ur/ethdb"
+	"github.com/urcapital/go-ur/logger"
+	"github.com/urcapital/go-ur/logger/glog"
+	"github.com/urcapital/go-ur/metrics"
+	"github.com/urcapital/go-ur/params"
+	"github.com/urcapital/go-ur/rlp"
+	"github.com/urcapital/go-ur/rpc/codec"
+	"github.com/urcapital/go-ur/rpc/comms"
 )
 
 const (
@@ -271,7 +271,7 @@ nodes.
 			Description: `
 The Geth console is an interactive shell for the JavaScript runtime environment
 which exposes a node admin interface as well as the Ðapp JavaScript API.
-See https://github.com/ethereum/go-ethereum/wiki/Javascipt-Console
+See https://github.com/urcapital/go-ur/wiki/Javascipt-Console
 `},
 		{
 			Action: attach,
@@ -290,7 +290,7 @@ This command allows to open a console on a running geth node.
 			Usage:  `executes the given JavaScript files in the Geth JavaScript VM`,
 			Description: `
 The JavaScript VM exposes a node admin interface as well as the Ðapp
-JavaScript API. See https://github.com/ethereum/go-ethereum/wiki/Javascipt-Console
+JavaScript API. See https://github.com/urcapital/go-ur/wiki/Javascipt-Console
 `,
 		},
 	}

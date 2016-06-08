@@ -20,11 +20,11 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethdb"
+	"github.com/urcapital/go-ur/common"
+	"github.com/urcapital/go-ur/core/state"
+	"github.com/urcapital/go-ur/core/vm"
+	"github.com/urcapital/go-ur/crypto"
+	"github.com/urcapital/go-ur/ethdb"
 )
 
 // Config is a basic type specifing certain configuration flags for running

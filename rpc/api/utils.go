@@ -21,10 +21,10 @@ import (
 
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/rpc/codec"
-	"github.com/ethereum/go-ethereum/rpc/shared"
-	"github.com/ethereum/go-ethereum/xeth"
+	"github.com/urcapital/go-ur/eth"
+	"github.com/urcapital/go-ur/rpc/codec"
+	"github.com/urcapital/go-ur/rpc/shared"
+	"github.com/urcapital/go-ur/xeth"
 )
 
 var (

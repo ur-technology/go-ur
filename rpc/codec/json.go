@@ -23,7 +23,7 @@ import (
 	"time"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/rpc/shared"
+	"github.com/urcapital/go-ur/rpc/shared"
 )
 
 const (

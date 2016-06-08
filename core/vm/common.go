@@ -20,9 +20,9 @@ import (
 	"math"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/urcapital/go-ur/common"
+	"github.com/urcapital/go-ur/logger/glog"
+	"github.com/urcapital/go-ur/params"
 )
 
 // Global Debug flag indicating Debug VM (full logging)

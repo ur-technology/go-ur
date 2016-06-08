@@ -20,7 +20,7 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/ethereum/go-ethereum/rpc/shared"
+	"github.com/urcapital/go-ur/rpc/shared"
 )
 
 type Codec int

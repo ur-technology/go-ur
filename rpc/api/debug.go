@@ -22,14 +22,14 @@ import (
 	"time"
 
 	"github.com/ethereum/ethash"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/rpc/codec"
-	"github.com/ethereum/go-ethereum/rpc/shared"
-	"github.com/ethereum/go-ethereum/xeth"
+	"github.com/urcapital/go-ur/core"
+	"github.com/urcapital/go-ur/core/state"
+	"github.com/urcapital/go-ur/core/vm"
+	"github.com/urcapital/go-ur/eth"
+	"github.com/urcapital/go-ur/rlp"
+	"github.com/urcapital/go-ur/rpc/codec"
+	"github.com/urcapital/go-ur/rpc/shared"
+	"github.com/urcapital/go-ur/xeth"
 	"github.com/rcrowley/go-metrics"
 )
 

@@ -19,8 +19,8 @@ package registrar
 import (
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/urcapital/go-ur/common"
+	"github.com/urcapital/go-ur/crypto"
 )
 
 type testBackend struct {

@@ -19,8 +19,8 @@ package api
 import (
 	"encoding/json"
 
-	"github.com/ethereum/go-ethereum/common/compiler"
-	"github.com/ethereum/go-ethereum/rpc/shared"
+	"github.com/urcapital/go-ur/common/compiler"
+	"github.com/urcapital/go-ur/rpc/shared"
 )
 
 type AddPeerArgs struct {
