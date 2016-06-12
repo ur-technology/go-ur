@@ -23,7 +23,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/ethereum/ethash"
+	"github.com/urcapital/urash"
 	"github.com/urcapital/go-ur/common"
 	"github.com/urcapital/go-ur/logger"
 	"github.com/urcapital/go-ur/logger/glog"
