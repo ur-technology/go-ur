@@ -30,7 +30,7 @@ import (
 	"strconv"
 
 	"github.com/codegangsta/cli"
-	"github.com/ethereum/ethash"
+	"github.com/urcapital/urash"
 	"github.com/urcapital/go-ur/accounts"
 	"github.com/urcapital/go-ur/common"
 	"github.com/urcapital/go-ur/core"

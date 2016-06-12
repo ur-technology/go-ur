@@ -26,7 +26,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/ethereum/ethash"
+	"github.com/urcapital/urash"
 	"github.com/urcapital/go-ur/common"
 	"github.com/urcapital/go-ur/core/state"
 	"github.com/urcapital/go-ur/core/types"

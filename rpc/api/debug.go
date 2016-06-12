@@ -21,7 +21,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ethereum/ethash"
+	"github.com/urcapital/urash"
 	"github.com/urcapital/go-ur/core"
 	"github.com/urcapital/go-ur/core/state"
 	"github.com/urcapital/go-ur/core/vm"

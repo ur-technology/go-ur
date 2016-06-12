@@ -29,7 +29,7 @@ import (
 	"time"
 
 	"github.com/codegangsta/cli"
-	"github.com/ethereum/ethash"
+	"github.com/urcapital/urash"
 	"github.com/urcapital/go-ur/accounts"
 	"github.com/urcapital/go-ur/cmd/utils"
 	"github.com/urcapital/go-ur/common"
