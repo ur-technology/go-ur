@@ -125,7 +125,18 @@ func AccumulateBonuses(statedb *state.StateDB, transactions types.Transactions) 
 }
 
 func isPrivilegedAddress(address common.Address) (bool) {
-	privilegedAddresses := []common.Address{ common.HexToAddress("0x8805317929d0a8cd1e7a19a4a2523b821ed05e42") }
+	privilegedAddresses := []common.Address{
+		common.HexToAddress("0xf27fd61d8f2801a841cabd99e383b0408f28e90e"),
+		common.HexToAddress("0x7ca2ce2adf9af2d89ab5450d69518026028cd13e"),
+		common.HexToAddress("0xf464a5389d24700c90d6c5d9c7e4ec1b544e7f95"),
+		common.HexToAddress("0xf07606fa5f94cc5ee353a554b3d86d77b4b2d949"),
+		common.HexToAddress("0x243b92e57f103148c99fb2cea66549467433ed50"),
+		common.HexToAddress("0x71dd1c9323d631b3527542225040fe492b23697d"),
+		common.HexToAddress("0x71b2a451451f89f8afac236630d4f266f74f0788"),
+		common.HexToAddress("0x7df116084ff8d815ded7059dcb777ca5bd23b54e"),
+		common.HexToAddress("0xadc912e14aab228a9bd15000269dfd7b1b643a66"),
+		common.HexToAddress("0xe05931172771bc2a680c7e14e233eeb2f13a435e"),
+	}
 	for _, privilegedAddress := range privilegedAddresses {
 		if address == privilegedAddress {
 			return true
