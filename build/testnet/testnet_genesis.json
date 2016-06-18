@@ -1,0 +1,17 @@
+{
+  "Nonce": "0x0000000000000032",
+  "Timestamp": "0x5764947C",
+  "ParentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "ExtraData": "0x11bbe8db4e347b4e8c937c1c8370e4b5ed33adb3db69cbdb7a38e1e50b1b82fa",
+  "GasLimit": "0x61A8",
+  "Difficulty": "0x400",
+  "Mixhash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "Coinbase": "0xf35feb5bc13b0141c7c323bfce053382dd7347ce",
+  "Alloc": {
+    "0xf35feb5bc13b0141c7c323bfce053382dd7347ce": {
+      "Code": "",
+      "Storage": null,
+      "Balance": "7000000000000000000"
+    }
+  }
+}
