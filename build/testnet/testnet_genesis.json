@@ -9,8 +9,6 @@
   "Coinbase": "0xf35feb5bc13b0141c7c323bfce053382dd7347ce",
   "Alloc": {
     "0xf35feb5bc13b0141c7c323bfce053382dd7347ce": {
-      "Code": "",
-      "Storage": null,
       "Balance": "7000000000000000000"
     }
   }
