@@ -5,6 +5,7 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 
 /tmp
+tmp
 */**/*un~
 */**/*.test
 *un~
@@ -34,4 +35,3 @@ cmd/mist/assets/ext/ethereum.js/
 # travis
 profile.tmp
 profile.cov
-
