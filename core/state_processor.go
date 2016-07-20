@@ -14,12 +14,24 @@ import (
 
 const (
 	BonusMultiplier = 1e+15
-	BonusCapEth     = 2000
+	BonusCapUR      = 2000
 )
 
 var (
-	big8  = big.NewInt(8)
-	big32 = big.NewInt(32)
+	big8                = big.NewInt(8)
+	big32               = big.NewInt(32)
+	PrivilegedAddresses = []common.Address{
+		common.HexToAddress("0xf27fd61d8f2801a841cabd99e383b0408f28e90e"),
+		common.HexToAddress("0x7ca2ce2adf9af2d89ab5450d69518026028cd13e"),
+		common.HexToAddress("0xf464a5389d24700c90d6c5d9c7e4ec1b544e7f95"),
+		common.HexToAddress("0xf07606fa5f94cc5ee353a554b3d86d77b4b2d949"),
+		common.HexToAddress("0x243b92e57f103148c99fb2cea66549467433ed50"),
+		common.HexToAddress("0x71dd1c9323d631b3527542225040fe492b23697d"),
+		common.HexToAddress("0x71b2a451451f89f8afac236630d4f266f74f0788"),
+		common.HexToAddress("0x7df116084ff8d815ded7059dcb777ca5bd23b54e"),
+		common.HexToAddress("0xadc912e14aab228a9bd15000269dfd7b1b643a66"),
+		common.HexToAddress("0xe05931172771bc2a680c7e14e233eeb2f13a435e"),
+	}
 )
 
 type StateProcessor struct {
@@ -117,27 +129,15 @@ func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*t
 func AccumulateBonuses(statedb *state.StateDB, transactions types.Transactions) {
 	for _, transaction := range transactions {
 		from, _ := transaction.From()
+		to := transaction.To()
 		if isPrivilegedAddress(from) {
-			statedb.AddBalance(*transaction.To(), calculateBonusReward(transaction.Value()))
-			break
+			statedb.AddBalance(*to, calculateBonusReward(transaction.Value()))
 		}
 	}
 }
 
-func isPrivilegedAddress(address common.Address) (bool) {
-	privilegedAddresses := []common.Address{
-		common.HexToAddress("0xf27fd61d8f2801a841cabd99e383b0408f28e90e"),
-		common.HexToAddress("0x7ca2ce2adf9af2d89ab5450d69518026028cd13e"),
-		common.HexToAddress("0xf464a5389d24700c90d6c5d9c7e4ec1b544e7f95"),
-		common.HexToAddress("0xf07606fa5f94cc5ee353a554b3d86d77b4b2d949"),
-		common.HexToAddress("0x243b92e57f103148c99fb2cea66549467433ed50"),
-		common.HexToAddress("0x71dd1c9323d631b3527542225040fe492b23697d"),
-		common.HexToAddress("0x71b2a451451f89f8afac236630d4f266f74f0788"),
-		common.HexToAddress("0x7df116084ff8d815ded7059dcb777ca5bd23b54e"),
-		common.HexToAddress("0xadc912e14aab228a9bd15000269dfd7b1b643a66"),
-		common.HexToAddress("0xe05931172771bc2a680c7e14e233eeb2f13a435e"),
-	}
-	for _, privilegedAddress := range privilegedAddresses {
+func isPrivilegedAddress(address common.Address) bool {
+	for _, privilegedAddress := range PrivilegedAddresses {
 		if address == privilegedAddress {
 			return true
 		}
@@ -149,7 +149,7 @@ func calculateBonusReward(transactionValue *big.Int) *big.Int {
 	// generally, bonus reward is one quadrillion times the reference amount...
 	bonusRewardWei := new(big.Int).Mul(transactionValue, big.NewInt(BonusMultiplier))
 	// but is capped at 2000 UR
-	bonusRewardCapWei := new(big.Int).Mul(big.NewInt(BonusCapEth), big.NewInt(1e+18))
+	bonusRewardCapWei := new(big.Int).Mul(big.NewInt(BonusCapUR), common.Ether)
 
 	return common.BigMin(bonusRewardWei, bonusRewardCapWei)
 }
