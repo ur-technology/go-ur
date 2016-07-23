@@ -174,6 +174,109 @@ func Test_ItAppliesBonusesForQualifyingTransactions(t *testing.T) {
 	}
 }
 
+func Test_ItAppliesMinerRewardBonusForNewSignupsInBlock(t *testing.T) {
+	privKey, privAddress := setupPrivilegedAddress(t)
+
+	tests := []struct {
+		Description              string
+		NumberOfSignups          int
+		NumberOfBlocks           int
+		AdditionalTransactionsFn func(int, *BlockGen, []common.Address)
+	}{
+		{
+			Description:     "No signups",
+			NumberOfSignups: 0,
+			NumberOfBlocks:  1,
+		},
+		{
+			Description:     "1 Signup",
+			NumberOfSignups: 1,
+			NumberOfBlocks:  1,
+		},
+		{
+			Description:     "2 signups over 2 blocks",
+			NumberOfSignups: 2,
+			NumberOfBlocks:  2,
+		},
+		{
+			Description:     "5 signups over 2 blocks",
+			NumberOfSignups: 5,
+			NumberOfBlocks:  2,
+		},
+		{
+			Description:     "700 signups over 200 blocks",
+			NumberOfSignups: 700,
+			NumberOfBlocks:  200,
+		},
+		{
+			Description:     "30 signups over 5 blocks, with non qualifying signup transactions",
+			NumberOfSignups: 30,
+			NumberOfBlocks:  5,
+			AdditionalTransactionsFn: func(i int, block *BlockGen, nonSignupAddresses []common.Address) {
+				tx, err := types.NewTransaction(block.TxNonce(privAddress), nonSignupAddresses[i], big.NewInt(int64(rand.Intn(1999999))), params.TxGas, nil, nil).SignECDSA(privKey)
+				if err != nil {
+					panic(err)
+				}
+				block.AddTx(tx)
+			},
+		},
+	}
+
+	transactionValue := big.NewInt(2000000)
+	funds := new(big.Int).Mul(big.NewInt(1), common.Ether)
+
+	for _, test := range tests {
+		expectedBonusReward := new(big.Int).Mul(BlockReward, big.NewInt(int64(test.NumberOfSignups)))
+		expectedBlockReward := new(big.Int).Mul(BlockReward, big.NewInt(int64(test.NumberOfBlocks)))
+		genesis, gendb := setupGenesis(t, privAddress, funds)
+
+		newAddresses := generateNewAddresses(t, test.NumberOfSignups)
+		nonSignupAddresses := generateNewAddresses(t, test.NumberOfSignups)
+
+		blocks, _ := GenerateChain(genesis, gendb, test.NumberOfBlocks, func(i int, block *BlockGen) {
+			block.SetCoinbase(common.Address{0x00})
+
+			if test.AdditionalTransactionsFn != nil {
+				test.AdditionalTransactionsFn(i, block, nonSignupAddresses)
+			}
+
+			if test.NumberOfBlocks < test.NumberOfSignups {
+				// Distribute new signup transactions across blocks
+				for j := (i * int(test.NumberOfSignups/test.NumberOfBlocks)); j < ((i + 1) * int(test.NumberOfSignups/test.NumberOfBlocks)); j++ {
+					tx, err := types.NewTransaction(block.TxNonce(privAddress), newAddresses[j], transactionValue, params.TxGas, nil, nil).SignECDSA(privKey)
+					if err != nil {
+						panic(err)
+					}
+					block.AddTx(tx)
+				}
+				// On last block
+				if test.NumberOfBlocks-1 == i {
+					// Do any remaining transactions for new signups
+					for j := (test.NumberOfSignups - (test.NumberOfSignups % test.NumberOfBlocks)); j < test.NumberOfSignups; j++ {
+						tx, err := types.NewTransaction(block.TxNonce(privAddress), newAddresses[j], transactionValue, params.TxGas, nil, nil).SignECDSA(privKey)
+						if err != nil {
+							panic(err)
+						}
+						block.AddTx(tx)
+					}
+				}
+			} else if i < test.NumberOfSignups {
+				// 1 transaction per block
+				tx, err := types.NewTransaction(block.TxNonce(privAddress), newAddresses[i], transactionValue, params.TxGas, nil, nil).SignECDSA(privKey)
+				if err != nil {
+					panic(err)
+				}
+				block.AddTx(tx)
+			}
+		})
+
+		statedb := buildBlockChain(t, gendb, genesis, blocks)
+
+		expectedMinerBalance := new(big.Int).Add(expectedBlockReward, expectedBonusReward)
+		assert.Equal(t, expectedMinerBalance, statedb.GetBalance(common.Address{0x00}), test.Description)
+	}
+}
+
 // http://stackoverflow.com/a/31832326
 func RandHex(n int) string {
 	const letterBytes = "0123456789abcdef"
