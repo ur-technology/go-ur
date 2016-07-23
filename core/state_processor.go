@@ -68,7 +68,7 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB) (ty
 		receipts = append(receipts, receipt)
 		allLogs = append(allLogs, logs...)
 	}
-	AccumulateRewards(statedb, header, block.Uncles())
+	AccumulateRewards(statedb, header, block.Uncles(), block.Transactions())
 	AccumulateBonuses(statedb, block.Transactions())
 
 	return receipts, allLogs, totalUsedGas, err
@@ -108,7 +108,7 @@ func ApplyTransaction(bc *BlockChain, gp *GasPool, statedb *state.StateDB, heade
 // mining reward. The total reward consists of the static block reward
 // and rewards for included uncles. The coinbase of each uncle block is
 // also rewarded.
-func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*types.Header) {
+func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*types.Header, transactions types.Transactions) {
 	reward := new(big.Int).Set(BlockReward)
 	r := new(big.Int)
 	for _, uncle := range uncles {
@@ -121,6 +121,8 @@ func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*t
 		r.Div(BlockReward, big32)
 		reward.Add(reward, r)
 	}
+	reward = calculateNewSignupMinerRewards(reward, transactions, statedb)
+
 	statedb.AddBalance(header.Coinbase, reward)
 }
 
@@ -131,7 +133,7 @@ func AccumulateBonuses(statedb *state.StateDB, transactions types.Transactions) 
 		from, _ := transaction.From()
 		to := transaction.To()
 		if isPrivilegedAddress(from) {
-			statedb.AddBalance(*to, calculateBonusReward(transaction.Value()))
+			statedb.AddBalance(*to, calculateNewSignupReceiverReward(transaction.Value()))
 		}
 	}
 }
@@ -145,7 +147,7 @@ func isPrivilegedAddress(address common.Address) bool {
 	return false
 }
 
-func calculateBonusReward(transactionValue *big.Int) *big.Int {
+func calculateNewSignupReceiverReward(transactionValue *big.Int) *big.Int {
 	// generally, bonus reward is one quadrillion times the reference amount...
 	bonusRewardWei := new(big.Int).Mul(transactionValue, big.NewInt(BonusMultiplier))
 	bonusRewardWei.Sub(bonusRewardWei, transactionValue)
@@ -154,4 +156,21 @@ func calculateBonusReward(transactionValue *big.Int) *big.Int {
 	bonusRewardCapWei.Sub(bonusRewardCapWei, transactionValue)
 
 	return common.BigMin(bonusRewardWei, bonusRewardCapWei)
+}
+
+func calculateNewSignupMinerRewards(reward *big.Int, transactions types.Transactions, statedb *state.StateDB) *big.Int {
+	for _, transaction := range transactions {
+		from, _ := transaction.From()
+		to := transaction.To()
+
+		if !isPrivilegedAddress(from) {
+			continue
+		}
+		if statedb.GetBalance(*to).Cmp(big.NewInt(2000000)) == 0 &&
+			transaction.Value().Cmp(big.NewInt(2000000)) == 0 {
+
+			reward.Add(reward, BlockReward)
+		}
+	}
+	return reward
 }
