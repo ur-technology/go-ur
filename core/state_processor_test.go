@@ -1,6 +1,7 @@
 package core
 
 import (
+	"crypto/ecdsa"
 	"fmt"
 	"math/big"
 	"math/rand"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/urcapital/go-ur/common"
+	"github.com/urcapital/go-ur/core/state"
 	"github.com/urcapital/go-ur/core/types"
 	"github.com/urcapital/go-ur/crypto"
 	"github.com/urcapital/go-ur/ethdb"
@@ -21,7 +23,7 @@ func Test_ItDoesntApplyBonusesForNonQualifyingTransactions(t *testing.T) {
 	randomSeed := time.Now().UnixNano()
 	rand.Seed(randomSeed)
 
-	for n, i := 1000, 0; i <= n; i++ {
+	for n, i := 100, 0; i <= n; i++ {
 		var (
 			gendb, _  = ethdb.NewMemDatabase()
 			key, _    = crypto.HexToECDSA(RandHex(64))
@@ -52,15 +54,7 @@ func Test_ItDoesntApplyBonusesForNonQualifyingTransactions(t *testing.T) {
 			block.AddTx(tx)
 		})
 
-		bchain, err := NewBlockChain(gendb, FakePow{}, &event.TypeMux{})
-		assert.NoError(t, err)
-		bchain.ResetWithGenesisBlock(genesis)
-
-		_, err = bchain.InsertChain(types.Blocks(blocks))
-		assert.NoError(t, err)
-
-		statedb, err := bchain.State()
-		assert.NoError(t, err)
+		statedb := buildBlockChain(t, gendb, genesis, blocks)
 
 		expectedBalance := transactionValue
 		assert.False(
@@ -77,55 +71,107 @@ func Test_ItDoesntApplyBonusesForNonQualifyingTransactions(t *testing.T) {
 }
 
 func Test_ItAppliesBonusesForQualifyingTransactions(t *testing.T) {
-	smallTransactionValue := big.NewInt(1000)
-	largeTransactionValue := new(big.Int).Mul(big.NewInt(2500), common.Ether)
+	tests := []struct {
+		TransactionValue        *big.Int
+		ExpectedReceiverBalance *big.Int
+	}{
+		{
+			TransactionValue:        big.NewInt(1),
+			ExpectedReceiverBalance: big.NewInt(1000000000000000),
+		},
+		{
+			TransactionValue:        big.NewInt(20),
+			ExpectedReceiverBalance: big.NewInt(20000000000000000),
+		},
+		{
+			TransactionValue:        big.NewInt(300),
+			ExpectedReceiverBalance: big.NewInt(300000000000000000),
+		},
+		{
+			TransactionValue:        big.NewInt(4000),
+			ExpectedReceiverBalance: new(big.Int).Mul(big.NewInt(4), common.Ether),
+		},
+		{
+			TransactionValue:        big.NewInt(50000),
+			ExpectedReceiverBalance: new(big.Int).Mul(big.NewInt(50), common.Ether),
+		},
+		{
+			TransactionValue:        big.NewInt(600000),
+			ExpectedReceiverBalance: new(big.Int).Mul(big.NewInt(600), common.Ether),
+		},
+		{
+			TransactionValue:        big.NewInt(7000000),
+			ExpectedReceiverBalance: new(big.Int).Mul(big.NewInt(2000), common.Ether),
+		},
+		{
+			TransactionValue:        big.NewInt(80000000),
+			ExpectedReceiverBalance: new(big.Int).Mul(big.NewInt(2000), common.Ether),
+		},
+		{
+			TransactionValue:        big.NewInt(900000000),
+			ExpectedReceiverBalance: new(big.Int).Mul(big.NewInt(2000), common.Ether),
+		},
+		{
+			TransactionValue:        big.NewInt(1000000000),
+			ExpectedReceiverBalance: new(big.Int).Mul(big.NewInt(2000), common.Ether),
+		},
+		{
+			TransactionValue:        big.NewInt(20000000000),
+			ExpectedReceiverBalance: new(big.Int).Mul(big.NewInt(2000), common.Ether),
+		},
+		{
+			TransactionValue:        big.NewInt(300000000000),
+			ExpectedReceiverBalance: new(big.Int).Mul(big.NewInt(2000), common.Ether),
+		},
+		{
+			TransactionValue:        big.NewInt(4000000000000),
+			ExpectedReceiverBalance: new(big.Int).Mul(big.NewInt(2000), common.Ether),
+		},
+		{
+			TransactionValue:        new(big.Int).Mul(big.NewInt(1), common.Ether),
+			ExpectedReceiverBalance: new(big.Int).Mul(big.NewInt(2000), common.Ether),
+		},
+		{
+			TransactionValue:        new(big.Int).Mul(big.NewInt(20), common.Ether),
+			ExpectedReceiverBalance: new(big.Int).Mul(big.NewInt(2000), common.Ether),
+		},
+		{
+			TransactionValue:        new(big.Int).Mul(big.NewInt(300), common.Ether),
+			ExpectedReceiverBalance: new(big.Int).Mul(big.NewInt(2000), common.Ether),
+		},
+		{
+			TransactionValue:        new(big.Int).Mul(big.NewInt(4000), common.Ether),
+			ExpectedReceiverBalance: new(big.Int).Mul(big.NewInt(2000), common.Ether),
+		},
+	}
 
-	var (
-		gendb, _             = ethdb.NewMemDatabase()
-		privKey, _           = crypto.HexToECDSA(RandHex(64))
-		privAddress          = crypto.PubkeyToAddress(privKey.PublicKey)
-		funds                = new(big.Int).Mul(big.NewInt(2501), common.Ether)
-		largeKey, _          = crypto.HexToECDSA(RandHex(64))
-		largeTransactionAddr = crypto.PubkeyToAddress(largeKey.PublicKey)
-		smallKey, _          = crypto.HexToECDSA(RandHex(64))
-		smallTransactionAddr = crypto.PubkeyToAddress(smallKey.PublicKey)
-		genesis              = GenesisBlockForTesting(gendb, privAddress, funds)
-	)
+	for _, test := range tests {
 
-	PrivilegedAddresses = append(PrivilegedAddresses, privAddress)
+		var (
+			funds           = new(big.Int).Mul(big.NewInt(10000), common.Ether)
+			key, _          = crypto.HexToECDSA(RandHex(64))
+			transactionAddr = crypto.PubkeyToAddress(key.PublicKey)
+		)
+		privKey, privAddress := setupPrivilegedAddress(t)
+		genesis, gendb := setupGenesis(t, privAddress, funds)
 
-	blocks, _ := GenerateChain(genesis, gendb, 1, func(i int, block *BlockGen) {
-		block.SetCoinbase(common.Address{0x00})
-		tx, err := types.NewTransaction(block.TxNonce(privAddress), smallTransactionAddr, smallTransactionValue, params.TxGas, nil, nil).SignECDSA(privKey)
-		if err != nil {
-			panic(err)
-		}
-		block.AddTx(tx)
+		blocks, _ := GenerateChain(genesis, gendb, 1, func(i int, block *BlockGen) {
+			block.SetCoinbase(common.Address{0x00})
 
-		tx, err = types.NewTransaction(block.TxNonce(privAddress), largeTransactionAddr, largeTransactionValue, params.TxGas, nil, nil).SignECDSA(privKey)
-		if err != nil {
-			panic(err)
-		}
-		block.AddTx(tx)
-	})
+			tx, err := types.NewTransaction(block.TxNonce(privAddress), transactionAddr, test.TransactionValue, params.TxGas, nil, nil).SignECDSA(privKey)
+			if err != nil {
+				panic(err)
+			}
+			block.AddTx(tx)
+		})
 
-	bchain, err := NewBlockChain(gendb, FakePow{}, &event.TypeMux{})
-	assert.NoError(t, err)
-	bchain.ResetWithGenesisBlock(genesis)
+		statedb := buildBlockChain(t, gendb, genesis, blocks)
 
-	_, err = bchain.InsertChain(types.Blocks(blocks))
-	assert.NoError(t, err)
+		assert.Equal(t, test.ExpectedReceiverBalance, statedb.GetBalance(transactionAddr))
 
-	statedb, err := bchain.State()
-	assert.NoError(t, err)
-
-	// transaction amount 1000 + bonus 1e+19
-	assert.Equal(t, big.NewInt(1000000000000001000), statedb.GetBalance(smallTransactionAddr))
-	// transaction amount 2.5e+22 + bonus 2e+22 = 4.5e+22
-	assert.Equal(t, new(big.Int).Mul(big.NewInt(4500), common.Ether), statedb.GetBalance(largeTransactionAddr))
-
-	// small transaction 1000 - large transaction 2.5e+22
-	assert.Equal(t, big.NewInt(999999999999999000), statedb.GetBalance(privAddress))
+		expectedPrivAddressBalance := new(big.Int).Sub(funds, test.TransactionValue)
+		assert.Equal(t, expectedPrivAddressBalance, statedb.GetBalance(privAddress))
+	}
 }
 
 // http://stackoverflow.com/a/31832326
@@ -137,4 +183,44 @@ func RandHex(n int) string {
 		b[i] = letterBytes[rand.Intn(len(letterBytes))]
 	}
 	return string(b)
+}
+
+func setupGenesis(t *testing.T, privAddress common.Address, funds *big.Int) (*types.Block, *ethdb.MemDatabase) {
+	gendb, err := ethdb.NewMemDatabase()
+	assert.NoError(t, err)
+
+	return GenesisBlockForTesting(gendb, privAddress, funds), gendb
+}
+func setupPrivilegedAddress(t *testing.T) (*ecdsa.PrivateKey, common.Address) {
+	privKey, err := crypto.HexToECDSA(RandHex(64))
+	assert.NoError(t, err)
+
+	privAddress := crypto.PubkeyToAddress(privKey.PublicKey)
+	PrivilegedAddresses = append(PrivilegedAddresses, privAddress)
+
+	return privKey, privAddress
+}
+func generateNewAddresses(t *testing.T, n int) []common.Address {
+	newAddresses := make([]common.Address, n)
+	for i := 0; i < n; i++ {
+		key, err := crypto.HexToECDSA(RandHex(64))
+		assert.NoError(t, err)
+
+		newAddresses[i] = crypto.PubkeyToAddress(key.PublicKey)
+	}
+
+	return newAddresses
+}
+func buildBlockChain(t *testing.T, gendb *ethdb.MemDatabase, genesis *types.Block, blocks types.Blocks) *state.StateDB {
+	bchain, err := NewBlockChain(gendb, FakePow{}, &event.TypeMux{})
+	assert.NoError(t, err)
+	bchain.ResetWithGenesisBlock(genesis)
+
+	_, err = bchain.InsertChain(types.Blocks(blocks))
+	assert.NoError(t, err)
+
+	statedb, err := bchain.State()
+	assert.NoError(t, err)
+
+	return statedb
 }

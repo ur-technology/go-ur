@@ -148,8 +148,10 @@ func isPrivilegedAddress(address common.Address) bool {
 func calculateBonusReward(transactionValue *big.Int) *big.Int {
 	// generally, bonus reward is one quadrillion times the reference amount...
 	bonusRewardWei := new(big.Int).Mul(transactionValue, big.NewInt(BonusMultiplier))
+	bonusRewardWei.Sub(bonusRewardWei, transactionValue)
 	// but is capped at 2000 UR
 	bonusRewardCapWei := new(big.Int).Mul(big.NewInt(BonusCapUR), common.Ether)
+	bonusRewardCapWei.Sub(bonusRewardCapWei, transactionValue)
 
 	return common.BigMin(bonusRewardWei, bonusRewardCapWei)
 }
