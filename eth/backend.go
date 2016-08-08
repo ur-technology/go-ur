@@ -70,8 +70,8 @@ var (
 
 	defaultBootNodes = []*discover.Node{
 		// UR/DEV Go Bootnodes
-		discover.MustParseNode("enode://88f7c8b3b70e47960d10d1577ce0f4f5aaaaa7c44fa86c2467e0ce7118fb2996710673045712b812e14f97163bd5fcab0c2f09fe18979708a8fe9495106bc0e1@50.116.43.81:19595"), // seednode1
-		discover.MustParseNode("enode://fdfbe3a8ab17c18afd6bc32e8e022a6f9395418edd49365071fd44895a36a5a2fa113c8a805b1b179507ac224504bd6b4812b21d6a388a19f81ab3b5334a4604@198.74.48.148:19595"), // seednode2
+		discover.MustParseNode("enode://fcf730cf678d6296ffa75a1b2c06aa07d9558788762d0bbefbc209ccbfb4e840f7dcfc2f7a188eb2e65056d989de3722df3fc4df286eb3690d4586992c1c6d82@50.116.43.81:19595"), // seednode1
+		discover.MustParseNode("enode://d846b3c0445b7a91cfeb56fbeaece55ca9e559a6e5810cc41c54e2b88790fa7a24444508f16eb983630da1367ab73a6db1b705cc36134d9e61a2df070284d3f4@198.74.48.148:19595"), // seednode2
 	}
 
 	defaultTestNetBootNodes = []*discover.Node{
