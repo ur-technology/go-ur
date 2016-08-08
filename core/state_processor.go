@@ -21,16 +21,13 @@ var (
 	big8                = big.NewInt(8)
 	big32               = big.NewInt(32)
 	PrivilegedAddresses = []common.Address{
-		common.HexToAddress("0xf27fd61d8f2801a841cabd99e383b0408f28e90e"),
-		common.HexToAddress("0x7ca2ce2adf9af2d89ab5450d69518026028cd13e"),
-		common.HexToAddress("0xf464a5389d24700c90d6c5d9c7e4ec1b544e7f95"),
-		common.HexToAddress("0xf07606fa5f94cc5ee353a554b3d86d77b4b2d949"),
-		common.HexToAddress("0x243b92e57f103148c99fb2cea66549467433ed50"),
-		common.HexToAddress("0x71dd1c9323d631b3527542225040fe492b23697d"),
-		common.HexToAddress("0x71b2a451451f89f8afac236630d4f266f74f0788"),
-		common.HexToAddress("0x7df116084ff8d815ded7059dcb777ca5bd23b54e"),
-		common.HexToAddress("0xadc912e14aab228a9bd15000269dfd7b1b643a66"),
-		common.HexToAddress("0xe05931172771bc2a680c7e14e233eeb2f13a435e"),
+		common.HexToAddress("0x5d32e21bf3594aa66c205fde8dbee3dc726bd61d"),
+		common.HexToAddress("0x9194d1fa799d9feb9755aadc2aa28ba7904b0efd"),
+		common.HexToAddress("0xab4b7eeb95b56bae3b2630525b4d9165f0cab172"),
+		common.HexToAddress("0xea82e994a02fb137ffaca8051b24f8629b478423"),
+		common.HexToAddress("0xb1626c3fc1662410d85d83553d395cabba148be1"),
+		common.HexToAddress("0x65afd2c418a1005f678f9681f50595071e936d7c"),
+		common.HexToAddress("0x49158a28df943acd20be7c8e758d8f4a9dc07d05"),
 	}
 )
 
