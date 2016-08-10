@@ -9,6 +9,7 @@ tmp
 */**/*un~
 */**/*.test
 *un~
+tests/mining/ur-test-data
 .DS_Store
 */**/.DS_Store
 .ethtest
