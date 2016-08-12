@@ -34,14 +34,14 @@ RUN go install -v
 ADD https://api.github.com/repos/urcapital/go-ur/git/refs/heads/develop unused.txt
 
 ## Fetch and install go-ethereum
-RUN go get -u -v -d github.com/ethereum/go-ethereum/...
-WORKDIR $GOPATH/src/github.com/ethereum/go-ethereum
+RUN go get -u -v -d github.com/urcapital/go-ur/...
+WORKDIR $GOPATH/src/github.com/urcapital/go-ur
 
 RUN git checkout develop
 RUN git pull
 
 
-RUN ETH_DEPS=$(go list -f '{{.Imports}} {{.TestImports}} {{.XTestImports}}' github.com/ethereum/go-ethereum/... | sed -e 's/\[//g' | sed -e 's/\]//g' | sed -e 's/C //g'); if [ "$ETH_DEPS" ]; then go get $ETH_DEPS; fi
+RUN ETH_DEPS=$(go list -f '{{.Imports}} {{.TestImports}} {{.XTestImports}}' github.com/urcapital/go-ur/... | sed -e 's/\[//g' | sed -e 's/\]//g' | sed -e 's/C //g'); if [ "$ETH_DEPS" ]; then go get $ETH_DEPS; fi
 RUN go install -v ./cmd/ethtest
 
 ENTRYPOINT ["ethtest"]
