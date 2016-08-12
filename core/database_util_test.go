@@ -24,13 +24,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/crypto/sha3"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/urcapital/go-ur/common"
+	"github.com/urcapital/go-ur/core/types"
+	"github.com/urcapital/go-ur/core/vm"
+	"github.com/urcapital/go-ur/crypto"
+	"github.com/urcapital/go-ur/crypto/sha3"
+	"github.com/urcapital/go-ur/ethdb"
+	"github.com/urcapital/go-ur/rlp"
 )
 
 type diffTest struct {

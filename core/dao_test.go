@@ -20,9 +20,9 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/urcapital/go-ur/ethdb"
+	"github.com/urcapital/go-ur/event"
+	"github.com/urcapital/go-ur/params"
 )
 
 // Tests that DAO-fork enabled clients can properly filter out fork-commencing
