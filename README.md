@@ -27,7 +27,7 @@ The following builds are build automatically by our build servers after each pus
 ## Building the source
 
 For prerequisites and detailed build instructions please read the
-[Installation Instructions](https://github.com/ethereum/go-ethereum/wiki/Building-Ethereum)
+[Installation Instructions](https://github.com/urcapital/go-ur/wiki/Building-Ethereum)
 on the Ethereum wiki and replace eth with ur, Ethereum with UR, etc.
 
 Building gur requires both a Go and a C compiler.
