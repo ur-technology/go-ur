@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/ur-technology/go-ur/common"
 )
 
 type Account struct {

@@ -28,17 +28,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/httpclient"
-	"github.com/ethereum/go-ethereum/common/registrar"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/node"
-	xe "github.com/ethereum/go-ethereum/xeth"
+	"github.com/ur-technology/go-ur/accounts"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/common/httpclient"
+	"github.com/ur-technology/go-ur/common/registrar"
+	"github.com/ur-technology/go-ur/core"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/eth"
+	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/event"
+	"github.com/ur-technology/go-ur/node"
+	xe "github.com/ur-technology/go-ur/xeth"
 )
 
 const (

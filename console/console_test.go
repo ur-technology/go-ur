@@ -28,12 +28,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/internal/jsre"
-	"github.com/ethereum/go-ethereum/node"
+	"github.com/ur-technology/go-ur/accounts"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core"
+	"github.com/ur-technology/go-ur/eth"
+	"github.com/ur-technology/go-ur/internal/jsre"
+	"github.com/ur-technology/go-ur/node"
 )
 
 const (

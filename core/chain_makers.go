@@ -20,14 +20,14 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/pow"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/state"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/event"
+	"github.com/ur-technology/go-ur/params"
+	"github.com/ur-technology/go-ur/pow"
 )
 
 /*

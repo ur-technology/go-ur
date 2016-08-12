@@ -21,12 +21,12 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/pow"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/state"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/params"
+	"github.com/ur-technology/go-ur/pow"
 	"gopkg.in/fatih/set.v0"
 )
 

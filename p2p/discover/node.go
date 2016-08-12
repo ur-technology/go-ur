@@ -30,9 +30,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/crypto/secp256k1"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/crypto/secp256k1"
 )
 
 const nodeIDBits = 512

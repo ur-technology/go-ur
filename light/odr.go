@@ -19,10 +19,10 @@
 package light
 
 import (
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/rlp"
 	"golang.org/x/net/context"
 )
 

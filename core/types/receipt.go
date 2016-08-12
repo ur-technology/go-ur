@@ -21,9 +21,9 @@ import (
 	"io"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/rlp"
 )
 
 // Receipt represents the results of a transaction.

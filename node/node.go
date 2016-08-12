@@ -26,12 +26,12 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/internal/debug"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/ur-technology/go-ur/event"
+	"github.com/ur-technology/go-ur/internal/debug"
+	"github.com/ur-technology/go-ur/logger"
+	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/p2p"
+	"github.com/ur-technology/go-ur/rpc"
 )
 
 var (

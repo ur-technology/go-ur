@@ -16,7 +16,7 @@
 
 package utils
 
-import "github.com/ethereum/go-ethereum/p2p/discover"
+import "github.com/ur-technology/go-ur/p2p/discover"
 
 // FrontierBootNodes are the enode URLs of the P2P bootstrap nodes running on
 // the Frontier network.
