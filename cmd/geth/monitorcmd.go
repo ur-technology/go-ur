@@ -26,9 +26,9 @@ import (
 
 	"sort"
 
-	"github.com/ethereum/go-ethereum/cmd/utils"
-	"github.com/ethereum/go-ethereum/node"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/urcapital/go-ur/cmd/utils"
+	"github.com/urcapital/go-ur/node"
+	"github.com/urcapital/go-ur/rpc"
 	"github.com/gizak/termui"
 	"gopkg.in/urfave/cli.v1"
 )

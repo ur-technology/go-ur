@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/urcapital/go-ur/common"
 )
 
 func TestBox(t *testing.T) {

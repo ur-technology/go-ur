@@ -20,7 +20,7 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/core/vm"
+	"github.com/urcapital/go-ur/core/vm"
 )
 
 var ChainConfigNotFoundErr = errors.New("ChainConfig not found") // general config not found error

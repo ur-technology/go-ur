@@ -19,14 +19,14 @@ package backends
 import (
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/event"
+	"github.com/urcapital/go-ur/accounts/abi/bind"
+	"github.com/urcapital/go-ur/common"
+	"github.com/urcapital/go-ur/core"
+	"github.com/urcapital/go-ur/core/state"
+	"github.com/urcapital/go-ur/core/types"
+	"github.com/urcapital/go-ur/core/vm"
+	"github.com/urcapital/go-ur/ethdb"
+	"github.com/urcapital/go-ur/event"
 )
 
 // Default chain configuration which sets homestead phase at block 0 (i.e. no frontier)

@@ -23,10 +23,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/urcapital/go-ur/common"
+	"github.com/urcapital/go-ur/core"
+	"github.com/urcapital/go-ur/ethdb"
+	"github.com/urcapital/go-ur/params"
 )
 
 // Genesis block for nodes which don't care about the DAO fork (i.e. not configured)
