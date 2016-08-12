@@ -21,11 +21,11 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/logger"
+	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/params"
 )
 
 // Config are the configuration options for the EVM

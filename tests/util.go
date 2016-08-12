@@ -22,14 +22,14 @@ import (
 	"math/big"
 	"os"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/logger/glog"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core"
+	"github.com/ur-technology/go-ur/core/state"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/logger/glog"
 )
 
 var (

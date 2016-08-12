@@ -25,8 +25,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/crypto"
 )
 
 // formatSilceOutput add padding to the value and adds a size

@@ -21,14 +21,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/crypto/ecies"
-	"github.com/ethereum/go-ethereum/event/filter"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/crypto/ecies"
+	"github.com/ur-technology/go-ur/event/filter"
+	"github.com/ur-technology/go-ur/logger"
+	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/p2p"
+	"github.com/ur-technology/go-ur/rpc"
 
 	"gopkg.in/fatih/set.v0"
 )

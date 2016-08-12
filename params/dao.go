@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/ur-technology/go-ur/common"
 )
 
 // TestNetDAOForkBlock is the block number where the DAO hard-fork commences on

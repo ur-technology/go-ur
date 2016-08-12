@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/ethereum/go-ethereum",
+	"ImportPath": "github.com/ur-technology/go-ur",
 	"GoVersion": "go1.5.2",
 	"GodepVersion": "v74",
 	"Packages": [
@@ -19,9 +19,8 @@
 			"Rev": "5215b55f46b2b919f50a1df0eaa5886afe4e3b3d"
 		},
 		{
-			"ImportPath": "github.com/ethereum/ethash",
-			"Comment": "v23.1-245-g25b32de",
-			"Rev": "25b32de0c0271065c28c3719c2bfe86959d72f0c"
+			"ImportPath": "github.com/ur-technology/urhash",
+			"Rev": "856a479062501d1ca5577b7719c0caf87b90bbfd"
 		},
 		{
 			"ImportPath": "github.com/fatih/color",

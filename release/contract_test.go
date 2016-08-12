@@ -21,11 +21,11 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind/backends"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ur-technology/go-ur/accounts/abi/bind"
+	"github.com/ur-technology/go-ur/accounts/abi/bind/backends"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core"
+	"github.com/ur-technology/go-ur/crypto"
 )
 
 // setupReleaseTest creates a blockchain simulator and deploys a version oracle

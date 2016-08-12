@@ -22,8 +22,8 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/vm"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/vm"
 )
 
 func main() {

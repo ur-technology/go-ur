@@ -23,12 +23,12 @@ import (
 	"io"
 	"runtime"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/params"
+	"github.com/ur-technology/go-ur/rlp"
 )
 
 // Transaction Test JSON Format

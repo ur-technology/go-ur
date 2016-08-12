@@ -23,11 +23,11 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/ur-technology/go-ur/accounts/abi/bind"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/rlp"
+	"github.com/ur-technology/go-ur/rpc"
 )
 
 // This nil assignment ensures compile time that rpcBackend implements bind.ContractBackend.

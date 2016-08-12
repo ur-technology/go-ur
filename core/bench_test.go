@@ -23,12 +23,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/event"
+	"github.com/ur-technology/go-ur/params"
 )
 
 func BenchmarkInsertChain_empty_memdb(b *testing.B) {

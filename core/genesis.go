@@ -26,13 +26,13 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/logger"
-	"github.com/ethereum/go-ethereum/logger/glog"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/state"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/logger"
+	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/params"
 )
 
 // WriteGenesisBlock writes the genesis block to the database as block number 0

@@ -42,7 +42,7 @@ import (
 	"hash"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/crypto/secp256k1"
+	"github.com/ur-technology/go-ur/crypto/secp256k1"
 )
 
 var (
