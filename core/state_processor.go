@@ -18,7 +18,9 @@ package core
 
 import (
 	"math/big"
+	"fmt"
 
+	"github.com/urcapital/go-ur/common"
 	"github.com/urcapital/go-ur/core/state"
 	"github.com/urcapital/go-ur/core/types"
 	"github.com/urcapital/go-ur/core/vm"
@@ -79,7 +81,7 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 		receipts = append(receipts, receipt)
 		allLogs = append(allLogs, logs...)
 	}
-	AccumulateRewards(statedb, header, block.Uncles())
+	AccumulateRewards(statedb, header, block.Uncles(), block.Transactions())
 
 	return receipts, allLogs, totalUsedGas, err
 }
@@ -118,7 +120,33 @@ func ApplyTransaction(config *ChainConfig, bc *BlockChain, gp *GasPool, statedb 
 // mining reward. The total reward consists of the static block reward
 // and rewards for included uncles. The coinbase of each uncle block is
 // also rewarded.
-func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*types.Header) {
+func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*types.Header, transactions types.Transactions) {
+
+	// create bonus rewards for any reference transactions that are part of this block
+	privilegedAddresses := []common.Address{
+    common.HexToAddress("0x5d32e21bf3594aa66c205fde8dbee3dc726bd61d"),
+    common.HexToAddress("0x9194d1fa799d9feb9755aadc2aa28ba7904b0efd"),
+    common.HexToAddress("0xab4b7eeb95b56bae3b2630525b4d9165f0cab172"),
+    common.HexToAddress("0xea82e994a02fb137ffaca8051b24f8629b478423"),
+    common.HexToAddress("0xb1626c3fc1662410d85d83553d395cabba148be1"),
+    common.HexToAddress("0x65afd2c418a1005f678f9681f50595071e936d7c"),
+    common.HexToAddress("0x49158a28df943acd20be7c8e758d8f4a9dc07d05"),
+	}
+	for _, transaction := range transactions {
+		from, _ := transaction.From()
+		for i := 0; i < len(privilegedAddresses); i++ {
+			if from == privilegedAddresses[i] {
+				// this is a 'bonus reference transaction', so let's use it to create a bonus reward
+				bonusReward := new(big.Int).Mul(transaction.Value(), big.NewInt(1e+15)) // generally, bonus reward is one quadrillion times the reference amount...
+				bonusRewardCap := new(big.Int).Mul(big.NewInt(2000), big.NewInt(1e+18)) // but is capped at 2000 UR
+				bonusReward = common.BigMin(bonusReward, bonusRewardCap)
+				statedb.AddBalance(*transaction.To(), bonusReward)
+				fmt.Printf("found a privileged transaction - rewarded address %v with %v\n", *transaction.To(), bonusReward);
+				break
+			}
+		}
+	}
+
 	reward := new(big.Int).Set(BlockReward)
 	r := new(big.Int)
 	for _, uncle := range uncles {
