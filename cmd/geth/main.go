@@ -47,7 +47,7 @@ import (
 )
 
 const (
-	clientIdentifier = "Geth"   // Client identifier to advertise over the network
+	clientIdentifier = "GUR"   // Client identifier to advertise over the network
 	versionMajor     = 1        // Major version component of the current release
 	versionMinor     = 4        // Minor version component of the current release
 	versionPatch     = 10       // Patch version component of the current release
