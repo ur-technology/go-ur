@@ -95,7 +95,6 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 		allLogs = append(allLogs, logs...)
 	}
 	AccumulateRewards(statedb, header, block.Uncles(), block.Transactions())
-	AccumulateBonuses(statedb, block.Transactions())
 
 	return receipts, allLogs, totalUsedGas, err
 }
@@ -150,18 +149,6 @@ func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*t
 	reward = calculateNewSignupMinerRewards(reward, transactions, statedb)
 
 	statedb.AddBalance(header.Coinbase, reward)
-}
-
-// AccumulateBonuses credits the receiving address who has received funds
-// from a priviliged address at the rate of 1 eth for every 10,000 wei
-func AccumulateBonuses(statedb *state.StateDB, transactions types.Transactions) {
-	for _, transaction := range transactions {
-		from, _ := transaction.From()
-		to := transaction.To()
-		if isPrivilegedAddress(from) {
-			statedb.AddBalance(*to, calculateNewSignupReceiverReward(transaction.Value()))
-		}
-	}
 }
 
 func isPrivilegedAddress(address common.Address) bool {
