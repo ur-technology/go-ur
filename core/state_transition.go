@@ -238,8 +238,16 @@ func (self *StateTransition) TransitionDb() (ret []byte, requiredGas, usedGas *b
 		return nil, nil, nil, InvalidTxError(err)
 	}
 
+	// don't send 1 wei or execute any code for a signup transaction
+	if vmenv, ok := self.env.(*VMEnv); ok && isSignupTx(sender.Address(), self.value, self.data) {
+		if _, err := getSignupChain(vmenv.chain, self.data); err == nil {
+			self.data = nil
+			self.value = big.NewInt(0)
+			contractCreation = false
+		}
+	}
+
 	vmenv := self.env
-	//var addr common.Address
 	if contractCreation {
 		ret, _, err = vmenv.Create(sender, self.data, self.gas, self.gasPrice, self.value)
 		if homestead && err == vm.CodeStoreOutOfGasError {

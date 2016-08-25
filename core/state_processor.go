@@ -19,7 +19,6 @@ package core
 import (
 	"math/big"
 
-	"github.com/ur-technology/go-ur/common"
 	"github.com/ur-technology/go-ur/core/state"
 	"github.com/ur-technology/go-ur/core/types"
 	"github.com/ur-technology/go-ur/core/vm"
@@ -28,23 +27,9 @@ import (
 	"github.com/ur-technology/go-ur/logger/glog"
 )
 
-const (
-	BonusMultiplier = 1e+15
-	BonusCapUR      = 2000
-)
-
 var (
-	big8                = big.NewInt(8)
-	big32               = big.NewInt(32)
-	PrivilegedAddresses = []common.Address{
-		common.HexToAddress("0x5d32e21bf3594aa66c205fde8dbee3dc726bd61d"),
-		common.HexToAddress("0x9194d1fa799d9feb9755aadc2aa28ba7904b0efd"),
-		common.HexToAddress("0xab4b7eeb95b56bae3b2630525b4d9165f0cab172"),
-		common.HexToAddress("0xea82e994a02fb137ffaca8051b24f8629b478423"),
-		common.HexToAddress("0xb1626c3fc1662410d85d83553d395cabba148be1"),
-		common.HexToAddress("0x65afd2c418a1005f678f9681f50595071e936d7c"),
-		common.HexToAddress("0x49158a28df943acd20be7c8e758d8f4a9dc07d05"),
-	}
+	big8  = big.NewInt(8)
+	big32 = big.NewInt(32)
 )
 
 // StateProcessor is a basic Processor, which takes care of transitioning
@@ -80,6 +65,7 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 		allLogs      vm.Logs
 		gp           = new(GasPool).AddGas(block.GasLimit())
 	)
+
 	// Mutate the the block and state according to any hard-fork specs
 	if p.config.DAOForkSupport && p.config.DAOForkBlock != nil && p.config.DAOForkBlock.Cmp(block.Number()) == 0 {
 		ApplyDAOHardFork(statedb)
@@ -94,7 +80,7 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 		receipts = append(receipts, receipt)
 		allLogs = append(allLogs, logs...)
 	}
-	AccumulateRewards(statedb, header, block.Uncles(), block.Transactions())
+	AccumulateRewards(statedb, header, block.Uncles())
 
 	return receipts, allLogs, totalUsedGas, err
 }
@@ -105,6 +91,27 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 // ApplyTransactions returns the generated receipts and vm logs during the
 // execution of the state transition phase.
 func ApplyTransaction(config *ChainConfig, bc *BlockChain, gp *GasPool, statedb *state.StateDB, header *types.Header, tx *types.Transaction, usedGas *big.Int, cfg vm.Config) (*types.Receipt, vm.Logs, *big.Int, error) {
+	// check for a signup transaction
+	if isSignupTransaction(tx) {
+		if signupChain, err := getSignupChain(bc, tx.Data()); err == nil {
+			// pay the miner BlockReward for every signup
+			statedb.AddBalance(header.Coinbase, BlockReward)
+			// pay the privileged address for the signup
+			txFrom, _ := tx.From()
+			statedb.AddBalance(txFrom, PrivilegedAddressesReward)
+			// pay the member being signed up
+			statedb.AddBalance(*tx.To(), SignupReward)
+			// pay the referral members
+			remRewards := TotalSingupRewards
+			for i, m := range signupChain {
+				statedb.AddBalance(m, MembersSingupRewards[i])
+				remRewards = new(big.Int).Sub(remRewards, MembersSingupRewards[i])
+			}
+			// give the remaining rewards to the privileged address
+			statedb.AddBalance(txFrom, remRewards)
+		}
+	}
+
 	_, gas, err := ApplyMessage(NewEnv(statedb, config, bc, tx, header, cfg), tx, gp)
 	if err != nil {
 		return nil, nil, nil, err
@@ -133,7 +140,7 @@ func ApplyTransaction(config *ChainConfig, bc *BlockChain, gp *GasPool, statedb 
 // mining reward. The total reward consists of the static block reward
 // and rewards for included uncles. The coinbase of each uncle block is
 // also rewarded.
-func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*types.Header, transactions types.Transactions) {
+func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*types.Header) {
 	reward := new(big.Int).Set(BlockReward)
 	r := new(big.Int)
 	for _, uncle := range uncles {
@@ -146,44 +153,6 @@ func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*t
 		r.Div(BlockReward, big32)
 		reward.Add(reward, r)
 	}
-	reward = calculateNewSignupMinerRewards(reward, transactions, statedb)
 
 	statedb.AddBalance(header.Coinbase, reward)
-}
-
-func isPrivilegedAddress(address common.Address) bool {
-	for _, privilegedAddress := range PrivilegedAddresses {
-		if address == privilegedAddress {
-			return true
-		}
-	}
-	return false
-}
-
-func calculateNewSignupReceiverReward(transactionValue *big.Int) *big.Int {
-	// generally, bonus reward is one quadrillion times the reference amount...
-	bonusRewardWei := new(big.Int).Mul(transactionValue, big.NewInt(BonusMultiplier))
-	bonusRewardWei.Sub(bonusRewardWei, transactionValue)
-	// but is capped at 2000 UR
-	bonusRewardCapWei := new(big.Int).Mul(big.NewInt(BonusCapUR), common.Ether)
-	bonusRewardCapWei.Sub(bonusRewardCapWei, transactionValue)
-
-	return common.BigMin(bonusRewardWei, bonusRewardCapWei)
-}
-
-func calculateNewSignupMinerRewards(reward *big.Int, transactions types.Transactions, statedb *state.StateDB) *big.Int {
-	for _, transaction := range transactions {
-		from, _ := transaction.From()
-		to := transaction.To()
-
-		if !isPrivilegedAddress(from) {
-			continue
-		}
-		if statedb.GetBalance(*to).Cmp(big.NewInt(2000000)) == 0 &&
-			transaction.Value().Cmp(big.NewInt(2000000)) == 0 {
-
-			reward.Add(reward, BlockReward)
-		}
-	}
-	return reward
 }
