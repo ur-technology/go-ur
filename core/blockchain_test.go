@@ -88,12 +88,12 @@ func testFork(t *testing.T, blockchain *BlockChain, i, n int, full bool, compara
 		headerChainB []*types.Header
 	)
 	if full {
-		blockChainB = makeBlockChain(blockchain2.CurrentBlock(), n, db, forkSeed)
+		blockChainB = makeBlockChain(blockchain2, blockchain2.CurrentBlock(), n, db, forkSeed)
 		if _, err := blockchain2.InsertChain(blockChainB); err != nil {
 			t.Fatalf("failed to insert forking chain: %v", err)
 		}
 	} else {
-		headerChainB = makeHeaderChain(blockchain2.CurrentHeader(), n, db, forkSeed)
+		headerChainB = makeHeaderChain(blockchain2, blockchain2.CurrentHeader(), n, db, forkSeed)
 		if _, err := blockchain2.InsertHeaderChain(headerChainB, 1); err != nil {
 			t.Fatalf("failed to insert forking chain: %v", err)
 		}
@@ -205,7 +205,7 @@ func TestLastBlock(t *testing.T) {
 	db, _ := ethdb.NewMemDatabase()
 
 	bchain := theBlockChain(db, t)
-	block := makeBlockChain(bchain.CurrentBlock(), 1, db, 0)[0]
+	block := makeBlockChain(bchain, bchain.CurrentBlock(), 1, db, 0)[0]
 	bchain.insert(block)
 	if block.Hash() != GetHeadBlockHash(db) {
 		t.Errorf("Write/Get HeadBlockHash failed")
@@ -334,12 +334,12 @@ func testBrokenChain(t *testing.T, full bool) {
 	}
 	// Create a forked chain, and try to insert with a missing link
 	if full {
-		chain := makeBlockChain(blockchain.CurrentBlock(), 5, db, forkSeed)[1:]
+		chain := makeBlockChain(blockchain, blockchain.CurrentBlock(), 5, db, forkSeed)[1:]
 		if err := testBlockChainImport(chain, blockchain); err == nil {
 			t.Errorf("broken block chain not reported")
 		}
 	} else {
-		chain := makeHeaderChain(blockchain.CurrentHeader(), 5, db, forkSeed)[1:]
+		chain := makeHeaderChain(blockchain, blockchain.CurrentHeader(), 5, db, forkSeed)[1:]
 		if err := testHeaderChainImport(chain, blockchain); err == nil {
 			t.Errorf("broken header chain not reported")
 		}
@@ -651,7 +651,7 @@ func testInsertNonceError(t *testing.T, full bool) {
 			failHash common.Hash
 		)
 		if full {
-			blocks := makeBlockChain(blockchain.CurrentBlock(), i, db, 0)
+			blocks := makeBlockChain(blockchain, blockchain.CurrentBlock(), i, db, 0)
 
 			failAt = rand.Int() % len(blocks)
 			failNum = blocks[failAt].NumberU64()
@@ -661,7 +661,7 @@ func testInsertNonceError(t *testing.T, full bool) {
 
 			failRes, err = blockchain.InsertChain(blocks)
 		} else {
-			headers := makeHeaderChain(blockchain.CurrentHeader(), i, db, 0)
+			headers := makeHeaderChain(blockchain, blockchain.CurrentHeader(), i, db, 0)
 
 			failAt = rand.Int() % len(headers)
 			failNum = headers[failAt].Number.Uint64()
@@ -712,7 +712,12 @@ func TestFastVsFullChains(t *testing.T) {
 		funds    = big.NewInt(1000000000)
 		genesis  = GenesisBlockForTesting(gendb, address, funds)
 	)
-	blocks, receipts := GenerateChain(nil, genesis, gendb, 1024, func(i int, block *BlockGen) {
+	// Import the chain as an archive node for the comparison baseline
+	archiveDb, _ := ethdb.NewMemDatabase()
+	WriteGenesisBlockForTesting(archiveDb, GenesisAccount{address, funds})
+	archive, _ := NewBlockChain(archiveDb, testChainConfig(), FakePow{}, new(event.TypeMux))
+	archive.ResetWithGenesisBlock(genesis)
+	blocks, receipts := GenerateChain(nil, archive, genesis, gendb, 1024, func(i int, block *BlockGen) {
 		block.SetCoinbase(common.Address{0x00})
 
 		// If the block number is multiple of 3, send a few bonus transactions to the miner
@@ -730,11 +735,6 @@ func TestFastVsFullChains(t *testing.T) {
 			block.AddUncle(&types.Header{ParentHash: block.PrevBlock(i - 1).Hash(), Number: big.NewInt(int64(i - 1))})
 		}
 	})
-	// Import the chain as an archive node for the comparison baseline
-	archiveDb, _ := ethdb.NewMemDatabase()
-	WriteGenesisBlockForTesting(archiveDb, GenesisAccount{address, funds})
-
-	archive, _ := NewBlockChain(archiveDb, testChainConfig(), FakePow{}, new(event.TypeMux))
 
 	if n, err := archive.InsertChain(blocks); err != nil {
 		t.Fatalf("failed to process block %d: %v", n, err)
@@ -795,7 +795,11 @@ func TestLightVsFastVsFullChainHeads(t *testing.T) {
 		genesis  = GenesisBlockForTesting(gendb, address, funds)
 	)
 	height := uint64(1024)
-	blocks, receipts := GenerateChain(nil, genesis, gendb, int(height), nil)
+	// Import the chain as an archive node and ensure all pointers are updated
+	archiveDb, _ := ethdb.NewMemDatabase()
+	WriteGenesisBlockForTesting(archiveDb, GenesisAccount{address, funds})
+	archive, _ := NewBlockChain(archiveDb, testChainConfig(), FakePow{}, new(event.TypeMux))
+	blocks, receipts := GenerateChain(nil, archive, genesis, gendb, int(height), nil)
 
 	// Configure a subchain to roll back
 	remove := []common.Hash{}
@@ -814,11 +818,6 @@ func TestLightVsFastVsFullChainHeads(t *testing.T) {
 			t.Errorf("%s head header mismatch: have #%v, want #%v", kind, num, header)
 		}
 	}
-	// Import the chain as an archive node and ensure all pointers are updated
-	archiveDb, _ := ethdb.NewMemDatabase()
-	WriteGenesisBlockForTesting(archiveDb, GenesisAccount{address, funds})
-
-	archive, _ := NewBlockChain(archiveDb, testChainConfig(), FakePow{}, new(event.TypeMux))
 
 	if n, err := archive.InsertChain(blocks); err != nil {
 		t.Fatalf("failed to process block %d: %v", n, err)
@@ -894,8 +893,10 @@ func TestChainTxReorgs(t *testing.T) {
 	//  - freshAdd:  transaction added at the exact block the reorg is detected
 	//  - futureAdd: transaction added after the reorg has already finished
 	var pastAdd, freshAdd, futureAdd *types.Transaction
+	evmux := &event.TypeMux{}
+	blockchain, _ := NewBlockChain(db, testChainConfig(), FakePow{}, evmux)
 
-	chain, _ := GenerateChain(nil, genesis, db, 3, func(i int, gen *BlockGen) {
+	chain, _ := GenerateChain(nil, blockchain, genesis, db, 3, func(i int, gen *BlockGen) {
 		switch i {
 		case 0:
 			pastDrop, _ = types.NewTransaction(gen.TxNonce(addr2), addr2, big.NewInt(1000), params.TxGas, nil, nil).SignECDSA(key2)
@@ -913,14 +914,12 @@ func TestChainTxReorgs(t *testing.T) {
 		}
 	})
 	// Import the chain. This runs all block validation rules.
-	evmux := &event.TypeMux{}
-	blockchain, _ := NewBlockChain(db, testChainConfig(), FakePow{}, evmux)
 	if i, err := blockchain.InsertChain(chain); err != nil {
 		t.Fatalf("failed to insert original chain[%d]: %v", i, err)
 	}
 
 	// overwrite the old chain
-	chain, _ = GenerateChain(nil, genesis, db, 5, func(i int, gen *BlockGen) {
+	chain, _ = GenerateChain(nil, blockchain, genesis, db, 5, func(i int, gen *BlockGen) {
 		switch i {
 		case 0:
 			pastAdd, _ = types.NewTransaction(gen.TxNonce(addr3), addr3, big.NewInt(1000), params.TxGas, nil, nil).SignECDSA(key3)
@@ -990,7 +989,7 @@ func TestLogReorgs(t *testing.T) {
 	blockchain, _ := NewBlockChain(db, testChainConfig(), FakePow{}, evmux)
 
 	subs := evmux.Subscribe(RemovedLogsEvent{})
-	chain, _ := GenerateChain(nil, genesis, db, 2, func(i int, gen *BlockGen) {
+	chain, _ := GenerateChain(nil, blockchain, genesis, db, 2, func(i int, gen *BlockGen) {
 		if i == 1 {
 			tx, err := types.NewContractCreation(gen.TxNonce(addr1), new(big.Int), big.NewInt(1000000), new(big.Int), code).SignECDSA(key1)
 			if err != nil {
@@ -1003,7 +1002,7 @@ func TestLogReorgs(t *testing.T) {
 		t.Fatalf("failed to insert chain: %v", err)
 	}
 
-	chain, _ = GenerateChain(nil, genesis, db, 3, func(i int, gen *BlockGen) {})
+	chain, _ = GenerateChain(nil, blockchain, genesis, db, 3, func(i int, gen *BlockGen) {})
 	if _, err := blockchain.InsertChain(chain); err != nil {
 		t.Fatalf("failed to insert forked chain: %v", err)
 	}
@@ -1025,12 +1024,12 @@ func TestReorgSideEvent(t *testing.T) {
 	evmux := &event.TypeMux{}
 	blockchain, _ := NewBlockChain(db, testChainConfig(), FakePow{}, evmux)
 
-	chain, _ := GenerateChain(nil, genesis, db, 3, func(i int, gen *BlockGen) {})
+	chain, _ := GenerateChain(nil, blockchain, genesis, db, 3, func(i int, gen *BlockGen) {})
 	if _, err := blockchain.InsertChain(chain); err != nil {
 		t.Fatalf("failed to insert chain: %v", err)
 	}
 
-	replacementBlocks, _ := GenerateChain(nil, genesis, db, 4, func(i int, gen *BlockGen) {
+	replacementBlocks, _ := GenerateChain(nil, blockchain, genesis, db, 4, func(i int, gen *BlockGen) {
 		tx, err := types.NewContractCreation(gen.TxNonce(addr1), new(big.Int), big.NewInt(1000000), new(big.Int), nil).SignECDSA(key1)
 		if i == 2 {
 			gen.OffsetTime(-1)

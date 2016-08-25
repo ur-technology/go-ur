@@ -44,8 +44,8 @@ var (
 // the returned hash chain is ordered head->parent. In addition, every 3rd block
 // contains a transaction and every 5th an uncle to allow testing correct block
 // reassembly.
-func makeChain(n int, seed byte, parent *types.Block) ([]common.Hash, map[common.Hash]*types.Block) {
-	blocks, _ := core.GenerateChain(nil, parent, testdb, n, func(i int, block *core.BlockGen) {
+func makeChain(n int, seed byte, blockchain *core.BlockChain, parent *types.Block) ([]common.Hash, map[common.Hash]*types.Block) {
+	blocks, _ := core.GenerateChain(nil, blockchain, parent, testdb, n, func(i int, block *core.BlockGen) {
 		block.SetCoinbase(common.Address{seed})
 
 		// If the block number is multiple of 3, send a bonus transaction to the miner
@@ -301,7 +301,7 @@ func TestSequentialAnnouncements64(t *testing.T) { testSequentialAnnouncements(t
 func testSequentialAnnouncements(t *testing.T, protocol int) {
 	// Create a chain of blocks to import
 	targetBlocks := 4 * hashLimit
-	hashes, blocks := makeChain(targetBlocks, 0, genesis)
+	hashes, blocks := makeChain(targetBlocks, 0, nil, genesis)
 
 	tester := newTester()
 	blockFetcher := tester.makeBlockFetcher(blocks)
@@ -333,7 +333,7 @@ func TestConcurrentAnnouncements64(t *testing.T) { testConcurrentAnnouncements(t
 func testConcurrentAnnouncements(t *testing.T, protocol int) {
 	// Create a chain of blocks to import
 	targetBlocks := 4 * hashLimit
-	hashes, blocks := makeChain(targetBlocks, 0, genesis)
+	hashes, blocks := makeChain(targetBlocks, 0, nil, genesis)
 
 	// Assemble a tester with a built in counter for the requests
 	tester := newTester()
@@ -384,7 +384,7 @@ func TestOverlappingAnnouncements64(t *testing.T) { testOverlappingAnnouncements
 func testOverlappingAnnouncements(t *testing.T, protocol int) {
 	// Create a chain of blocks to import
 	targetBlocks := 4 * hashLimit
-	hashes, blocks := makeChain(targetBlocks, 0, genesis)
+	hashes, blocks := makeChain(targetBlocks, 0, nil, genesis)
 
 	tester := newTester()
 	blockFetcher := tester.makeBlockFetcher(blocks)
@@ -423,7 +423,7 @@ func TestPendingDeduplication64(t *testing.T) { testPendingDeduplication(t, 64) 
 
 func testPendingDeduplication(t *testing.T, protocol int) {
 	// Create a hash and corresponding block
-	hashes, blocks := makeChain(1, 0, genesis)
+	hashes, blocks := makeChain(1, 0, nil, genesis)
 
 	// Assemble a tester with a built in counter and delayed fetcher
 	tester := newTester()
@@ -483,7 +483,7 @@ func TestRandomArrivalImport64(t *testing.T) { testRandomArrivalImport(t, 64) }
 func testRandomArrivalImport(t *testing.T, protocol int) {
 	// Create a chain of blocks to import, and choose one to delay
 	targetBlocks := maxQueueDist
-	hashes, blocks := makeChain(targetBlocks, 0, genesis)
+	hashes, blocks := makeChain(targetBlocks, 0, nil, genesis)
 	skip := targetBlocks / 2
 
 	tester := newTester()
@@ -524,7 +524,7 @@ func TestQueueGapFill64(t *testing.T) { testQueueGapFill(t, 64) }
 func testQueueGapFill(t *testing.T, protocol int) {
 	// Create a chain of blocks to import, and choose one to not announce at all
 	targetBlocks := maxQueueDist
-	hashes, blocks := makeChain(targetBlocks, 0, genesis)
+	hashes, blocks := makeChain(targetBlocks, 0, nil, genesis)
 	skip := targetBlocks / 2
 
 	tester := newTester()
@@ -560,7 +560,7 @@ func TestImportDeduplication64(t *testing.T) { testImportDeduplication(t, 64) }
 
 func testImportDeduplication(t *testing.T, protocol int) {
 	// Create two blocks to import (one for duplication, the other for stalling)
-	hashes, blocks := makeChain(2, 0, genesis)
+	hashes, blocks := makeChain(2, 0, nil, genesis)
 
 	// Create the tester and wrap the importer with a counter
 	tester := newTester()
@@ -604,7 +604,7 @@ func testImportDeduplication(t *testing.T, protocol int) {
 // discarded to prevent wasting resources on useless blocks from faulty peers.
 func TestDistantPropagationDiscarding(t *testing.T) {
 	// Create a long chain to import and define the discard boundaries
-	hashes, blocks := makeChain(3*maxQueueDist, 0, genesis)
+	hashes, blocks := makeChain(3*maxQueueDist, 0, nil, genesis)
 	head := hashes[len(hashes)/2]
 
 	low, high := len(hashes)/2+maxUncleDist+1, len(hashes)/2-maxQueueDist-1
@@ -640,7 +640,7 @@ func TestDistantAnnouncementDiscarding64(t *testing.T) { testDistantAnnouncement
 
 func testDistantAnnouncementDiscarding(t *testing.T, protocol int) {
 	// Create a long chain to import and define the discard boundaries
-	hashes, blocks := makeChain(3*maxQueueDist, 0, genesis)
+	hashes, blocks := makeChain(3*maxQueueDist, 0, nil, genesis)
 	head := hashes[len(hashes)/2]
 
 	low, high := len(hashes)/2+maxUncleDist+1, len(hashes)/2-maxQueueDist-1
@@ -683,7 +683,7 @@ func TestInvalidNumberAnnouncement64(t *testing.T) { testInvalidNumberAnnounceme
 
 func testInvalidNumberAnnouncement(t *testing.T, protocol int) {
 	// Create a single block to import and check numbers against
-	hashes, blocks := makeChain(1, 0, genesis)
+	hashes, blocks := makeChain(1, 0, nil, genesis)
 
 	tester := newTester()
 	headerFetcher := tester.makeHeaderFetcher(blocks, -gatherSlack)
@@ -725,7 +725,7 @@ func TestEmptyBlockShortCircuit64(t *testing.T) { testEmptyBlockShortCircuit(t, 
 
 func testEmptyBlockShortCircuit(t *testing.T, protocol int) {
 	// Create a chain of blocks to import
-	hashes, blocks := makeChain(32, 0, genesis)
+	hashes, blocks := makeChain(32, 0, nil, genesis)
 
 	tester := newTester()
 	headerFetcher := tester.makeHeaderFetcher(blocks, -gatherSlack)
@@ -780,12 +780,12 @@ func testHashMemoryExhaustionAttack(t *testing.T, protocol int) {
 	}
 	// Create a valid chain and an infinite junk chain
 	targetBlocks := hashLimit + 2*maxQueueDist
-	hashes, blocks := makeChain(targetBlocks, 0, genesis)
+	hashes, blocks := makeChain(targetBlocks, 0, nil, genesis)
 	validBlockFetcher := tester.makeBlockFetcher(blocks)
 	validHeaderFetcher := tester.makeHeaderFetcher(blocks, -gatherSlack)
 	validBodyFetcher := tester.makeBodyFetcher(blocks, 0)
 
-	attack, _ := makeChain(targetBlocks, 0, unknownBlock)
+	attack, _ := makeChain(targetBlocks, 0, nil, unknownBlock)
 	attackerBlockFetcher := tester.makeBlockFetcher(nil)
 	attackerHeaderFetcher := tester.makeHeaderFetcher(nil, -gatherSlack)
 	attackerBodyFetcher := tester.makeBodyFetcher(nil, 0)
@@ -841,10 +841,10 @@ func TestBlockMemoryExhaustionAttack(t *testing.T) {
 	}
 	// Create a valid chain and a batch of dangling (but in range) blocks
 	targetBlocks := hashLimit + 2*maxQueueDist
-	hashes, blocks := makeChain(targetBlocks, 0, genesis)
+	hashes, blocks := makeChain(targetBlocks, 0, nil, genesis)
 	attack := make(map[common.Hash]*types.Block)
 	for i := byte(0); len(attack) < blockLimit+2*maxQueueDist; i++ {
-		hashes, blocks := makeChain(maxQueueDist-1, i, unknownBlock)
+		hashes, blocks := makeChain(maxQueueDist-1, i, nil, unknownBlock)
 		for _, hash := range hashes[:maxQueueDist-2] {
 			attack[hash] = blocks[hash]
 		}

@@ -63,11 +63,12 @@ var (
 // BlockGen creates blocks for testing.
 // See GenerateChain for a detailed explanation.
 type BlockGen struct {
-	i       int
-	parent  *types.Block
-	chain   []*types.Block
-	header  *types.Header
-	statedb *state.StateDB
+	i          int
+	parent     *types.Block
+	chain      []*types.Block
+	header     *types.Header
+	statedb    *state.StateDB
+	blockchain *BlockChain
 
 	gasPool  *GasPool
 	txs      []*types.Transaction
@@ -106,7 +107,7 @@ func (b *BlockGen) AddTx(tx *types.Transaction) {
 		b.SetCoinbase(common.Address{})
 	}
 	b.statedb.StartRecord(tx.Hash(), common.Hash{}, len(b.txs))
-	receipt, _, _, err := ApplyTransaction(MakeChainConfig(), nil, b.gasPool, b.statedb, b.header, tx, b.header.GasUsed, vm.Config{})
+	receipt, _, _, err := ApplyTransaction(MakeChainConfig(), b.blockchain, b.gasPool, b.statedb, b.header, tx, b.header.GasUsed, vm.Config{})
 	if err != nil {
 		panic(err)
 	}
@@ -178,10 +179,10 @@ func (b *BlockGen) OffsetTime(seconds int64) {
 // Blocks created by GenerateChain do not contain valid proof of work
 // values. Inserting them into BlockChain requires use of FakePow or
 // a similar non-validating proof of work implementation.
-func GenerateChain(config *ChainConfig, parent *types.Block, db ethdb.Database, n int, gen func(int, *BlockGen)) ([]*types.Block, []types.Receipts) {
+func GenerateChain(config *ChainConfig, blockchain *BlockChain, parent *types.Block, db ethdb.Database, n int, gen func(int, *BlockGen)) ([]*types.Block, []types.Receipts) {
 	blocks, receipts := make(types.Blocks, n), make([]types.Receipts, n)
 	genblock := func(i int, h *types.Header, statedb *state.StateDB) (*types.Block, types.Receipts) {
-		b := &BlockGen{parent: parent, i: i, chain: blocks, header: h, statedb: statedb}
+		b := &BlockGen{parent: parent, i: i, blockchain: blockchain, chain: blocks, header: h, statedb: statedb}
 
 		// Mutate the state and block according to any hard-fork specs
 		if config == nil {
@@ -202,7 +203,7 @@ func GenerateChain(config *ChainConfig, parent *types.Block, db ethdb.Database, 
 		if gen != nil {
 			gen(i, b)
 		}
-		AccumulateRewards(statedb, h, b.uncles, b.txs)
+		AccumulateRewards(statedb, h, b.uncles)
 		root, err := statedb.Commit()
 		if err != nil {
 			panic(fmt.Sprintf("state write error: %v", err))
@@ -261,19 +262,19 @@ func newCanonical(n int, full bool) (ethdb.Database, *BlockChain, error) {
 	}
 	if full {
 		// Full block-chain requested
-		blocks := makeBlockChain(genesis, n, db, canonicalSeed)
+		blocks := makeBlockChain(blockchain, genesis, n, db, canonicalSeed)
 		_, err := blockchain.InsertChain(blocks)
 		return db, blockchain, err
 	}
 	// Header-only chain requested
-	headers := makeHeaderChain(genesis.Header(), n, db, canonicalSeed)
+	headers := makeHeaderChain(blockchain, genesis.Header(), n, db, canonicalSeed)
 	_, err := blockchain.InsertHeaderChain(headers, 1)
 	return db, blockchain, err
 }
 
 // makeHeaderChain creates a deterministic chain of headers rooted at parent.
-func makeHeaderChain(parent *types.Header, n int, db ethdb.Database, seed int) []*types.Header {
-	blocks := makeBlockChain(types.NewBlockWithHeader(parent), n, db, seed)
+func makeHeaderChain(blockchain *BlockChain, parent *types.Header, n int, db ethdb.Database, seed int) []*types.Header {
+	blocks := makeBlockChain(blockchain, types.NewBlockWithHeader(parent), n, db, seed)
 	headers := make([]*types.Header, len(blocks))
 	for i, block := range blocks {
 		headers[i] = block.Header()
@@ -282,8 +283,8 @@ func makeHeaderChain(parent *types.Header, n int, db ethdb.Database, seed int) [
 }
 
 // makeBlockChain creates a deterministic chain of blocks rooted at parent.
-func makeBlockChain(parent *types.Block, n int, db ethdb.Database, seed int) []*types.Block {
-	blocks, _ := GenerateChain(nil, parent, db, n, func(i int, b *BlockGen) {
+func makeBlockChain(blockchain *BlockChain, parent *types.Block, n int, db ethdb.Database, seed int) []*types.Block {
+	blocks, _ := GenerateChain(nil, blockchain, parent, db, n, func(i int, b *BlockGen) {
 		b.SetCoinbase(common.Address{0: byte(seed), 19: byte(i)})
 	})
 	return blocks
