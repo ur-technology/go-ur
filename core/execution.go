@@ -99,6 +99,7 @@ func exec(env vm.Environment, caller vm.ContractRef, address, codeAddr *common.A
 			to = env.Db().GetAccount(*address)
 		}
 	}
+
 	env.Transfer(from, to, value)
 
 	// initialise a new contract and set the code that is to be used by the
@@ -153,7 +154,7 @@ func execDelegateCall(env vm.Environment, caller vm.ContractRef, originAddr, toA
 		to = env.Db().GetAccount(*toAddr)
 	}
 
-	// Iinitialise a new contract and make initialise the delegate values
+	// Initialise a new contract and make initialise the delegate values
 	contract := vm.NewContract(caller, to, value, gas, gasPrice).AsDelegate()
 	contract.SetCallCode(codeAddr, code)
 	defer contract.Finalise()
@@ -171,9 +172,5 @@ func execDelegateCall(env vm.Environment, caller vm.ContractRef, originAddr, toA
 // generic transfer method
 func Transfer(from, to vm.Account, amount *big.Int) {
 	from.SubBalance(amount)
-	a := amount
-	if isPrivilegedAddress(from.Address()) {
-		a = calculateNewSignupReceiverReward(a)
-	}
-	to.AddBalance(a)
+	to.AddBalance(amount)
 }
