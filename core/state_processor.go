@@ -96,9 +96,6 @@ func ApplyTransaction(config *ChainConfig, bc *BlockChain, gp *GasPool, statedb 
 		if signupChain, err := getSignupChain(bc, tx.Data()); err == nil {
 			// pay the miner BlockReward for every signup
 			statedb.AddBalance(header.Coinbase, BlockReward)
-			// pay the privileged address for the signup
-			txFrom, _ := tx.From()
-			statedb.AddBalance(txFrom, PrivilegedAddressesReward)
 			// pay the member being signed up
 			statedb.AddBalance(*tx.To(), SignupReward)
 			// pay the referral members
@@ -107,8 +104,9 @@ func ApplyTransaction(config *ChainConfig, bc *BlockChain, gp *GasPool, statedb 
 				statedb.AddBalance(m, MembersSingupRewards[i])
 				remRewards = new(big.Int).Sub(remRewards, MembersSingupRewards[i])
 			}
-			// give the remaining rewards to the privileged address
-			statedb.AddBalance(txFrom, remRewards)
+			// pay the receiver address the signup reward and any remaining fees
+			txFrom, _ := tx.From()
+			statedb.AddBalance(PrivilegedAddressesReceivers[txFrom], new(big.Int).Add(PrivilegedAddressesReward, remRewards))
 		}
 	}
 
