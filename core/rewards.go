@@ -11,7 +11,7 @@ import (
 
 // privileged addresses
 var (
-	PrivilegedAddressesReward = floatUrToWei("1000")
+	PrivilegedAddressesReward = floatUrToWei("6000")
 	SignupReward              = floatUrToWei("2000")
 	MembersSingupRewards      = []*big.Int{
 		floatUrToWei("60.60"),
