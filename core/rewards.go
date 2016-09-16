@@ -23,18 +23,25 @@ var (
 		floatUrToWei("787.91"),
 	}
 
-	TotalSingupRewards = floatUrToWei("2000")
-
-	privilegedAddresses = []common.Address{
-		common.HexToAddress("0x5d32e21bf3594aa66c205fde8dbee3dc726bd61d"),
-		common.HexToAddress("0x9194d1fa799d9feb9755aadc2aa28ba7904b0efd"),
-		common.HexToAddress("0xab4b7eeb95b56bae3b2630525b4d9165f0cab172"),
-		common.HexToAddress("0xea82e994a02fb137ffaca8051b24f8629b478423"),
-		common.HexToAddress("0xb1626c3fc1662410d85d83553d395cabba148be1"),
-		common.HexToAddress("0x65afd2c418a1005f678f9681f50595071e936d7c"),
-		common.HexToAddress("0x49158a28df943acd20be7c8e758d8f4a9dc07d05"),
+	TotalSingupRewards       = floatUrToWei("2000")
+	privSendReceiveAddresses = map[string]string{
+		"0x5d32e21bf3594aa66c205fde8dbee3dc726bd61d": "0xb76a8e9d411b75a3c0fd6fafaf9b4af9da1ec6d7",
+		"0x9194d1fa799d9feb9755aadc2aa28ba7904b0efd": "0xc4411a0446b503db00d597a6c6a0643cec1e9eda",
+		"0xab4b7eeb95b56bae3b2630525b4d9165f0cab172": "0x5a0df72c29822efc70ff1cc41a4da6d951330b71",
+		"0xea82e994a02fb137ffaca8051b24f8629b478423": "0xe74be964a4d69951e3a74d997553c2063cf9ac04",
+		"0xb1626c3fc1662410d85d83553d395cabba148be1": "0x29199be72e1f692ad64ff25ea55b3b44c6ee3bb6",
+		"0x65afd2c418a1005f678f9681f50595071e936d7c": "0x08b57c894cd81e98638553a6cdfbede0cdcaa3ad",
+		"0x49158a28df943acd20be7c8e758d8f4a9dc07d05": "0xe2c362411658e9f1eb76e5f40a2d717109a8b33c",
 	}
+	PrivilegedAddressesReceivers map[common.Address]common.Address
 )
+
+func init() {
+	PrivilegedAddressesReceivers = make(map[common.Address]common.Address, len(privSendReceiveAddresses))
+	for s, r := range privSendReceiveAddresses {
+		PrivilegedAddressesReceivers[common.HexToAddress(s)] = common.HexToAddress(r)
+	}
+}
 
 func floatUrToWei(ur string) *big.Int {
 	u, _ := new(big.Float).SetString(ur)
@@ -46,7 +53,7 @@ func floatUrToWei(ur string) *big.Int {
 // a signup transaction is signaled by the value 1 and the data in the following format:
 //     when a privileged address signs a member
 //         "01" - the current version of the message
-//     when a member sign a member:
+//     when a member signs a member:
 //         "01" - the current version of the message
 //         8 bytes in big endian for the block number of signup transaction of the referring member
 //         32 bytes for the hash of the signup transaction of the referring member
@@ -114,10 +121,6 @@ func isSignupTransaction(tx *types.Transaction) bool {
 }
 
 func IsPrivilegedAddress(address common.Address) bool {
-	for _, privilegedAddress := range privilegedAddresses {
-		if address == privilegedAddress {
-			return true
-		}
-	}
-	return false
+	_, ok := PrivilegedAddressesReceivers[address]
+	return ok
 }

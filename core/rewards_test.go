@@ -168,7 +168,7 @@ func TestMembersRewardChain(t *testing.T) {
 		curNode = n
 	}
 	// save privileged address initial balance
-	privInitialBal, err := addressBalance(sim.BlockChain, privKeyAddr)
+	privInitialBal, err := addressBalance(sim.BlockChain, core.PrivilegedAddressesReceivers[privKeyAddr])
 	if err != nil {
 		t.Error(err)
 		return
@@ -177,7 +177,7 @@ func TestMembersRewardChain(t *testing.T) {
 	balances := make(map[common.Address]*big.Int)
 	signupMembers(sim, rootNode, minerAddr, []common.Address{}, balances)
 	// add the privileged address initial balance
-	addToBalance(balances, privKeyAddr, privInitialBal)
+	addToBalance(balances, core.PrivilegedAddressesReceivers[privKeyAddr], privInitialBal)
 	// check address
 	if err := checkBalances(sim.BlockChain, balances, minerAddr); err != nil {
 		t.Error(err)
@@ -192,8 +192,8 @@ func signupMembers(sim *Simulator, node *memberNode, minerAddr common.Address, c
 		if err != nil {
 			fmt.Println("oops:", err)
 		}
-		// the privileged address receives 1000 UR
-		addToBalance(balances, privKeyAddr, core.PrivilegedAddressesReward)
+		// the receiver address for the privileged address receives 6000 UR
+		addToBalance(balances, core.PrivilegedAddressesReceivers[privKeyAddr], core.PrivilegedAddressesReward)
 		// the miner receives 7 UR for the block, 7 UR for the signup
 		for i := 0; i < 2; i++ {
 			addToBalance(balances, minerAddr, core.BlockReward)
@@ -213,8 +213,8 @@ func signupMembers(sim *Simulator, node *memberNode, minerAddr common.Address, c
 			addToBalance(balances, a, core.MembersSingupRewards[i])
 			rem = new(big.Int).Sub(rem, core.MembersSingupRewards[i])
 		}
-		// the privileged address receives the remaining rewards if any
-		addToBalance(balances, privKeyAddr, rem)
+		// the receiver address for the privileged address receives the remaining rewards if any
+		addToBalance(balances, core.PrivilegedAddressesReceivers[privKeyAddr], rem)
 		// continue down the tree
 		signupMembers(sim, m, minerAddr, newChain, balances)
 	}
@@ -254,18 +254,18 @@ func addToBalance(bal map[common.Address]*big.Int, addr common.Address, value *b
 }
 
 func checkBalances(bc *core.BlockChain, balances map[common.Address]*big.Int, minerAddr common.Address) error {
-	expBal, ok := balances[privKeyAddr]
+	expBal, ok := balances[core.PrivilegedAddressesReceivers[privKeyAddr]]
 	if !ok {
 		return fmt.Errorf("no address for the privileged address")
 	}
-	bal, err := addressBalance(bc, privKeyAddr)
+	bal, err := addressBalance(bc, core.PrivilegedAddressesReceivers[privKeyAddr])
 	if err != nil {
 		return err
 	}
 	if expBal.Cmp(bal) != 0 {
 		return fmt.Errorf("got a different balance for the privileged address than expected (%s): %s\n", expBal, bal)
 	}
-	delete(balances, privKeyAddr)
+	delete(balances, core.PrivilegedAddressesReceivers[privKeyAddr])
 	if expBal, ok = balances[minerAddr]; !ok {
 		return fmt.Errorf("no address for the miner")
 	}
