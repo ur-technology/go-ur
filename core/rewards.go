@@ -124,3 +124,41 @@ func IsPrivilegedAddress(address common.Address) bool {
 	_, ok := PrivilegedAddressesReceivers[address]
 	return ok
 }
+
+var (
+	big9007 = new(big.Int).Mul(common.Ether, big.NewInt(9007))
+	big10k  = new(big.Int).Mul(common.Ether, big.NewInt(10000))
+	big1k   = new(big.Int).Mul(common.Ether, big.NewInt(1000))
+)
+
+func calculateTxManagementFee(nSignups, totaWei *big.Int) *big.Int {
+	if nSignups.Cmp(common.Big0) == 0 {
+		return big1k
+	}
+	avg := new(big.Int).Div(totaWei, nSignups)
+	if avg.Cmp(big10k) <= 0 {
+		return big1k
+	}
+	return common.Big0
+}
+
+func calculateBlockTotals(cNSignups, cTotalWei *big.Int, header *types.Header, uncles []*types.Header, txs []*types.Transaction) (*big.Int, *big.Int) {
+	newNSignups := new(big.Int).Set(cNSignups)
+	newTotalWei := new(big.Int).Set(cTotalWei)
+	for _, r := range calculateAccumulatedRewards(header, uncles) {
+		newTotalWei.Add(newTotalWei, r)
+	}
+	for _, t := range txs {
+		if isSignupTransaction(t) {
+			mngFee := calculateTxManagementFee(newNSignups, newTotalWei)
+			newNSignups.Add(newNSignups, common.Big1)
+			newTotalWei.Add(newTotalWei, new(big.Int).Add(big9007, mngFee))
+		}
+	}
+	return newNSignups, newTotalWei
+}
+
+// returns number of sign
+func UpdateBlockTotals(header *types.Header, uncles []*types.Header, txs []*types.Transaction) {
+	header.NSignups, header.TotalWei = calculateBlockTotals(header.NSignups, header.TotalWei, header, uncles, txs)
+}

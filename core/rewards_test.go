@@ -140,6 +140,70 @@ func TestMembersRewardsTree(t *testing.T) {
 	}
 }
 
+func TestManagementFee(t *testing.T) {
+	// simulated blockchain
+	sim, err := NewSimulator(core.GenesisAccount{Address: privKeyAddr, Balance: common.Ether})
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	// setup the miner account
+	_, minerAddr, err := newKeyAddr()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	// set coinbase
+	sim.Coinbase = minerAddr
+
+	big9k := new(big.Int).Mul(common.Ether, big.NewInt(9000))
+	big10k := new(big.Int).Mul(common.Ether, big.NewInt(10000))
+	big1k := new(big.Int).Mul(common.Ether, big.NewInt(1000))
+
+	expNSignups := big.NewInt(0)
+	expTotalWei := big.NewInt(0)
+
+	for i := 0; i < 10000; i++ {
+		blk := sim.BlockChain.CurrentBlock()
+		// miner block reward
+		expTotalWei.Add(expTotalWei, core.BlockReward)
+		if i%50 == 0 {
+			sim.AddPendingTx(&TxData{
+				From:  privKey,
+				To:    minerAddr,
+				Value: big.NewInt(1),
+				Data:  []byte{01},
+			})
+			if expNSignups.Cmp(common.Big0) == 0 || new(big.Int).Div(expTotalWei, expNSignups).Cmp(big10k) <= 0 {
+				// receive management fee
+				expTotalWei.Add(expTotalWei, big1k)
+			}
+			// miner signup reward
+			expTotalWei.Add(expTotalWei, core.BlockReward)
+			// fixed rewards
+			expTotalWei.Add(expTotalWei, big9k)
+			// increment signups count
+			expNSignups.Add(expNSignups, common.Big1)
+		}
+		if _, err := sim.Commit(); err != nil {
+			t.Error(err)
+			return
+		}
+		blk = sim.BlockChain.CurrentBlock()
+		ns := blk.NSignups()
+		total := blk.TotalWei()
+		nr := blk.Number()
+		if expNSignups.Cmp(ns) != 0 {
+			t.Errorf("failed at block %s, got a different number of signups than expected (%s): %s", nr, expNSignups, ns)
+			return
+		}
+		if expTotalWei.Cmp(total) != 0 {
+			t.Errorf("failed at block %s, got a different total wei (%s): %s", nr, expTotalWei, total)
+			return
+		}
+	}
+}
+
 // TestMembersRewardChain creates a "chain" of referrals. privileged key signs member1,
 // member1 signs member2 and so on until memberx-1 signs memberx
 func TestMembersRewardChain(t *testing.T) {

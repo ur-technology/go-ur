@@ -131,6 +131,15 @@ func (v *BlockValidator) ValidateState(block, parent *types.Block, statedb *stat
 	if root := statedb.IntermediateRoot(); header.Root != root {
 		return fmt.Errorf("invalid merkle root: header=%x computed=%x", header.Root, root)
 	}
+	// validate number of signups and total wei
+	vfyNSignups, vfyTotalWei := calculateBlockTotals(parent.NSignups(), parent.TotalWei(), header, block.Uncles(), block.Transactions())
+	if vfyNSignups.Cmp(header.NSignups) != 0 {
+		return fmt.Errorf("number of signups mismatch: got %s, expected %s", vfyNSignups, header.NSignups)
+	}
+	if vfyTotalWei.Cmp(header.TotalWei) != 0 {
+		return fmt.Errorf("total wei mismatch: got %s, expected %s", vfyTotalWei, header.TotalWei)
+	}
+
 	return nil
 }
 
@@ -247,6 +256,7 @@ func ValidateHeader(config *ChainConfig, pow pow.PoW, header *types.Header, pare
 			return &BlockNonceErr{header.Number, header.Hash(), header.Nonce.Uint64()}
 		}
 	}
+
 	// If all checks passed, validate the extra-data field for hard forks
 	return ValidateDAOHeaderExtraData(config, header)
 }

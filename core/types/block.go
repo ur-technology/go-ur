@@ -66,6 +66,8 @@ type Header struct {
 	GasUsed     *big.Int       // Gas used
 	Time        *big.Int       // Creation time
 	Extra       []byte         // Extra data
+	TotalWei    *big.Int       // Total UR in the network
+	NSignups    *big.Int       // Number of signups in the network
 	MixDigest   common.Hash    // for quick difficulty verification
 	Nonce       BlockNonce
 }
@@ -89,6 +91,8 @@ func (h *Header) HashNoNonce() common.Hash {
 		h.GasUsed,
 		h.Time,
 		h.Extra,
+		h.TotalWei,
+		h.NSignups,
 	})
 }
 
@@ -100,6 +104,8 @@ func (h *Header) UnmarshalJSON(data []byte) error {
 		GasLimit   string
 		Time       *big.Int
 		Extra      string
+		TotalWei   *big.Int
+		NSignups   *big.Int
 	}
 	dec := json.NewDecoder(bytes.NewReader(data))
 	if err := dec.Decode(&ext); err != nil {
@@ -111,6 +117,8 @@ func (h *Header) UnmarshalJSON(data []byte) error {
 	h.Difficulty = common.String2Big(ext.Difficulty)
 	h.Time = ext.Time
 	h.Extra = []byte(ext.Extra)
+	h.TotalWei = ext.TotalWei
+	h.NSignups = ext.NSignups
 	return nil
 }
 
@@ -250,6 +258,12 @@ func CopyHeader(h *Header) *Header {
 		cpy.Extra = make([]byte, len(h.Extra))
 		copy(cpy.Extra, h.Extra)
 	}
+	if cpy.TotalWei = new(big.Int); h.TotalWei != nil {
+		cpy.TotalWei.Set(h.TotalWei)
+	}
+	if cpy.NSignups = new(big.Int); h.NSignups != nil {
+		cpy.NSignups.Set(h.NSignups)
+	}
 	return &cpy
 }
 
@@ -329,6 +343,8 @@ func (b *Block) TxHash() common.Hash      { return b.header.TxHash }
 func (b *Block) ReceiptHash() common.Hash { return b.header.ReceiptHash }
 func (b *Block) UncleHash() common.Hash   { return b.header.UncleHash }
 func (b *Block) Extra() []byte            { return common.CopyBytes(b.header.Extra) }
+func (b *Block) TotalWei() *big.Int       { return b.header.TotalWei }
+func (b *Block) NSignups() *big.Int       { return b.header.NSignups }
 
 func (b *Block) Header() *Header { return CopyHeader(b.header) }
 
@@ -427,9 +443,11 @@ func (h *Header) String() string {
 	GasUsed:	    %v
 	Time:		    %v
 	Extra:		    %s
+	TotalWei:       %s
+	NSignups:       %s
 	MixDigest:      %x
 	Nonce:		    %x
-]`, h.Hash(), h.ParentHash, h.UncleHash, h.Coinbase, h.Root, h.TxHash, h.ReceiptHash, h.Bloom, h.Difficulty, h.Number, h.GasLimit, h.GasUsed, h.Time, h.Extra, h.MixDigest, h.Nonce)
+]`, h.Hash(), h.ParentHash, h.UncleHash, h.Coinbase, h.Root, h.TxHash, h.ReceiptHash, h.Bloom, h.Difficulty, h.Number, h.GasLimit, h.GasUsed, h.Time, h.Extra, h.TotalWei, h.NSignups, h.MixDigest, h.Nonce)
 }
 
 type Blocks []*Block
