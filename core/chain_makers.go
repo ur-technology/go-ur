@@ -203,6 +203,9 @@ func GenerateChain(config *ChainConfig, blockchain *BlockChain, parent *types.Bl
 		if gen != nil {
 			gen(i, b)
 		}
+
+		UpdateBlockTotals(h, b.uncles, b.txs)
+
 		AccumulateRewards(statedb, h, b.uncles)
 		root, err := statedb.Commit()
 		if err != nil {
@@ -241,6 +244,8 @@ func makeHeader(parent *types.Block, state *state.StateDB) *types.Header {
 		GasUsed:    new(big.Int),
 		Number:     new(big.Int).Add(parent.Number(), common.Big1),
 		Time:       time,
+		TotalWei:   new(big.Int).Set(parent.TotalWei()),
+		NSignups:   new(big.Int).Set(parent.NSignups()),
 	}
 }
 
