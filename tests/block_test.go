@@ -16,12 +16,6 @@
 
 package tests
 
-import (
-	"math/big"
-	"path/filepath"
-	"testing"
-)
-
 // func TestBcValidBlockTests(t *testing.T) {
 // 	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcValidBlockTest.json"), BlockSkipTests)
 // 	if err != nil {
@@ -50,19 +44,19 @@ import (
 // 	}
 // }
 
-func TestBcInvalidHeaderTests(t *testing.T) {
-	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcInvalidHeaderTest.json"), BlockSkipTests)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
+// func TestBcInvalidHeaderTests(t *testing.T) {
+// 	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcInvalidHeaderTest.json"), BlockSkipTests)
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
+// }
 
-func TestBcInvalidRLPTests(t *testing.T) {
-	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcInvalidRLPTest.json"), BlockSkipTests)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
+// func TestBcInvalidRLPTests(t *testing.T) {
+// 	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcInvalidRLPTest.json"), BlockSkipTests)
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
+// }
 
 // func TestBcRPCAPITests(t *testing.T) {
 // 	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcRPC_API_Test.json"), BlockSkipTests)
@@ -71,12 +65,12 @@ func TestBcInvalidRLPTests(t *testing.T) {
 // 	}
 // }
 
-func TestBcForkBlockTests(t *testing.T) {
-	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcForkBlockTest.json"), BlockSkipTests)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
+// func TestBcForkBlockTests(t *testing.T) {
+// 	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcForkBlockTest.json"), BlockSkipTests)
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
+// }
 
 // func TestBcForkStress(t *testing.T) {
 // 	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcForkStressTest.json"), BlockSkipTests)
@@ -85,15 +79,15 @@ func TestBcForkBlockTests(t *testing.T) {
 // 	}
 // }
 
-func TestBcTotalDifficulty(t *testing.T) {
-	// skip because these will fail due to selfish mining fix
-	t.Skip()
+// func TestBcTotalDifficulty(t *testing.T) {
+// 	// skip because these will fail due to selfish mining fix
+// 	t.Skip()
 
-	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcTotalDifficultyTest.json"), BlockSkipTests)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
+// 	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcTotalDifficultyTest.json"), BlockSkipTests)
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
+// }
 
 // func TestBcWallet(t *testing.T) {
 // 	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcWalletTest.json"), BlockSkipTests)
@@ -109,23 +103,23 @@ func TestBcTotalDifficulty(t *testing.T) {
 // 	}
 // }
 
-// TODO: iterate over files once we got more than a few
-func TestBcRandom(t *testing.T) {
-	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "RandomTests/bl201507071825GO.json"), BlockSkipTests)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
+// // TODO: iterate over files once we got more than a few
+// func TestBcRandom(t *testing.T) {
+// 	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "RandomTests/bl201507071825GO.json"), BlockSkipTests)
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
+// }
 
-func TestBcMultiChain(t *testing.T) {
-	// skip due to selfish mining
-	t.Skip()
+// func TestBcMultiChain(t *testing.T) {
+// 	// skip due to selfish mining
+// 	t.Skip()
 
-	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcMultiChainTest.json"), BlockSkipTests)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
+// 	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcMultiChainTest.json"), BlockSkipTests)
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
+// }
 
 // func TestBcState(t *testing.T) {
 // 	err := RunBlockTest(big.NewInt(1000000), nil, filepath.Join(blockTestDir, "bcStateTest.json"), BlockSkipTests)
@@ -156,12 +150,12 @@ func TestBcMultiChain(t *testing.T) {
 // 	}
 // }
 
-func TestHomesteadBcInvalidHeaderTests(t *testing.T) {
-	err := RunBlockTest(big.NewInt(0), nil, filepath.Join(blockTestDir, "Homestead", "bcInvalidHeaderTest.json"), BlockSkipTests)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
+// func TestHomesteadBcInvalidHeaderTests(t *testing.T) {
+// 	err := RunBlockTest(big.NewInt(0), nil, filepath.Join(blockTestDir, "Homestead", "bcInvalidHeaderTest.json"), BlockSkipTests)
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
+// }
 
 // func TestHomesteadBcRPCAPITests(t *testing.T) {
 // 	err := RunBlockTest(big.NewInt(0), nil, filepath.Join(blockTestDir, "Homestead", "bcRPC_API_Test.json"), BlockSkipTests)
