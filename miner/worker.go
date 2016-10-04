@@ -469,6 +469,8 @@ func (self *worker) commitNewWork() {
 		Coinbase:   self.coinbase,
 		Extra:      self.extra,
 		Time:       big.NewInt(tstamp),
+		TotalWei:   parent.TotalWei(),
+		NSignups:   parent.NSignups(),
 	}
 	// If we are care about TheDAO hard-fork check whether to override the extra-data or not
 	if daoBlock := self.config.DAOForkBlock; daoBlock != nil {
@@ -558,6 +560,8 @@ func (self *worker) commitNewWork() {
 	for _, hash := range badUncles {
 		delete(self.possibleUncles, hash)
 	}
+
+	core.UpdateBlockTotals(header, uncles, transactions)
 
 	if atomic.LoadInt32(&self.mining) == 1 {
 		// commit state root after all state transitions.

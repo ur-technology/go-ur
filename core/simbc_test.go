@@ -53,8 +53,14 @@ func NewSimulator(account core.GenesisAccount) (*Simulator, error) {
 // Commits pending transactions and return the a slice of []TxData with the Tx field set.
 func (b *Simulator) Commit() (commitedTxs []*TxData, err error) {
 	defer func() {
-		if e, ok := recover().(error); ok && e != nil {
+		p := recover()
+		if p == nil {
+			return
+		}
+		if e, ok := p.(error); ok && e != nil {
 			err = e
+		} else {
+			panic(p)
 		}
 	}()
 	blocks, _ := core.GenerateChain(defaultChainConfig, b.BlockChain, b.BlockChain.CurrentBlock(), b.db, 1, func(n int, block *core.BlockGen) {

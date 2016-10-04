@@ -19,6 +19,7 @@ package core
 import (
 	"math/big"
 
+	"github.com/ur-technology/go-ur/common"
 	"github.com/ur-technology/go-ur/core/state"
 	"github.com/ur-technology/go-ur/core/types"
 	"github.com/ur-technology/go-ur/core/vm"
@@ -134,23 +135,59 @@ func ApplyTransaction(config *ChainConfig, bc *BlockChain, gp *GasPool, statedb 
 	return receipt, logs, gas, err
 }
 
+func calculateAccumulatedRewards(header *types.Header, uncles []*types.Header) map[common.Address]*big.Int {
+	rew := make(map[common.Address]*big.Int, len(uncles)+1)
+	reward := new(big.Int).Set(BlockReward)
+	r := new(big.Int)
+	for _, uncle := range uncles {
+		// the miner for the uncle block receives
+		// ((uncleBlockNumber + 8 - currentBlockNumber) * BlockReward) / 8
+		r.Add(uncle.Number, big8)
+		r.Sub(r, header.Number)
+		r.Mul(r, BlockReward)
+		r.Div(r, big8)
+		ub, ok := rew[uncle.Coinbase]
+		if !ok {
+			ub = big.NewInt(0)
+		}
+		rew[uncle.Coinbase] = ub.Add(ub, r)
+
+		// the miner receives 1/32 * BlockReward for every uncle block
+		r.Div(BlockReward, big32)
+		reward.Add(reward, r)
+	}
+	ub, ok := rew[header.Coinbase]
+	if !ok {
+		ub = big.NewInt(0)
+	}
+	rew[header.Coinbase] = ub.Add(ub, reward)
+	return rew
+}
+
 // AccumulateRewards credits the coinbase of the given block with the
 // mining reward. The total reward consists of the static block reward
 // and rewards for included uncles. The coinbase of each uncle block is
 // also rewarded.
 func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*types.Header) {
-	reward := new(big.Int).Set(BlockReward)
-	r := new(big.Int)
-	for _, uncle := range uncles {
-		r.Add(uncle.Number, big8)
-		r.Sub(r, header.Number)
-		r.Mul(r, BlockReward)
-		r.Div(r, big8)
-		statedb.AddBalance(uncle.Coinbase, r)
-
-		r.Div(BlockReward, big32)
-		reward.Add(reward, r)
+	rewards := calculateAccumulatedRewards(header, uncles)
+	for a, r := range rewards {
+		statedb.AddBalance(a, r)
 	}
-
-	statedb.AddBalance(header.Coinbase, reward)
 }
+
+// func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*types.Header) {
+// 	reward := new(big.Int).Set(BlockReward)
+// 	r := new(big.Int)
+// 	for _, uncle := range uncles {
+// 		r.Add(uncle.Number, big8)
+// 		r.Sub(r, header.Number)
+// 		r.Mul(r, BlockReward)
+// 		r.Div(r, big8)
+// 		statedb.AddBalance(uncle.Coinbase, r)
+
+// 		r.Div(BlockReward, big32)
+// 		reward.Add(reward, r)
+// 	}
+
+// 	statedb.AddBalance(header.Coinbase, reward)
+// }
