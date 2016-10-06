@@ -20,10 +20,10 @@ import (
 	"bytes"
 	"math/big"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/ethdb"
-	"github.com/urcapital/go-ur/rlp"
-	"github.com/urcapital/go-ur/trie"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/rlp"
+	"github.com/ur-technology/go-ur/trie"
 )
 
 // StateSync is the main state synchronisation scheduler, which provides yet the

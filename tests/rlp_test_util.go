@@ -26,7 +26,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/urcapital/go-ur/rlp"
+	"github.com/ur-technology/go-ur/rlp"
 )
 
 // RLPTest is the JSON structure of a single RLP test.

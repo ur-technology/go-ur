@@ -19,7 +19,7 @@
 
 package whisper
 
-import "github.com/urcapital/go-ur/crypto"
+import "github.com/ur-technology/go-ur/crypto"
 
 // Topic represents a cryptographically secure, probabilistic partial
 // classifications of a message, determined as the first (left) 4 bytes of the

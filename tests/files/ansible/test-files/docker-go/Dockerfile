@@ -1,4 +1,4 @@
-# Adjusted from https://github.com/urcapital/go-ur/blob/develop/Dockerfile
+# Adjusted from https://github.com/ur-technology/go-ur/blob/develop/Dockerfile
 FROM ubuntu:14.04
 
 ## Environment setup
@@ -31,17 +31,17 @@ RUN git checkout v1
 RUN go install -v
 
 # this is a workaround, to make sure that docker's cache is invalidated whenever the git repo changes
-ADD https://api.github.com/repos/urcapital/go-ur/git/refs/heads/develop unused.txt
+ADD https://api.github.com/repos/ur-technology/go-ur/git/refs/heads/develop unused.txt
 
 ## Fetch and install go-ethereum
-RUN go get -u -v -d github.com/urcapital/go-ur/...
-WORKDIR $GOPATH/src/github.com/urcapital/go-ur
+RUN go get -u -v -d github.com/ur-technology/go-ur/...
+WORKDIR $GOPATH/src/github.com/ur-technology/go-ur
 
 RUN git checkout develop
 RUN git pull
 
 
-RUN ETH_DEPS=$(go list -f '{{.Imports}} {{.TestImports}} {{.XTestImports}}' github.com/urcapital/go-ur/... | sed -e 's/\[//g' | sed -e 's/\]//g' | sed -e 's/C //g'); if [ "$ETH_DEPS" ]; then go get $ETH_DEPS; fi
+RUN ETH_DEPS=$(go list -f '{{.Imports}} {{.TestImports}} {{.XTestImports}}' github.com/ur-technology/go-ur/... | sed -e 's/\[//g' | sed -e 's/\]//g' | sed -e 's/C //g'); if [ "$ETH_DEPS" ]; then go get $ETH_DEPS; fi
 RUN go install -v ./cmd/ethtest
 
 ENTRYPOINT ["ethtest"]

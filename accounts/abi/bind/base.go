@@ -22,10 +22,10 @@ import (
 	"math/big"
 	"sync/atomic"
 
-	"github.com/urcapital/go-ur/accounts/abi"
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core/types"
-	"github.com/urcapital/go-ur/crypto"
+	"github.com/ur-technology/go-ur/accounts/abi"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/crypto"
 )
 
 // SignerFn is a signer function callback when a contract requires a method to

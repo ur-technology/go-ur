@@ -19,10 +19,10 @@ package runtime
 import (
 	"math/big"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core"
-	"github.com/urcapital/go-ur/core/state"
-	"github.com/urcapital/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core"
+	"github.com/ur-technology/go-ur/core/state"
+	"github.com/ur-technology/go-ur/core/vm"
 )
 
 // Env is a basic runtime environment required for running the EVM.

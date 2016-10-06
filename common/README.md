@@ -1,14 +1,14 @@
 # common
 
 [![Build
-Status](https://travis-ci.org/urcapital/go-ur.png?branch=master)](https://travis-ci.org/urcapital/go-ur)
+Status](https://travis-ci.org/ur-technology/go-ur.png?branch=master)](https://travis-ci.org/ur-technology/go-ur)
 
 The common package contains the ethereum utility library.
 
 # Installation
 
 As a subdirectory the main go-ethereum repository, you get it with
-`go get github.com/urcapital/go-ur`.
+`go get github.com/ur-technology/go-ur`.
 
 # Usage
 

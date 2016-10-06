@@ -24,7 +24,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/urcapital/go-ur/common"
+	"github.com/ur-technology/go-ur/common"
 )
 
 // The ABI holds information about a contract's context and available

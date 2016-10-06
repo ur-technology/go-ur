@@ -28,9 +28,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/crypto/sha3"
-	"github.com/urcapital/go-ur/rlp"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/crypto/sha3"
+	"github.com/ur-technology/go-ur/rlp"
 )
 
 // A BlockNonce is a 64-bit hash which proves (combined with the

@@ -21,8 +21,8 @@ package main
 import (
 	"io"
 
-	"github.com/urcapital/go-ur/cmd/utils"
-	"github.com/urcapital/go-ur/internal/debug"
+	"github.com/ur-technology/go-ur/cmd/utils"
+	"github.com/ur-technology/go-ur/internal/debug"
 	"gopkg.in/urfave/cli.v1"
 )
 

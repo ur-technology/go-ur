@@ -34,12 +34,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/urcapital/go-ur/crypto"
-	"github.com/urcapital/go-ur/crypto/ecies"
-	"github.com/urcapital/go-ur/crypto/secp256k1"
-	"github.com/urcapital/go-ur/crypto/sha3"
-	"github.com/urcapital/go-ur/p2p/discover"
-	"github.com/urcapital/go-ur/rlp"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/crypto/ecies"
+	"github.com/ur-technology/go-ur/crypto/secp256k1"
+	"github.com/ur-technology/go-ur/crypto/sha3"
+	"github.com/ur-technology/go-ur/p2p/discover"
+	"github.com/ur-technology/go-ur/rlp"
 )
 
 const (

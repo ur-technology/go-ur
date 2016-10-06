@@ -21,11 +21,11 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/crypto/sha3"
-	"github.com/urcapital/go-ur/logger"
-	"github.com/urcapital/go-ur/logger/glog"
-	"github.com/urcapital/go-ur/rlp"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/crypto/sha3"
+	"github.com/ur-technology/go-ur/logger"
+	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/rlp"
 )
 
 // Prove constructs a merkle proof for key. The result contains all

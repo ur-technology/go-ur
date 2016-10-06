@@ -19,9 +19,9 @@ package types
 import (
 	"bytes"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/rlp"
-	"github.com/urcapital/go-ur/trie"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/rlp"
+	"github.com/ur-technology/go-ur/trie"
 )
 
 type DerivableList interface {

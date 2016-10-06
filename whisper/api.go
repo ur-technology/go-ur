@@ -22,9 +22,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/crypto"
-	"github.com/urcapital/go-ur/rpc"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/rpc"
 )
 
 // PublicWhisperAPI provides the whisper RPC service.

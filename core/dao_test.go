@@ -20,9 +20,9 @@ package core
 // 	"math/big"
 // 	"testing"
 
-// 	"github.com/urcapital/go-ur/ethdb"
-// 	"github.com/urcapital/go-ur/event"
-// 	"github.com/urcapital/go-ur/params"
+// 	"github.com/ur-technology/go-ur/ethdb"
+// 	"github.com/ur-technology/go-ur/event"
+// 	"github.com/ur-technology/go-ur/params"
 // )
 
 // // Tests that DAO-fork enabled clients can properly filter out fork-commencing

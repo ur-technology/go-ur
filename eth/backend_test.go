@@ -20,11 +20,11 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core"
-	"github.com/urcapital/go-ur/core/types"
-	"github.com/urcapital/go-ur/core/vm"
-	"github.com/urcapital/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/ethdb"
 )
 
 func TestMipmapUpgrade(t *testing.T) {

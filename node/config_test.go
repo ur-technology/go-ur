@@ -24,7 +24,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/urcapital/go-ur/crypto"
+	"github.com/ur-technology/go-ur/crypto"
 )
 
 // Tests that datadirs can be successfully created, be them manually configured

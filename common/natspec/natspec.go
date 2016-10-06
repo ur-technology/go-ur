@@ -24,11 +24,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/common/httpclient"
-	"github.com/urcapital/go-ur/common/registrar"
-	"github.com/urcapital/go-ur/crypto"
-	"github.com/urcapital/go-ur/xeth"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/common/httpclient"
+	"github.com/ur-technology/go-ur/common/registrar"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/xeth"
 	"github.com/robertkrimen/otto"
 )
 

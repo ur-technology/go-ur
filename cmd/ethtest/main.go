@@ -25,9 +25,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/urcapital/go-ur/logger/glog"
-	"github.com/urcapital/go-ur/params"
-	"github.com/urcapital/go-ur/tests"
+	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/params"
+	"github.com/ur-technology/go-ur/tests"
 	"gopkg.in/urfave/cli.v1"
 )
 

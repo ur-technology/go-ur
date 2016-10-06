@@ -7,10 +7,10 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/urcapital/go-ur/accounts/abi"
-	"github.com/urcapital/go-ur/accounts/abi/bind"
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core/types"
+	"github.com/ur-technology/go-ur/accounts/abi"
+	"github.com/ur-technology/go-ur/accounts/abi/bind"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/types"
 )
 
 // ReleaseOracleABI is the input ABI used to generate the binding from.

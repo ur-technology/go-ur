@@ -21,7 +21,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/urcapital/go-ur/crypto"
+	"github.com/ur-technology/go-ur/crypto"
 )
 
 // Callable method given a `Name` and whether the method is a constant.

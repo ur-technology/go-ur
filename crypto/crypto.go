@@ -30,11 +30,11 @@ import (
 	"encoding/hex"
 	"errors"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/crypto/ecies"
-	"github.com/urcapital/go-ur/crypto/secp256k1"
-	"github.com/urcapital/go-ur/crypto/sha3"
-	"github.com/urcapital/go-ur/rlp"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/crypto/ecies"
+	"github.com/ur-technology/go-ur/crypto/secp256k1"
+	"github.com/ur-technology/go-ur/crypto/sha3"
+	"github.com/ur-technology/go-ur/rlp"
 	"golang.org/x/crypto/ripemd160"
 )
 

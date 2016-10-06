@@ -19,8 +19,8 @@ package runtime_test
 import (
 	"fmt"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core/vm/runtime"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/vm/runtime"
 )
 
 func ExampleExecute() {

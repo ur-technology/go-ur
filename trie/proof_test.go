@@ -23,8 +23,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/rlp"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/rlp"
 )
 
 func init() {

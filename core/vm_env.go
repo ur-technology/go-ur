@@ -19,10 +19,10 @@ package core
 import (
 	"math/big"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core/state"
-	"github.com/urcapital/go-ur/core/types"
-	"github.com/urcapital/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/state"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/core/vm"
 )
 
 // GetHashFn returns a function for which the VM env can query block hashes through

@@ -20,10 +20,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/urcapital/go-ur/core"
-	"github.com/urcapital/go-ur/core/types"
-	"github.com/urcapital/go-ur/core/vm"
-	"github.com/urcapital/go-ur/event"
+	"github.com/ur-technology/go-ur/core"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/event"
 )
 
 func TestCallbacks(t *testing.T) {

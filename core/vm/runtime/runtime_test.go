@@ -21,11 +21,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/urcapital/go-ur/accounts/abi"
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core/state"
-	"github.com/urcapital/go-ur/core/vm"
-	"github.com/urcapital/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/accounts/abi"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/state"
+	"github.com/ur-technology/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/ethdb"
 )
 
 func TestDefaults(t *testing.T) {

@@ -21,10 +21,10 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core/state"
-	"github.com/urcapital/go-ur/ethdb"
-	"github.com/urcapital/go-ur/trie"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/state"
+	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/trie"
 	"golang.org/x/net/context"
 )
 

@@ -26,12 +26,12 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/urcapital/go-ur/event"
-	"github.com/urcapital/go-ur/internal/debug"
-	"github.com/urcapital/go-ur/logger"
-	"github.com/urcapital/go-ur/logger/glog"
-	"github.com/urcapital/go-ur/p2p"
-	"github.com/urcapital/go-ur/rpc"
+	"github.com/ur-technology/go-ur/event"
+	"github.com/ur-technology/go-ur/internal/debug"
+	"github.com/ur-technology/go-ur/logger"
+	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/p2p"
+	"github.com/ur-technology/go-ur/rpc"
 )
 
 var (

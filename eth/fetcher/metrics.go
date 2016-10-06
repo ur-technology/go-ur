@@ -19,7 +19,7 @@
 package fetcher
 
 import (
-	"github.com/urcapital/go-ur/metrics"
+	"github.com/ur-technology/go-ur/metrics"
 )
 
 var (

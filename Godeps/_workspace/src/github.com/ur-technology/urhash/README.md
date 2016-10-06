@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/urcapital/urhash.svg?branch=master)](https://travis-ci.org/urcapital/urhash)
+[![Build Status](https://travis-ci.org/ur-technology/urhash.svg?branch=master)](https://travis-ci.org/ur-technology/urhash)
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/github/debris/ethash?branch=master&svg=true)](https://ci.appveyor.com/project/debris/ethash-nr37r/branch/master)
 
 # Ethash

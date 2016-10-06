@@ -24,9 +24,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/urcapital/go-ur/crypto"
-	"github.com/urcapital/go-ur/p2p"
-	"github.com/urcapital/go-ur/rpc"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/p2p"
+	"github.com/ur-technology/go-ur/rpc"
 )
 
 var (

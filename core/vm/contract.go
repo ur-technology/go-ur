@@ -19,7 +19,7 @@ package vm
 import (
 	"math/big"
 
-	"github.com/urcapital/go-ur/common"
+	"github.com/ur-technology/go-ur/common"
 )
 
 // ContractRef is a reference to the contract's backing object

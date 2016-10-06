@@ -22,8 +22,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/urcapital/go-ur/crypto"
-	"github.com/urcapital/go-ur/crypto/secp256k1"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/crypto/secp256k1"
 )
 
 // Tests whether a message can be wrapped without any identity or encryption.

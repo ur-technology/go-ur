@@ -9,9 +9,9 @@ before_install:
   # Set up go-ur
   - sudo apt-get update -y -qq
   - sudo apt-get install -yqq libgmp3-dev 
-  - git clone --depth=10 https://github.com/urcapital/go-ur ${GOPATH}/src/github.com/urcapital/go-ur
+  - git clone --depth=10 https://github.com/ur-technology/go-ur ${GOPATH}/src/github.com/ur-technology/go-ur
   # use canned dependencies from the go-ethereum repository
-  - export GOPATH=$GOPATH:$GOPATH/src/github.com/urcapital/go-ur/Godeps/_workspace/
+  - export GOPATH=$GOPATH:$GOPATH/src/github.com/ur-technology/go-ur/Godeps/_workspace/
   - echo $GOPATH
 
 install:

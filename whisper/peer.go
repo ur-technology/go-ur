@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/logger"
-	"github.com/urcapital/go-ur/logger/glog"
-	"github.com/urcapital/go-ur/p2p"
-	"github.com/urcapital/go-ur/rlp"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/logger"
+	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/p2p"
+	"github.com/ur-technology/go-ur/rlp"
 	"gopkg.in/fatih/set.v0"
 )
 

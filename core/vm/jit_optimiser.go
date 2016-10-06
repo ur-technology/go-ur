@@ -20,8 +20,8 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/urcapital/go-ur/logger"
-	"github.com/urcapital/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/logger"
+	"github.com/ur-technology/go-ur/logger/glog"
 )
 
 // optimeProgram optimises a JIT program creating segments out of program

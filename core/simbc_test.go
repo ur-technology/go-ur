@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core"
-	"github.com/urcapital/go-ur/core/types"
-	"github.com/urcapital/go-ur/crypto"
-	"github.com/urcapital/go-ur/ethdb"
-	"github.com/urcapital/go-ur/event"
-	"github.com/urcapital/go-ur/params"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/event"
+	"github.com/ur-technology/go-ur/params"
 )
 
 var defaultChainConfig = core.MakeChainConfig()

@@ -22,16 +22,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core"
-	"github.com/urcapital/go-ur/core/state"
-	"github.com/urcapital/go-ur/core/types"
-	"github.com/urcapital/go-ur/crypto"
-	"github.com/urcapital/go-ur/eth/downloader"
-	"github.com/urcapital/go-ur/ethdb"
-	"github.com/urcapital/go-ur/event"
-	"github.com/urcapital/go-ur/p2p"
-	"github.com/urcapital/go-ur/params"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core"
+	"github.com/ur-technology/go-ur/core/state"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/eth/downloader"
+	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/event"
+	"github.com/ur-technology/go-ur/p2p"
+	"github.com/ur-technology/go-ur/params"
 )
 
 // Tests that protocol versions and modes of operations are matched up properly.

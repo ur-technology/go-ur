@@ -20,7 +20,7 @@ import (
 	"math/big"
 	"sort"
 
-	"github.com/urcapital/go-ur/common"
+	"github.com/ur-technology/go-ur/common"
 )
 
 type Summer interface {

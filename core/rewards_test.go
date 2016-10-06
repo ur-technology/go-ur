@@ -10,10 +10,10 @@ import (
 
 	"encoding/binary"
 
-	"github.com/urcapital/go-ur/accounts"
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core"
-	"github.com/urcapital/go-ur/crypto"
+	"github.com/ur-technology/go-ur/accounts"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core"
+	"github.com/ur-technology/go-ur/crypto"
 )
 
 var (

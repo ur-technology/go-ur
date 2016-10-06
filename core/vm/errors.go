@@ -20,7 +20,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/urcapital/go-ur/params"
+	"github.com/ur-technology/go-ur/params"
 )
 
 var OutOfGasError = errors.New("Out of gas")

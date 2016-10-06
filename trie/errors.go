@@ -19,7 +19,7 @@ package trie
 import (
 	"fmt"
 
-	"github.com/urcapital/go-ur/common"
+	"github.com/ur-technology/go-ur/common"
 )
 
 // MissingNodeError is returned by the trie functions (TryGet, TryUpdate, TryDelete)

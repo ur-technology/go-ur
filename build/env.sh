@@ -10,7 +10,7 @@ fi
 # Create fake Go workspace if it doesn't exist yet.
 workspace="$PWD/build/_workspace"
 root="$PWD"
-urdir="$workspace/src/github.com/urcapital"
+urdir="$workspace/src/github.com/ur-technology"
 if [ ! -L "$urdir/go-ur" ]; then
     mkdir -p "$urdir"
     cd "$urdir"

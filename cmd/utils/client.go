@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/urcapital/go-ur/node"
-	"github.com/urcapital/go-ur/rpc"
+	"github.com/ur-technology/go-ur/node"
+	"github.com/ur-technology/go-ur/rpc"
 	"gopkg.in/urfave/cli.v1"
 )
 

@@ -21,13 +21,13 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core/vm"
-	"github.com/urcapital/go-ur/ethdb"
-	"github.com/urcapital/go-ur/logger"
-	"github.com/urcapital/go-ur/logger/glog"
-	"github.com/urcapital/go-ur/rlp"
-	"github.com/urcapital/go-ur/trie"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/logger"
+	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/rlp"
+	"github.com/ur-technology/go-ur/trie"
 )
 
 // The starting nonce determines the default nonce when new accounts are being

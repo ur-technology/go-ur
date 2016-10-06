@@ -2,7 +2,7 @@
 
 Before you do a feature request please check and make sure that it isn't possible
 through some other means. The JavaScript enabled console is a powerful feature
-in the right hands. Please check our [Bitchin' tricks](https://github.com/urcapital/go-ur/wiki/bitchin-tricks) wiki page for more info
+in the right hands. Please check our [Bitchin' tricks](https://github.com/ur-technology/go-ur/wiki/bitchin-tricks) wiki page for more info
 and help.
 
 ## Contributing
@@ -13,6 +13,6 @@ are ignored (use gofmt!). If you send pull requests make absolute sure that you
 commit on the `develop` branch and that you do not merge to master.
 Commits that are directly based on master are simply ignored.
 
-See [Developers' Guide](https://github.com/urcapital/go-ur/wiki/Developers'-Guide)
+See [Developers' Guide](https://github.com/ur-technology/go-ur/wiki/Developers'-Guide)
 for more details on configuring your environment, testing, and
 dependency management.

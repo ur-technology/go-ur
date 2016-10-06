@@ -28,17 +28,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/urcapital/go-ur/accounts"
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/common/httpclient"
-	"github.com/urcapital/go-ur/common/registrar"
-	"github.com/urcapital/go-ur/core"
-	"github.com/urcapital/go-ur/crypto"
-	"github.com/urcapital/go-ur/eth"
-	"github.com/urcapital/go-ur/ethdb"
-	"github.com/urcapital/go-ur/event"
-	"github.com/urcapital/go-ur/node"
-	xe "github.com/urcapital/go-ur/xeth"
+	"github.com/ur-technology/go-ur/accounts"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/common/httpclient"
+	"github.com/ur-technology/go-ur/common/registrar"
+	"github.com/ur-technology/go-ur/core"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/eth"
+	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/event"
+	"github.com/ur-technology/go-ur/node"
+	xe "github.com/ur-technology/go-ur/xeth"
 )
 
 const (

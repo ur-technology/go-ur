@@ -28,7 +28,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/urcapital/go-ur/rpc"
+	"github.com/ur-technology/go-ur/rpc"
 )
 
 // Tests that a node embedded within a console can be started up properly and

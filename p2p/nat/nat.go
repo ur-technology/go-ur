@@ -25,8 +25,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/urcapital/go-ur/logger"
-	"github.com/urcapital/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/logger"
+	"github.com/ur-technology/go-ur/logger/glog"
 	"github.com/jackpal/go-nat-pmp"
 )
 

@@ -20,8 +20,8 @@ import (
 	"math"
 	"math/big"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/params"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/params"
 )
 
 // Type is the VM type accepted by **NewVm**

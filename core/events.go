@@ -19,9 +19,9 @@ package core
 import (
 	"math/big"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core/types"
-	"github.com/urcapital/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/core/vm"
 )
 
 // TxPreEvent is posted when a transaction enters the transaction pool.

@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/crypto"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/crypto"
 )
 
 // Event is an event potentially triggered by the EVM's LOG mechanism. The Event

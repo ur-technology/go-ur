@@ -21,8 +21,8 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/urcapital/go-ur/event"
-	"github.com/urcapital/go-ur/rpc"
+	"github.com/ur-technology/go-ur/event"
+	"github.com/ur-technology/go-ur/rpc"
 )
 
 // PublicDownloaderAPI provides an API which gives information about the current synchronisation status.

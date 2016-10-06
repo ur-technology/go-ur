@@ -25,9 +25,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/urcapital/go-ur/crypto"
-	"github.com/urcapital/go-ur/crypto/sha3"
-	"github.com/urcapital/go-ur/p2p/discover"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/crypto/sha3"
+	"github.com/ur-technology/go-ur/p2p/discover"
 )
 
 func init() {

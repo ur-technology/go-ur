@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/urcapital/go-ur",
+	"ImportPath": "github.com/ur-technology/go-ur",
 	"GoVersion": "go1.5.2",
 	"GodepVersion": "v74",
 	"Packages": [
@@ -19,7 +19,7 @@
 			"Rev": "5215b55f46b2b919f50a1df0eaa5886afe4e3b3d"
 		},
 		{
-			"ImportPath": "github.com/urcapital/urhash",
+			"ImportPath": "github.com/ur-technology/urhash",
 			"Rev": "856a479062501d1ca5577b7719c0caf87b90bbfd"
 		},
 		{

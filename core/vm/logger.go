@@ -22,7 +22,7 @@ import (
 	"os"
 	"unicode"
 
-	"github.com/urcapital/go-ur/common"
+	"github.com/ur-technology/go-ur/common"
 )
 
 type Storage map[common.Hash]common.Hash

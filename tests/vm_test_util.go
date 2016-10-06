@@ -24,12 +24,12 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core/state"
-	"github.com/urcapital/go-ur/core/vm"
-	"github.com/urcapital/go-ur/ethdb"
-	"github.com/urcapital/go-ur/logger/glog"
-	"github.com/urcapital/go-ur/params"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/state"
+	"github.com/ur-technology/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/params"
 )
 
 func RunVmTestWithReader(r io.Reader, skipTests []string) error {

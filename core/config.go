@@ -20,7 +20,7 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/urcapital/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/core/vm"
 )
 
 var ChainConfigNotFoundErr = errors.New("ChainConfig not found") // general config not found error

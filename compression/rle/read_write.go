@@ -21,7 +21,7 @@ import (
 	"bytes"
 	"errors"
 
-	"github.com/urcapital/go-ur/crypto"
+	"github.com/ur-technology/go-ur/crypto"
 )
 
 const (

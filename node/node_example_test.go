@@ -20,10 +20,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/urcapital/go-ur/node"
-	"github.com/urcapital/go-ur/p2p"
-	"github.com/urcapital/go-ur/p2p/discover"
-	"github.com/urcapital/go-ur/rpc"
+	"github.com/ur-technology/go-ur/node"
+	"github.com/ur-technology/go-ur/p2p"
+	"github.com/ur-technology/go-ur/p2p/discover"
+	"github.com/ur-technology/go-ur/rpc"
 )
 
 // SampleService is a trivial network service that can be attached to a node for

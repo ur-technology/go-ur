@@ -20,11 +20,11 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core/state"
-	"github.com/urcapital/go-ur/core/vm"
-	"github.com/urcapital/go-ur/crypto"
-	"github.com/urcapital/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/state"
+	"github.com/ur-technology/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/ethdb"
 )
 
 // The default, always homestead, rule set for the vm env

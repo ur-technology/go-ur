@@ -27,8 +27,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/crypto/secp256k1"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/crypto/secp256k1"
 )
 
 var testAddrHex = "970e8128ab834e8eac17ab8e3812f010678cf791"

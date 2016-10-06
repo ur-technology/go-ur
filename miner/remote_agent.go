@@ -23,10 +23,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/urcapital/urhash"
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/logger"
-	"github.com/urcapital/go-ur/logger/glog"
+	"github.com/ur-technology/urhash"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/logger"
+	"github.com/ur-technology/go-ur/logger/glog"
 )
 
 type hashrate struct {

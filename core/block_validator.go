@@ -21,12 +21,12 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core/state"
-	"github.com/urcapital/go-ur/core/types"
-	"github.com/urcapital/go-ur/logger/glog"
-	"github.com/urcapital/go-ur/params"
-	"github.com/urcapital/go-ur/pow"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/state"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/params"
+	"github.com/ur-technology/go-ur/pow"
 	"gopkg.in/fatih/set.v0"
 )
 

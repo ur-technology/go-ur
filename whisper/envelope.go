@@ -25,10 +25,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/crypto"
-	"github.com/urcapital/go-ur/crypto/ecies"
-	"github.com/urcapital/go-ur/rlp"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/crypto/ecies"
+	"github.com/ur-technology/go-ur/rlp"
 )
 
 // Envelope represents a clear-text data packet to transmit through the Whisper

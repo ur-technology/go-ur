@@ -22,11 +22,11 @@ import (
 	"flag"
 	"os"
 
-	"github.com/urcapital/go-ur/cmd/utils"
-	"github.com/urcapital/go-ur/crypto"
-	"github.com/urcapital/go-ur/logger/glog"
-	"github.com/urcapital/go-ur/p2p/discover"
-	"github.com/urcapital/go-ur/p2p/nat"
+	"github.com/ur-technology/go-ur/cmd/utils"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/p2p/discover"
+	"github.com/ur-technology/go-ur/p2p/nat"
 )
 
 func main() {

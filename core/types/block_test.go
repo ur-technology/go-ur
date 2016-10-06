@@ -22,8 +22,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/rlp"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/rlp"
 )
 
 // from bcValidBlockTest.json, "SimpleTx"

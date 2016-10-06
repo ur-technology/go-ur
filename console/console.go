@@ -27,9 +27,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/urcapital/go-ur/internal/jsre"
-	"github.com/urcapital/go-ur/internal/web3ext"
-	"github.com/urcapital/go-ur/rpc"
+	"github.com/ur-technology/go-ur/internal/jsre"
+	"github.com/ur-technology/go-ur/internal/web3ext"
+	"github.com/ur-technology/go-ur/rpc"
 	"github.com/mattn/go-colorable"
 	"github.com/peterh/liner"
 	"github.com/robertkrimen/otto"

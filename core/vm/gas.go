@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/urcapital/go-ur/params"
+	"github.com/ur-technology/go-ur/params"
 )
 
 var (

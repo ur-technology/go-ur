@@ -16,7 +16,7 @@
 
 package bind
 
-import "github.com/urcapital/go-ur/accounts/abi"
+import "github.com/ur-technology/go-ur/accounts/abi"
 
 // tmplData is the data structure required to fill the binding template.
 type tmplData struct {

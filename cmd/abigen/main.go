@@ -24,8 +24,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/urcapital/go-ur/accounts/abi/bind"
-	"github.com/urcapital/go-ur/common/compiler"
+	"github.com/ur-technology/go-ur/accounts/abi/bind"
+	"github.com/ur-technology/go-ur/common/compiler"
 )
 
 var (

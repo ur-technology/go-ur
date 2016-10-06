@@ -39,8 +39,8 @@ setup(
     author_email="matthew.wampler.doty@gmail.com",
     license='GPL',
     version='0.1.23',
-    url='https://github.com/urcapital/urhash',
-    download_url='https://github.com/urcapital/urhash/tarball/v23',
+    url='https://github.com/ur-technology/urhash',
+    download_url='https://github.com/ur-technology/urhash/tarball/v23',
     description=('Python wrappers for ethash, the ethereum proof of work'
                  'hashing function'),
     ext_modules=[pyethash],

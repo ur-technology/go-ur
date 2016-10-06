@@ -19,10 +19,10 @@ package core
 import (
 	"math/big"
 
-	"github.com/urcapital/go-ur/common"
-	"github.com/urcapital/go-ur/core/vm"
-	"github.com/urcapital/go-ur/crypto"
-	"github.com/urcapital/go-ur/params"
+	"github.com/ur-technology/go-ur/common"
+	"github.com/ur-technology/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/crypto"
+	"github.com/ur-technology/go-ur/params"
 )
 
 // Call executes within the given contract

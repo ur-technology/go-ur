@@ -20,11 +20,11 @@ import (
 	"container/list"
 	"fmt"
 
-	"github.com/urcapital/go-ur/core/types"
-	// "github.com/urcapital/go-ur/crypto"
+	"github.com/ur-technology/go-ur/core/types"
+	// "github.com/ur-technology/go-ur/crypto"
 
-	"github.com/urcapital/go-ur/ethdb"
-	"github.com/urcapital/go-ur/event"
+	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/event"
 )
 
 // Implement our EthTest Manager

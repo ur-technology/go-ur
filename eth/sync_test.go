@@ -21,8 +21,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/urcapital/go-ur/p2p"
-	"github.com/urcapital/go-ur/p2p/discover"
+	"github.com/ur-technology/go-ur/p2p"
+	"github.com/ur-technology/go-ur/p2p/discover"
 )
 
 // Tests that fast sync gets disabled as soon as a real block is successfully

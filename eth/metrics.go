@@ -17,8 +17,8 @@
 package eth
 
 import (
-	"github.com/urcapital/go-ur/metrics"
-	"github.com/urcapital/go-ur/p2p"
+	"github.com/ur-technology/go-ur/metrics"
+	"github.com/ur-technology/go-ur/p2p"
 )
 
 var (

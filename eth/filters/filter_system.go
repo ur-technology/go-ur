@@ -23,9 +23,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/urcapital/go-ur/core"
-	"github.com/urcapital/go-ur/core/vm"
-	"github.com/urcapital/go-ur/event"
+	"github.com/ur-technology/go-ur/core"
+	"github.com/ur-technology/go-ur/core/vm"
+	"github.com/ur-technology/go-ur/event"
 )
 
 // FilterType determines the type of filter and is used to put the filter in to

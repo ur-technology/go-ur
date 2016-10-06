@@ -19,8 +19,8 @@ package core
 import (
 	"runtime"
 
-	"github.com/urcapital/go-ur/core/types"
-	"github.com/urcapital/go-ur/pow"
+	"github.com/ur-technology/go-ur/core/types"
+	"github.com/ur-technology/go-ur/pow"
 )
 
 // nonceCheckResult contains the result of a nonce verification.
