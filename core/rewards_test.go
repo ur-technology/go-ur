@@ -2,13 +2,13 @@ package core_test
 
 import (
 	"crypto/ecdsa"
-	"encoding/hex"
 	"fmt"
 	"math/big"
 	"math/rand"
 	"testing"
 
 	"encoding/binary"
+	"encoding/hex"
 
 	"github.com/ur-technology/go-ur/accounts"
 	"github.com/ur-technology/go-ur/common"
@@ -17,9 +17,10 @@ import (
 )
 
 var (
-	privKey     *ecdsa.PrivateKey
-	privKeyAddr common.Address
-	privKeyJson = []byte(`{"address":"5d32e21bf3594aa66c205fde8dbee3dc726bd61d","Crypto":{"cipher":"aes-128-ctr","ciphertext":"bd9b82bdeecdf80c22747c2c18c389f2ce8a653c16dfbe830b66843f25c96543","cipherparams":{"iv":"7506def4dfb65d150541d45322feefbe"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"459c5c5cb4bcd402fbee2fa47b7c495d8b73e18fca476a191327cf970550ec4a"},"mac":"4cf2812e2e8bb628480ad16732dc51a82602bae192b4c2f09ce607485d5bde3a"},"id":"aa8ff3a6-826c-4ae8-967b-be398508baed","version":3}`)
+	privKey        *ecdsa.PrivateKey
+	privKeyAddr    common.Address
+	privKeyJson    = []byte(`{"address":"5d32e21bf3594aa66c205fde8dbee3dc726bd61d","Crypto":{"cipher":"aes-128-ctr","ciphertext":"bd9b82bdeecdf80c22747c2c18c389f2ce8a653c16dfbe830b66843f25c96543","cipherparams":{"iv":"7506def4dfb65d150541d45322feefbe"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"459c5c5cb4bcd402fbee2fa47b7c495d8b73e18fca476a191327cf970550ec4a"},"mac":"4cf2812e2e8bb628480ad16732dc51a82602bae192b4c2f09ce607485d5bde3a"},"id":"aa8ff3a6-826c-4ae8-967b-be398508baed","version":3}`)
+	genesisAccount core.GenesisAccount
 )
 
 // convert privileged key from JSON to *accounts.Key
@@ -30,6 +31,14 @@ func init() {
 	}
 	privKey = k.PrivateKey
 	privKeyAddr = crypto.PubkeyToAddress(privKey.PublicKey)
+	core.PrivilegedAddressesReceivers = map[common.Address]core.ReceiverAddressPair{
+		common.HexToAddress("0x5d32e21bf3594aa66c205fde8dbee3dc726bd61d"): core.ReceiverAddressPair{
+			Receiver: common.HexToAddress("0x59ab9bb134b529709333f7ae68f3f93c204d280b"),
+			URFF:     common.HexToAddress("46c0b8e0e95a772ad8764d3190a34cd4a60c7a98"),
+		},
+	}
+	genesisAccount.Address = privKeyAddr
+	genesisAccount.Balance = new(big.Int).Set(common.Ether)
 }
 
 // test the miners reward. the block miner should
@@ -37,7 +46,7 @@ func init() {
 // and core.BonusRewads for every signup transaction
 func TestMinersReward(t *testing.T) {
 	// simulated backend
-	sim, err := NewSimulator(core.GenesisAccount{Address: privKeyAddr, Balance: common.Ether})
+	sim, err := NewSimulator(genesisAccount)
 	if err != nil {
 		t.Error(err)
 		return
@@ -104,7 +113,7 @@ func TestMinersReward(t *testing.T) {
 // signs the members and checks the balances
 func TestMembersRewardsTree(t *testing.T) {
 	// simulated backend
-	sim, err := NewSimulator(core.GenesisAccount{Address: privKeyAddr, Balance: common.Ether})
+	sim, err := NewSimulator(genesisAccount)
 	if err != nil {
 		t.Error(err)
 		return
@@ -140,75 +149,11 @@ func TestMembersRewardsTree(t *testing.T) {
 	}
 }
 
-func TestManagementFee(t *testing.T) {
-	// simulated blockchain
-	sim, err := NewSimulator(core.GenesisAccount{Address: privKeyAddr, Balance: common.Ether})
-	if err != nil {
-		t.Error(err)
-		return
-	}
-	// setup the miner account
-	_, minerAddr, err := newKeyAddr()
-	if err != nil {
-		t.Error(err)
-		return
-	}
-	// set coinbase
-	sim.Coinbase = minerAddr
-
-	big9k := new(big.Int).Mul(common.Ether, big.NewInt(9000))
-	big10k := new(big.Int).Mul(common.Ether, big.NewInt(10000))
-	big1k := new(big.Int).Mul(common.Ether, big.NewInt(1000))
-
-	expNSignups := big.NewInt(0)
-	expTotalWei := big.NewInt(0)
-
-	for i := 0; i < 10000; i++ {
-		blk := sim.BlockChain.CurrentBlock()
-		// miner block reward
-		expTotalWei.Add(expTotalWei, core.BlockReward)
-		if i%50 == 0 {
-			sim.AddPendingTx(&TxData{
-				From:  privKey,
-				To:    minerAddr,
-				Value: big.NewInt(1),
-				Data:  []byte{01},
-			})
-			if expNSignups.Cmp(common.Big0) == 0 || new(big.Int).Div(expTotalWei, expNSignups).Cmp(big10k) <= 0 {
-				// receive management fee
-				expTotalWei.Add(expTotalWei, big1k)
-			}
-			// miner signup reward
-			expTotalWei.Add(expTotalWei, core.BlockReward)
-			// fixed rewards
-			expTotalWei.Add(expTotalWei, big9k)
-			// increment signups count
-			expNSignups.Add(expNSignups, common.Big1)
-		}
-		if _, err := sim.Commit(); err != nil {
-			t.Error(err)
-			return
-		}
-		blk = sim.BlockChain.CurrentBlock()
-		ns := blk.NSignups()
-		total := blk.TotalWei()
-		nr := blk.Number()
-		if expNSignups.Cmp(ns) != 0 {
-			t.Errorf("failed at block %s, got a different number of signups than expected (%s): %s", nr, expNSignups, ns)
-			return
-		}
-		if expTotalWei.Cmp(total) != 0 {
-			t.Errorf("failed at block %s, got a different total wei (%s): %s", nr, expTotalWei, total)
-			return
-		}
-	}
-}
-
 // TestMembersRewardChain creates a "chain" of referrals. privileged key signs member1,
 // member1 signs member2 and so on until memberx-1 signs memberx
 func TestMembersRewardChain(t *testing.T) {
 	// simulated blockchain
-	sim, err := NewSimulator(core.GenesisAccount{Address: privKeyAddr, Balance: common.Ether})
+	sim, err := NewSimulator(genesisAccount)
 	if err != nil {
 		t.Error(err)
 		return
@@ -232,7 +177,7 @@ func TestMembersRewardChain(t *testing.T) {
 		curNode = n
 	}
 	// save privileged address initial balance
-	privInitialBal, err := addressBalance(sim.BlockChain, core.PrivilegedAddressesReceivers[privKeyAddr])
+	privInitialBal, err := addressBalance(sim.BlockChain, core.PrivilegedAddressesReceivers[privKeyAddr].Receiver)
 	if err != nil {
 		t.Error(err)
 		return
@@ -241,11 +186,73 @@ func TestMembersRewardChain(t *testing.T) {
 	balances := make(map[common.Address]*big.Int)
 	signupMembers(sim, rootNode, minerAddr, []common.Address{}, balances)
 	// add the privileged address initial balance
-	addToBalance(balances, core.PrivilegedAddressesReceivers[privKeyAddr], privInitialBal)
+	addToBalance(balances, core.PrivilegedAddressesReceivers[privKeyAddr].Receiver, privInitialBal)
 	// check address
 	if err := checkBalances(sim.BlockChain, balances, minerAddr); err != nil {
 		t.Error(err)
 		return
+	}
+}
+
+func TestManagementFee(t *testing.T) {
+	// simulated blockchain
+	sim, err := NewSimulator(genesisAccount)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	// setup the miner account
+	_, minerAddr, err := newKeyAddr()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	// set coinbase
+	sim.Coinbase = minerAddr
+
+	big9k := new(big.Int).Mul(common.Ether, big.NewInt(9000))
+
+	expNSignups := big.NewInt(0)
+	expTotalWei := big.NewInt(0)
+
+	for i := 0; i < 10000; i++ {
+		blk := sim.BlockChain.CurrentBlock()
+		// miner block reward
+		if i%50 == 0 {
+			sim.AddPendingTx(&TxData{
+				From:  privKey,
+				To:    minerAddr,
+				Value: big.NewInt(1),
+				Data:  []byte{01},
+			})
+			if expNSignups.Cmp(common.Big0) == 0 || new(big.Int).Div(expTotalWei, expNSignups).Cmp(core.Big10k) <= 0 {
+				// receive management fee
+				expTotalWei.Add(expTotalWei, core.ManagementFee)
+			}
+			// miner signup reward
+			expTotalWei.Add(expTotalWei, core.BlockReward)
+			// fixed rewards
+			expTotalWei.Add(expTotalWei, big9k)
+			// increment signups count
+			expNSignups.Add(expNSignups, common.Big1)
+		}
+		expTotalWei.Add(expTotalWei, core.BlockReward)
+		if _, err := sim.Commit(); err != nil {
+			t.Error(err)
+			return
+		}
+		blk = sim.BlockChain.CurrentBlock()
+		ns := blk.NSignups()
+		total := blk.TotalWei()
+		nr := blk.Number()
+		if expNSignups.Cmp(ns) != 0 {
+			t.Errorf("failed at block %s, got a different number of signups than expected (%s): %s", nr, expNSignups, ns)
+			return
+		}
+		if expTotalWei.Cmp(total) != 0 {
+			t.Errorf("failed at block %s, got a different total wei (%s): %s", nr, expTotalWei, total)
+			return
+		}
 	}
 }
 
@@ -254,10 +261,16 @@ func signupMembers(sim *Simulator, node *memberNode, minerAddr common.Address, c
 	for _, m := range node.signups {
 		m.signBlock, m.signTx, err = signMember(sim, m.addr, node.signBlock, node.signTx, node.addr == privKeyAddr)
 		if err != nil {
-			fmt.Println("oops:", err)
+			panic(fmt.Sprintf("oops: %s", err.Error()))
 		}
-		// the receiver address for the privileged address receives 6000 UR
-		addToBalance(balances, core.PrivilegedAddressesReceivers[privKeyAddr], core.PrivilegedAddressesReward)
+		privRecv := core.PrivilegedAddressesReceivers[privKeyAddr]
+		// the receiver address for the company receives 1000 UR of management fee if applicable
+		blk := sim.BlockChain.CurrentBlock()
+		if blk.NSignups().Cmp(common.Big0) == 0 || new(big.Int).Div(blk.TotalWei(), blk.NSignups()).Cmp(core.Big10k) <= 0 {
+			addToBalance(balances, privRecv.Receiver, core.ManagementFee)
+		}
+		// the receiver address for the UR Future Fund receives 5000 UR
+		addToBalance(balances, privRecv.URFF, core.URFutureFundFee)
 		// the miner receives 7 UR for the block, 7 UR for the signup
 		for i := 0; i < 2; i++ {
 			addToBalance(balances, minerAddr, core.BlockReward)
@@ -278,7 +291,7 @@ func signupMembers(sim *Simulator, node *memberNode, minerAddr common.Address, c
 			rem = new(big.Int).Sub(rem, core.MembersSingupRewards[i])
 		}
 		// the receiver address for the privileged address receives the remaining rewards if any
-		addToBalance(balances, core.PrivilegedAddressesReceivers[privKeyAddr], rem)
+		addToBalance(balances, privRecv.Receiver, rem)
 		// continue down the tree
 		signupMembers(sim, m, minerAddr, newChain, balances)
 	}
@@ -318,18 +331,18 @@ func addToBalance(bal map[common.Address]*big.Int, addr common.Address, value *b
 }
 
 func checkBalances(bc *core.BlockChain, balances map[common.Address]*big.Int, minerAddr common.Address) error {
-	expBal, ok := balances[core.PrivilegedAddressesReceivers[privKeyAddr]]
+	expBal, ok := balances[core.PrivilegedAddressesReceivers[privKeyAddr].Receiver]
 	if !ok {
 		return fmt.Errorf("no address for the privileged address")
 	}
-	bal, err := addressBalance(bc, core.PrivilegedAddressesReceivers[privKeyAddr])
+	bal, err := addressBalance(bc, core.PrivilegedAddressesReceivers[privKeyAddr].Receiver)
 	if err != nil {
 		return err
 	}
 	if expBal.Cmp(bal) != 0 {
 		return fmt.Errorf("got a different balance for the privileged address than expected (%s): %s\n", expBal, bal)
 	}
-	delete(balances, core.PrivilegedAddressesReceivers[privKeyAddr])
+	delete(balances, core.PrivilegedAddressesReceivers[privKeyAddr].Receiver)
 	if expBal, ok = balances[minerAddr]; !ok {
 		return fmt.Errorf("no address for the miner")
 	}

@@ -204,7 +204,7 @@ func GenerateChain(config *ChainConfig, blockchain *BlockChain, parent *types.Bl
 			gen(i, b)
 		}
 
-		UpdateBlockTotals(h, b.uncles, b.txs)
+		UpdateBlockTotals(parent.Header(), h, b.uncles, b.txs)
 
 		AccumulateRewards(statedb, h, b.uncles)
 		root, err := statedb.Commit()

@@ -105,9 +105,14 @@ func ApplyTransaction(config *ChainConfig, bc *BlockChain, gp *GasPool, statedb 
 				statedb.AddBalance(m, MembersSingupRewards[i])
 				remRewards = new(big.Int).Sub(remRewards, MembersSingupRewards[i])
 			}
-			// pay the receiver address the signup reward and any remaining fees
 			txFrom, _ := tx.From()
-			statedb.AddBalance(PrivilegedAddressesReceivers[txFrom], new(big.Int).Add(PrivilegedAddressesReward, remRewards))
+			recvAddr := PrivilegedAddressesReceivers[txFrom]
+			// pay 5000 UR to the UR Future Fund
+			statedb.AddBalance(recvAddr.URFF, URFutureFundFee)
+			// pay the receiver address any remaining fees from the members and the management fee
+			pBlock := bc.GetBlock(header.ParentHash)
+			mngFee := calculateTxManagementFee(pBlock.NSignups(), pBlock.TotalWei())
+			statedb.AddBalance(PrivilegedAddressesReceivers[txFrom].Receiver, new(big.Int).Add(mngFee, remRewards))
 		}
 	}
 

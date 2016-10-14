@@ -11,9 +11,10 @@ import (
 
 // privileged addresses
 var (
-	PrivilegedAddressesReward = floatUrToWei("6000")
-	SignupReward              = floatUrToWei("2000")
-	MembersSingupRewards      = []*big.Int{
+	URFutureFundFee      = floatUrToWei("5000")
+	ManagementFee        = floatUrToWei("1000")
+	SignupReward         = floatUrToWei("2000")
+	MembersSingupRewards = []*big.Int{
 		floatUrToWei("60.60"),
 		floatUrToWei("60.60"),
 		floatUrToWei("121.21"),
@@ -24,22 +25,49 @@ var (
 	}
 
 	TotalSingupRewards       = floatUrToWei("2000")
-	privSendReceiveAddresses = map[string]string{
-		"0x482cf297b08d4523c97ec3a54e80d2d07acd76fa": "0x59ab9bb134b529709333f7ae68f3f93c204d280b", // UFF: 46c0b8e0e95a772ad8764d3190a34cd4a60c7a98
-		"0xcc74e28cec33a784c5cd40e14836dd212a937045": "0x0ec37d90610b7665517a2d813dc85a7f83852aee", // UFF: ac5fbbd56b1d6a31ad722de419433eeb5b9a9fc4
-		"0xc07a55758f896449805bae3851f57e25bb7ee7ef": "0x78021bd6fb0f0353bb49e2cc63a8aea051c902ca", // UFF: 57b1f656e88fc66e8fe1cf0eb65ce045004777f4
-		"0x48a24dd26a32564e2697f25fc8605700ec4c0337": "0xb8c4f8e04d3341690cfb9ebc11246bd8806884ce", // UFF: b0e314f5b39a1c71de5dbc86c3e9b22251a6d394
-		"0x3cac5f7909f9cb666cc4d7ef32047b170e454b16": "0x85b44964bb0d83fa1329dc969d853d710fde339e", // UFF: e5780543d87f8b8921e65789ba3c7eb69aba21c7
-		"0x0827d93936df936134dd7b7acaeaea04344b11f2": "0x5dc1a06fa3717b6084c4e19395ab1651185b6477", // UFF: 7c4da38909148d56b8e6cc37922e992c2a0a1063
-		"0xa63e936e0eb36c103f665d53bd7ca9c31ec7e1ad": "0x53372c0fce8ce636ac77cf502c51d5f15868dc64", // UFF: 4e2c9b2b57fd17a45d28fb4a6d42e932468afaee
+	privSendReceiveAddresses = map[string]receiverAddressPairString{
+		"0x482cf297b08d4523c97ec3a54e80d2d07acd76fa": receiverAddressPairString{
+			receiver: "0x59ab9bb134b529709333f7ae68f3f93c204d280b",
+			urff:     "46c0b8e0e95a772ad8764d3190a34cd4a60c7a98",
+		},
+		"0xcc74e28cec33a784c5cd40e14836dd212a937045": receiverAddressPairString{
+			receiver: "0x0ec37d90610b7665517a2d813dc85a7f83852aee",
+			urff:     "ac5fbbd56b1d6a31ad722de419433eeb5b9a9fc4",
+		},
+		"0xc07a55758f896449805bae3851f57e25bb7ee7ef": receiverAddressPairString{
+			receiver: "0x78021bd6fb0f0353bb49e2cc63a8aea051c902ca",
+			urff:     "57b1f656e88fc66e8fe1cf0eb65ce045004777f4",
+		},
+		"0x48a24dd26a32564e2697f25fc8605700ec4c0337": receiverAddressPairString{
+			receiver: "0xb8c4f8e04d3341690cfb9ebc11246bd8806884ce",
+			urff:     "b0e314f5b39a1c71de5dbc86c3e9b22251a6d394",
+		},
+		"0x3cac5f7909f9cb666cc4d7ef32047b170e454b16": receiverAddressPairString{
+			receiver: "0x85b44964bb0d83fa1329dc969d853d710fde339e",
+			urff:     "e5780543d87f8b8921e65789ba3c7eb69aba21c7",
+		},
+		"0x0827d93936df936134dd7b7acaeaea04344b11f2": receiverAddressPairString{
+			receiver: "0x5dc1a06fa3717b6084c4e19395ab1651185b6477",
+			urff:     "7c4da38909148d56b8e6cc37922e992c2a0a1063",
+		},
+		"0xa63e936e0eb36c103f665d53bd7ca9c31ec7e1ad": receiverAddressPairString{
+			receiver: "0x53372c0fce8ce636ac77cf502c51d5f15868dc64",
+			urff:     "4e2c9b2b57fd17a45d28fb4a6d42e932468afaee",
+		},
 	}
-	PrivilegedAddressesReceivers map[common.Address]common.Address
+	PrivilegedAddressesReceivers map[common.Address]ReceiverAddressPair
 )
 
+type receiverAddressPairString struct{ receiver, urff string }
+type ReceiverAddressPair struct{ Receiver, URFF common.Address }
+
 func init() {
-	PrivilegedAddressesReceivers = make(map[common.Address]common.Address, len(privSendReceiveAddresses))
+	PrivilegedAddressesReceivers = make(map[common.Address]ReceiverAddressPair, len(privSendReceiveAddresses))
 	for s, r := range privSendReceiveAddresses {
-		PrivilegedAddressesReceivers[common.HexToAddress(s)] = common.HexToAddress(r)
+		PrivilegedAddressesReceivers[common.HexToAddress(s)] = ReceiverAddressPair{
+			Receiver: common.HexToAddress(r.receiver),
+			URFF:     common.HexToAddress(r.urff),
+		}
 	}
 }
 
@@ -127,17 +155,16 @@ func IsPrivilegedAddress(address common.Address) bool {
 
 var (
 	big9007 = new(big.Int).Mul(common.Ether, big.NewInt(9007))
-	big10k  = new(big.Int).Mul(common.Ether, big.NewInt(10000))
-	big1k   = new(big.Int).Mul(common.Ether, big.NewInt(1000))
+	Big10k  = new(big.Int).Mul(common.Ether, big.NewInt(10000))
 )
 
 func calculateTxManagementFee(nSignups, totaWei *big.Int) *big.Int {
 	if nSignups.Cmp(common.Big0) == 0 {
-		return big1k
+		return ManagementFee
 	}
 	avg := new(big.Int).Div(totaWei, nSignups)
-	if avg.Cmp(big10k) <= 0 {
-		return big1k
+	if avg.Cmp(Big10k) <= 0 {
+		return ManagementFee
 	}
 	return common.Big0
 }
@@ -145,20 +172,20 @@ func calculateTxManagementFee(nSignups, totaWei *big.Int) *big.Int {
 func calculateBlockTotals(cNSignups, cTotalWei *big.Int, header *types.Header, uncles []*types.Header, txs []*types.Transaction) (*big.Int, *big.Int) {
 	newNSignups := new(big.Int).Set(cNSignups)
 	newTotalWei := new(big.Int).Set(cTotalWei)
+	blockMngFee := calculateTxManagementFee(cNSignups, cTotalWei)
 	for _, r := range calculateAccumulatedRewards(header, uncles) {
 		newTotalWei.Add(newTotalWei, r)
 	}
 	for _, t := range txs {
 		if isSignupTransaction(t) {
-			mngFee := calculateTxManagementFee(newNSignups, newTotalWei)
 			newNSignups.Add(newNSignups, common.Big1)
-			newTotalWei.Add(newTotalWei, new(big.Int).Add(big9007, mngFee))
+			newTotalWei.Add(newTotalWei, new(big.Int).Add(big9007, blockMngFee))
 		}
 	}
 	return newNSignups, newTotalWei
 }
 
 // returns number of sign
-func UpdateBlockTotals(header *types.Header, uncles []*types.Header, txs []*types.Transaction) {
-	header.NSignups, header.TotalWei = calculateBlockTotals(header.NSignups, header.TotalWei, header, uncles, txs)
+func UpdateBlockTotals(parent, header *types.Header, uncles []*types.Header, txs []*types.Transaction) {
+	header.NSignups, header.TotalWei = calculateBlockTotals(parent.NSignups, parent.TotalWei, header, uncles, txs)
 }

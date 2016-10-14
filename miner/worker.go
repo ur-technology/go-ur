@@ -561,7 +561,7 @@ func (self *worker) commitNewWork() {
 		delete(self.possibleUncles, hash)
 	}
 
-	core.UpdateBlockTotals(header, uncles, transactions)
+	core.UpdateBlockTotals(parent.Header(), header, uncles, transactions)
 
 	if atomic.LoadInt32(&self.mining) == 1 {
 		// commit state root after all state transitions.
