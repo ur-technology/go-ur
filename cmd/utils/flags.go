@@ -192,6 +192,11 @@ var (
 	}
 	EtherbaseFlag = cli.StringFlag{
 		Name:  "etherbase",
+		Usage: "alias for 'urbase' flag",
+		Value: "0",
+	}
+	UrbaseFlag = cli.StringFlag{
+		Name:  "urbase",
 		Usage: "Public address for block mining rewards (default = first account created)",
 		Value: "0",
 	}
@@ -513,10 +518,19 @@ func MakeNAT(ctx *cli.Context) nat.Interface {
 
 // MakeRPCModules splits input separated by a comma and trims excessive white
 // space from the substrings.
+func translateModuleAlias(moduleName string) string {
+	if moduleName == "ur" {
+		return "eth"
+	}
+	return moduleName
+}
+
+// MakeRPCModules splits input separated by a comma and trims excessive white
+// space from the substrings.
 func MakeRPCModules(input string) []string {
 	result := strings.Split(input, ",")
 	for i, r := range result {
-		result[i] = strings.TrimSpace(r)
+		result[i] = strings.TrimSpace(translateModuleAlias(r))
 	}
 	return result
 }
@@ -600,6 +614,26 @@ func MakeEtherbase(accman *accounts.Manager, ctx *cli.Context) common.Address {
 	account, err := MakeAddress(accman, etherbase)
 	if err != nil {
 		Fatalf("Option %q: %v", EtherbaseFlag.Name, err)
+	}
+	return account.Address
+}
+
+// MakeUrbase retrieves the urbase either from the directly specified
+// command line flags or from the keystore if CLI indexed.
+func MakeUrbase(accman *accounts.Manager, ctx *cli.Context) common.Address {
+	accounts := accman.Accounts()
+	if !ctx.GlobalIsSet(EtherbaseFlag.Name) && len(accounts) == 0 {
+		glog.V(logger.Error).Infoln("WARNING: No urbase set and no accounts found as default")
+		return common.Address{}
+	}
+	etherbase := ctx.GlobalString(UrbaseFlag.Name)
+	if etherbase == "" {
+		return common.Address{}
+	}
+	// If the specified etherbase is a valid address, return it
+	account, err := MakeAddress(accman, etherbase)
+	if err != nil {
+		Fatalf("Option %q: %v", UrbaseFlag.Name, err)
 	}
 	return account.Address
 }
@@ -827,23 +861,6 @@ func MustMakeChainConfigFromDb(ctx *cli.Context, db ethdb.Database) *core.ChainC
 		config.DAOForkSupport = true
 	case ctx.GlobalBool(OpposeDAOFork.Name):
 		config.DAOForkSupport = false
-	}
-	// Temporarilly display a proper message so the user knows which fork its on
-	if !ctx.GlobalBool(TestNetFlag.Name) && (genesis == nil || genesis.Hash() == common.HexToHash("0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3")) {
-		choice := "SUPPORT"
-		if !config.DAOForkSupport {
-			choice = "OPPOSE"
-		}
-		current := fmt.Sprintf("Geth is currently configured to %s the DAO hard-fork!", choice)
-		howtoswap := fmt.Sprintf("You can change your choice prior to block #%v with --support-dao-fork or --oppose-dao-fork.", config.DAOForkBlock)
-		howtosync := fmt.Sprintf("After the hard-fork block #%v passed, changing chains requires a resync from scratch!", config.DAOForkBlock)
-		separator := strings.Repeat("-", len(howtoswap))
-
-		glog.V(logger.Warn).Info(separator)
-		glog.V(logger.Warn).Info(current)
-		glog.V(logger.Warn).Info(howtoswap)
-		glog.V(logger.Warn).Info(howtosync)
-		glog.V(logger.Warn).Info(separator)
 	}
 	return config
 }

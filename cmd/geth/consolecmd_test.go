@@ -55,7 +55,7 @@ func TestConsoleWelcome(t *testing.T) {
 
 	// Verify the actual welcome message to the required template
 	geth.expect(`
-Welcome to the Geth JavaScript console!
+Welcome to the Gur JavaScript console!
 
 instance: GUR/v{{gethver}}/{{goos}}/{{gover}}
 coinbase: {{.Etherbase}}
@@ -78,7 +78,7 @@ func TestIPCAttachWelcome(t *testing.T) {
 	} else {
 		ws := tmpdir(t)
 		defer os.RemoveAll(ws)
-		ipc = filepath.Join(ws, "geth.ipc")
+		ipc = filepath.Join(ws, "gur.ipc")
 	}
 	// Note: we need --shh because testAttachWelcome checks for default
 	// list of ipc modules and shh is included there.
@@ -149,7 +149,7 @@ func testAttachWelcome(t *testing.T, geth *testgeth, endpoint string) {
 
 	// Verify the actual welcome message to the required template
 	attach.expect(`
-Welcome to the Geth JavaScript console!
+Welcome to the Gur JavaScript console!
 
 instance: GUR/v{{gethver}}/{{goos}}/{{gover}}
 coinbase: {{etherbase}}

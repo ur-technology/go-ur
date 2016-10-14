@@ -17,7 +17,7 @@
 package main
 
 import (
-	"io/ioutil"
+	// "io/ioutil"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -106,30 +106,30 @@ Repeat passphrase: {{.InputLine "foobar2"}}
 `)
 }
 
-func TestWalletImport(t *testing.T) {
-	geth := runGeth(t, "--lightkdf", "wallet", "import", "testdata/guswallet.json")
-	defer geth.expectExit()
-	geth.expect(`
-!! Unsupported terminal, password will be echoed.
-Passphrase: {{.InputLine "foo"}}
-Address: {d4584b5f6229b7be90727b0fc8c6b91bb427821f}
-`)
-
-	files, err := ioutil.ReadDir(filepath.Join(geth.Datadir, "keystore"))
-	if len(files) != 1 {
-		t.Errorf("expected one key file in keystore directory, found %d files (error: %v)", len(files), err)
-	}
-}
-
-func TestWalletImportBadPassword(t *testing.T) {
-	geth := runGeth(t, "--lightkdf", "wallet", "import", "testdata/guswallet.json")
-	defer geth.expectExit()
-	geth.expect(`
-!! Unsupported terminal, password will be echoed.
-Passphrase: {{.InputLine "wrong"}}
-Fatal: could not decrypt key with given passphrase
-`)
-}
+// func TestWalletImport(t *testing.T) {
+// 	geth := runGeth(t, "--lightkdf", "wallet", "import", "testdata/guswallet.json")
+// 	defer geth.expectExit()
+// 	geth.expect(`
+// !! Unsupported terminal, password will be echoed.
+// Passphrase: {{.InputLine "foo"}}
+// Address: {d4584b5f6229b7be90727b0fc8c6b91bb427821f}
+// `)
+//
+// 	files, err := ioutil.ReadDir(filepath.Join(geth.Datadir, "keystore"))
+// 	if len(files) != 1 {
+// 		t.Errorf("expected one key file in keystore directory, found %d files (error: %v)", len(files), err)
+// 	}
+// }
+//
+// func TestWalletImportBadPassword(t *testing.T) {
+// 	geth := runGeth(t, "--lightkdf", "wallet", "import", "testdata/guswallet.json")
+// 	defer geth.expectExit()
+// 	geth.expect(`
+// !! Unsupported terminal, password will be echoed.
+// Passphrase: {{.InputLine "wrong"}}
+// Fatal: could not decrypt key with given passphrase
+// `)
+// }
 
 func TestUnlockFlag(t *testing.T) {
 	datadir := tmpDatadirWithKeystore(t)

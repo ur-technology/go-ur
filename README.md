@@ -59,7 +59,7 @@ The go-ethereum project comes with several wrappers/executables found in the `cm
 Going through all the possible command line flags is out of scope here (please consult our
 [CLI Wiki page](https://github.com/ur-technology/go-ur/wiki/Command-Line-Options)), but we've
 enumerated a few common parameter combos to get you up to speed quickly on how you can run your
-own Geth instance.
+own Gur instance.
 
 ### Full node on the main Ethereum network
 
@@ -82,7 +82,7 @@ This command will:
  * Start up Geth's built-in interactive [JavaScript console](https://github.com/ur-technology/go-ur/wiki/JavaScript-Console),
    (via the trailing `console` subcommand) through which you can invoke all official [`web3` methods](https://github.com/ethereum/wiki/wiki/JavaScript-API)
    as well as Geth's own [management APIs](https://github.com/ur-technology/go-ur/wiki/Management-APIs).
-   This too is optional and if you leave it out you can always attach to an already running Geth instance
+   This too is optional and if you leave it out you can always attach to an already running Gur instance
    with `geth --attach`.
 
 ### Full node on the Ethereum test network
@@ -100,9 +100,9 @@ The `--fast`, `--cache` flags and `console` subcommand have the exact same meani
 are equially useful on the testnet too. Please see above for their explanations if you've skipped to
 here.
 
-Specifying the `--testnet` flag however will reconfigure your Geth instance a bit:
+Specifying the `--testnet` flag however will reconfigure your Gur instance a bit:
 
- * Instead of using the default data directory (`~/.ethereum` on Linux for example), Geth will nest
+ * Instead of using the default data directory (`~/.ethereum` on Linux for example), Gur will nest
    itself one level deeper into a `testnet` subfolder (`~/.ethereum/testnet` on Linux).
  * Instead of connecting the main Ethereum network, the client will connect to the test network,
    which uses different P2P bootnodes, different network IDs and genesis states.
@@ -113,12 +113,12 @@ always use separate accounts for play-money and real-money. Unless you manually 
 will by default correctly separate the two networks and will not make any accounts available between
 them.*
 
-### Programatically interfacing Geth nodes
+### Programatically interfacing Gur nodes
 
-As a developer, sooner rather than later you'll want to start interacting with Geth and the Ethereum
-network via your own programs and not manually through the console. To aid this, Geth has built in
+As a developer, sooner rather than later you'll want to start interacting with Gur and the Ethereum
+network via your own programs and not manually through the console. To aid this, Gur has built in
 support for a JSON-RPC based APIs ([standard APIs](https://github.com/ethereum/wiki/wiki/JSON-RPC) and
-[Geth specific APIs](https://github.com/ur-technology/go-ur/wiki/Management-APIs)). These can be
+[Gur specific APIs](https://github.com/ur-technology/go-ur/wiki/Management-APIs)). These can be
 exposed via HTTP, WebSockets and IPC (unix sockets on unix based platroms, and named pipes on Windows).
 
 The IPC interface is enabled by default and exposes all the APIs supported by Geth, whereas the HTTP
@@ -130,19 +130,19 @@ HTTP based JSON-RPC API options:
   * `--rpc` Enable the HTTP-RPC server
   * `--rpcaddr` HTTP-RPC server listening interface (default: "localhost")
   * `--rpcport` HTTP-RPC server listening port (default: 9595)
-  * `--rpcapi` API's offered over the HTTP-RPC interface (default: "eth,net,web3")
+  * `--rpcapi` API's offered over the HTTP-RPC interface (default: "ur,net,web3")
   * `--rpccorsdomain` Comma separated list of domains from which to accept cross origin requests (browser enforced)
   * `--ws` Enable the WS-RPC server
   * `--wsaddr` WS-RPC server listening interface (default: "localhost")
   * `--wsport` WS-RPC server listening port (default: 9596)
-  * `--wsapi` API's offered over the WS-RPC interface (default: "eth,net,web3")
+  * `--wsapi` API's offered over the WS-RPC interface (default: "ur,net,web3")
   * `--wsorigins` Origins from which to accept websockets requests
   * `--ipcdisable` Disable the IPC-RPC server
-  * `--ipcapi` API's offered over the IPC-RPC interface (default: "admin,debug,eth,miner,net,personal,shh,txpool,web3")
+  * `--ipcapi` API's offered over the IPC-RPC interface (default: "admin,debug,ur,miner,net,personal,shh,txpool,web3")
   * `--ipcpath` Filename for IPC socket/pipe within the datadir (explicit paths escape it)
 
 You'll need to use your own programming environments' capabilities (libraries, tools, etc) to connect
-via HTTP, WS or IPC to a Geth node configured with the above flags and you'll need to speak [JSON-RPC](http://www.jsonrpc.org/specification)
+via HTTP, WS or IPC to a Gur node configured with the above flags and you'll need to speak [JSON-RPC](http://www.jsonrpc.org/specification)
 on all transports. You can reuse the same connection for multiple requests!
 
 **Note: Please understand the security implications of opening up an HTTP/WS based transport before
@@ -186,7 +186,7 @@ configs:
 }
 ```
 
-With the genesis state defined in the above JSON file, you'll need to initialize **every** Geth node
+With the genesis state defined in the above JSON file, you'll need to initialize **every** Gur node
 with it prior to starting it up to ensure all blockchain parameters are correctly set:
 
 ```
@@ -209,12 +209,12 @@ that other nodes can use to connect to it and exchange peer information. Make su
 displayed IP address information (most probably `[::]`) with your externally accessible IP to get the
 actual `enode` URL.
 
-*Note: You could also use a full fledged Geth node as a bootnode, but it's the less recommended way.*
+*Note: You could also use a full fledged Gur node as a bootnode, but it's the less recommended way.*
 
 #### Starting up your member nodes
 
 With the bootnode operational and externally reachable (you can try `telnet <ip> <port>` to ensure
-it's indeed reachable), start every subsequent Geth node pointed to the bootnode for peer discovery
+it's indeed reachable), start every subsequent Gur node pointed to the bootnode for peer discovery
 via the `--bootnodes` flag. It will probably also be desirable to keep the data directory of your
 private network separated, so do also specify a custom `--datadir` flag.
 
@@ -238,11 +238,11 @@ resources (consider running on a single thread, no need for multiple ones either
 instance for mining, run it with all your usual flags, extended by:
 
 ```
-$ geth <usual-flags> --mine --minerthreads=1 --etherbase=0x0000000000000000000000000000000000000000
+$ geth <usual-flags> --mine --minerthreads=1 --urbase=0x0000000000000000000000000000000000000000
 ```
 
 Which will start mining bocks and transactions on a single CPU thread, crediting all proceedings to
-the account specified by `--etherbase`. You can further tune the mining by changing the default gas
+the account specified by `--urbase`. You can further tune the mining by changing the default gas
 limit blocks converge to (`--targetgaslimit`) and the price transactions are accepted at (`--gasprice`).
 
 ## Contribution

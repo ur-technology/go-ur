@@ -131,7 +131,7 @@ func (c *Console) init(preload []string) error {
 	if err != nil {
 		return fmt.Errorf("api modules: %v", err)
 	}
-	flatten := "var eth = web3.eth; var personal = web3.personal; "
+	flatten := "var eth = web3.eth; var ur = eth; var personal = web3.personal; "
 	for api := range apis {
 		if api == "web3" {
 			continue // manually mapped or ignore
@@ -245,7 +245,7 @@ func (c *Console) AutoCompleteInput(line string, pos int) (string, []string, str
 // console's available modules.
 func (c *Console) Welcome() {
 	// Print some generic Geth metadata
-	fmt.Fprintf(c.printer, "Welcome to the Geth JavaScript console!\n\n")
+	fmt.Fprintf(c.printer, "Welcome to the Gur JavaScript console!\n\n")
 	c.jsre.Run(`
 		console.log("instance: " + web3.version.node);
 		console.log("coinbase: " + eth.coinbase);

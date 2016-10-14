@@ -29,9 +29,9 @@ var (
 	consoleCommand = cli.Command{
 		Action: localConsole,
 		Name:   "console",
-		Usage:  `Geth Console: interactive JavaScript environment`,
+		Usage:  `Gur Console: interactive JavaScript environment`,
 		Description: `
-The Geth console is an interactive shell for the JavaScript runtime environment
+The Gur console is an interactive shell for the JavaScript runtime environment
 which exposes a node admin interface as well as the Ðapp JavaScript API.
 See https://github.com/ur-technology/go-ur/wiki/Javascipt-Console
 `,
@@ -39,9 +39,9 @@ See https://github.com/ur-technology/go-ur/wiki/Javascipt-Console
 	attachCommand = cli.Command{
 		Action: remoteConsole,
 		Name:   "attach",
-		Usage:  `Geth Console: interactive JavaScript environment (connect to node)`,
+		Usage:  `Gur Console: interactive JavaScript environment (connect to node)`,
 		Description: `
-The Geth console is an interactive shell for the JavaScript runtime environment
+The Gur console is an interactive shell for the JavaScript runtime environment
 which exposes a node admin interface as well as the Ðapp JavaScript API.
 See https://github.com/ur-technology/go-ur/wiki/Javascipt-Console.
 This command allows to open a console on a running geth node.
@@ -50,7 +50,7 @@ This command allows to open a console on a running geth node.
 	javascriptCommand = cli.Command{
 		Action: ephemeralConsole,
 		Name:   "js",
-		Usage:  `executes the given JavaScript files in the Geth JavaScript VM`,
+		Usage:  `executes the given JavaScript files in the Gur JavaScript VM`,
 		Description: `
 The JavaScript VM exposes a node admin interface as well as the Ðapp
 JavaScript API. See https://github.com/ur-technology/go-ur/wiki/Javascipt-Console

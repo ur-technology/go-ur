@@ -83,7 +83,7 @@ func init() {
 	copy(relConfig.Commit[:], commit)
 
 	// Initialize the CLI app and start Geth
-	app = utils.NewApp(verString, "the go-ethereum command line interface")
+	app = utils.NewApp(verString, "the go-ur command line interface")
 	app.Action = geth
 	app.HideVersion = true // we have a command to print the version
 	app.Commands = []cli.Command{
@@ -94,14 +94,14 @@ func init() {
 		dumpCommand,
 		monitorCommand,
 		accountCommand,
-		walletCommand,
+		// walletCommand,
 		consoleCommand,
 		attachCommand,
 		javascriptCommand,
 		{
 			Action: makedag,
 			Name:   "makedag",
-			Usage:  "generate ethash dag (for testing)",
+			Usage:  "generate urhash dag (for testing)",
 			Description: `
 The makedag command generates an ethash DAG in /tmp/dag.
 
@@ -128,7 +128,7 @@ Runs quick benchmark on first GPU found.
 		{
 			Action: version,
 			Name:   "version",
-			Usage:  "print ethereum version numbers",
+			Usage:  "print ur version numbers",
 			Description: `
 The output of this command is supposed to be machine-readable.
 `,
@@ -162,9 +162,8 @@ participating.
 		utils.MaxPeersFlag,
 		utils.MaxPendingPeersFlag,
 		utils.EtherbaseFlag,
+		utils.UrbaseFlag,
 		utils.GasPriceFlag,
-		utils.SupportDAOFork,
-		utils.OpposeDAOFork,
 		utils.MinerThreadsFlag,
 		utils.MiningEnabledFlag,
 		utils.MiningGPUFlag,

@@ -76,6 +76,10 @@ func runGeth(t *testing.T, args ...string) *testgeth {
 			if i < len(args)-1 {
 				tt.Datadir = args[i+1]
 			}
+		case arg == "-urbase" || arg == "--urbase":
+			if i < len(args)-1 {
+				tt.Etherbase = args[i+1]
+			}
 		case arg == "-etherbase" || arg == "--etherbase":
 			if i < len(args)-1 {
 				tt.Etherbase = args[i+1]

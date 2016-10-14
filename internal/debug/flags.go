@@ -35,7 +35,7 @@ var (
 	}
 	vmoduleFlag = cli.GenericFlag{
 		Name:  "vmodule",
-		Usage: "Per-module verbosity: comma-separated list of <pattern>=<level> (e.g. eth/*=6,p2p=5)",
+		Usage: "Per-module verbosity: comma-separated list of <pattern>=<level> (e.g. ur/*=6,p2p=5)",
 		Value: glog.GetVModule(),
 	}
 	backtraceAtFlag = cli.GenericFlag{
