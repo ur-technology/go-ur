@@ -3,11 +3,11 @@ FROM alpine:3.3
 RUN \
   apk add --update go git make gcc musl-dev         && \
   git clone https://github.com/ur-technology/go-ur && \
-  (cd go-ethereum && git checkout develop)          && \
-  (cd go-ethereum && make geth)                     && \
-  cp go-ethereum/build/bin/geth /geth               && \
+  (cd go-ur && git checkout develop)          && \
+  (cd go-ur && make geth)                     && \
+  cp go-ur/build/bin/geth /geth               && \
   apk del go git make gcc musl-dev                  && \
-  rm -rf /go-ethereum && rm -rf /var/cache/apk/*
+  rm -rf /go-ur && rm -rf /var/cache/apk/*
 
 EXPOSE 9595
 EXPOSE 19595

@@ -42,7 +42,7 @@ or, to build the full suite of utilities:
 
 ## Executables
 
-The go-ethereum project comes with several wrappers/executables found in the `cmd` directory.
+The go-ur project comes with several wrappers/executables found in the `cmd` directory.
 
 | Command    | Description |
 |:----------:|-------------|
@@ -250,7 +250,7 @@ limit blocks converge to (`--targetgaslimit`) and the price transactions are acc
 Thank you for considering to help out with the source code! We welcome contributions from
 anyone on the internet, and are grateful for even the smallest of fixes!
 
-If you'd like to contribute to go-ethereum, please fork, fix, commit and send a pull request
+If you'd like to contribute to go-ur, please fork, fix, commit and send a pull request
 for the maintainers to review and merge into the main code base. If you wish to submit more
 complex changes though, please check up with the core devs first on [our gitter channel](https://gitter.im/ur-technology/go-ur)
 to ensure those changes are in line with the general philosophy of the project and/or get some
@@ -270,10 +270,10 @@ for more details on configuring your environment, managing project dependencies 
 
 ## License
 
-The go-ethereum library (i.e. all code outside of the `cmd` directory) is licensed under the
+The go-ur library (i.e. all code outside of the `cmd` directory) is licensed under the
 [GNU Lesser General Public License v3.0](http://www.gnu.org/licenses/lgpl-3.0.en.html), also
 included in our repository in the `COPYING.LESSER` file.
 
-The go-ethereum binaries (i.e. all code inside of the `cmd` directory) is licensed under the
+The go-ur binaries (i.e. all code inside of the `cmd` directory) is licensed under the
 [GNU General Public License v3.0](http://www.gnu.org/licenses/gpl-3.0.en.html), also included
 in our repository in the `COPYING` file.

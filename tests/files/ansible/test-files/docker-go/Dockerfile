@@ -33,7 +33,7 @@ RUN go install -v
 # this is a workaround, to make sure that docker's cache is invalidated whenever the git repo changes
 ADD https://api.github.com/repos/ur-technology/go-ur/git/refs/heads/develop unused.txt 
 
-## Fetch and install go-ethereum
+## Fetch and install go-ur
 RUN go get -u -v -d github.com/ur-technology/go-ur/...
 WORKDIR $GOPATH/src/github.com/ur-technology/go-ur
 

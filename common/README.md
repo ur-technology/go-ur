@@ -7,7 +7,7 @@ The common package contains the ethereum utility library.
 
 # Installation
 
-As a subdirectory the main go-ethereum repository, you get it with
+As a subdirectory the main go-ur repository, you get it with
 `go get github.com/ur-technology/go-ur`.
 
 # Usage
