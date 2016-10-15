@@ -189,17 +189,18 @@ func parseRequest(incomingMsg json.RawMessage) ([]rpcRequest, bool, RPCError) {
 	}
 
 	if len(in.Payload) == 0 {
-		return []rpcRequest{rpcRequest{service: translateServiceAlias(elems[0]), method: elems[1], id: &in.Id}}, false, nil
+		return []rpcRequest{rpcRequest{service: replaceServiceAliasWithTarget(elems[0]), method: elems[1], id: &in.Id}}, false, nil
 	}
 
-	return []rpcRequest{rpcRequest{service: translateServiceAlias(elems[0]), method: elems[1], id: &in.Id, params: in.Payload}}, false, nil
+	return []rpcRequest{rpcRequest{service: replaceServiceAliasWithTarget(elems[0]), method: elems[1], id: &in.Id, params: in.Payload}}, false, nil
 }
 
-func translateServiceAlias(originalService string) (string) {
-	if originalService == "ur" {
+// replaceServiceAliasWithTarget if moduleName is an alias, it is replaced with the associated actual module
+func replaceServiceAliasWithTarget(serviceName string) (string) {
+	if serviceName == "ur" {
 		return "eth";
 	}
-	return originalService;
+	return serviceName;
 }
 
 // parseBatchRequest will parse a batch request into a collection of requests from the given RawMessage, an indication
@@ -249,9 +250,9 @@ func parseBatchRequest(incomingMsg json.RawMessage) ([]rpcRequest, bool, RPCErro
 		}
 
 		if len(r.Payload) == 0 {
-			requests[i] = rpcRequest{service: translateServiceAlias(elems[0]), method: elems[1], id: id, params: nil}
+			requests[i] = rpcRequest{service: replaceServiceAliasWithTarget(elems[0]), method: elems[1], id: id, params: nil}
 		} else {
-			requests[i] = rpcRequest{service: translateServiceAlias(elems[0]), method: elems[1], id: id, params: r.Payload}
+			requests[i] = rpcRequest{service: replaceServiceAliasWithTarget(elems[0]), method: elems[1], id: id, params: r.Payload}
 		}
 	}
 

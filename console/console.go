@@ -241,6 +241,14 @@ func (c *Console) AutoCompleteInput(line string, pos int) (string, []string, str
 	return line[:start], c.jsre.CompleteKeywords(line[start:pos]), line[pos:]
 }
 
+// replaceModuleTargetWithAlias if moduleName is an alias, it is replaced with the associated actual module
+func replaceModuleTargetWithAlias(moduleName string) string {
+	if moduleName == "eth" {
+		return "ur"
+	}
+	return moduleName
+}
+
 // Welcome show summary of current Geth instance and some metadata about the
 // console's available modules.
 func (c *Console) Welcome() {
@@ -256,7 +264,7 @@ func (c *Console) Welcome() {
 	if apis, err := c.client.SupportedModules(); err == nil {
 		modules := make([]string, 0, len(apis))
 		for api, version := range apis {
-			modules = append(modules, fmt.Sprintf("%s:%s", api, version))
+			modules = append(modules, fmt.Sprintf("%s:%s", replaceModuleTargetWithAlias(api), version))
 		}
 		sort.Strings(modules)
 		fmt.Fprintln(c.printer, " modules:", strings.Join(modules, " "))

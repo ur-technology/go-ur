@@ -516,9 +516,8 @@ func MakeNAT(ctx *cli.Context) nat.Interface {
 	return natif
 }
 
-// MakeRPCModules splits input separated by a comma and trims excessive white
-// space from the substrings.
-func translateModuleAlias(moduleName string) string {
+// replaceModuleAliasWithTarget if moduleName is an alias, it is replaced with the associated actual module
+func replaceModuleAliasWithTarget(moduleName string) string {
 	if moduleName == "ur" {
 		return "eth"
 	}
@@ -530,7 +529,7 @@ func translateModuleAlias(moduleName string) string {
 func MakeRPCModules(input string) []string {
 	result := strings.Split(input, ",")
 	for i, r := range result {
-		result[i] = strings.TrimSpace(translateModuleAlias(r))
+		result[i] = strings.TrimSpace(replaceModuleAliasWithTarget(r))
 	}
 	return result
 }
