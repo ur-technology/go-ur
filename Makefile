@@ -13,7 +13,7 @@ GOBIN = build/bin
 GO ?= latest
 
 gur:
-	build/env.sh go build -i -v $(shell build/flags.sh) -o $(GOBIN)/gur ./cmd/geth
+	build/env.sh go build -i -v $(shell build/flags.sh) -o $(GOBIN)/gur ./cmd/gur
 	@echo "Done building."
 	@echo "Run \"$(GOBIN)/gur\" to launch gur."
 
@@ -26,12 +26,12 @@ gur-linux: gur-linux-386 gur-linux-amd64 gur-linux-arm
 	@ls -ld $(GOBIN)/gur-linux-*
 
 gur-linux-386: xgo
-	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/386 -v $(shell build/flags.sh) ./cmd/geth
+	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/386 -v $(shell build/flags.sh) ./cmd/gur
 	@echo "Linux 386 cross compilation done:"
 	@ls -ld $(GOBIN)/gur-linux-* | grep 386
 
 gur-linux-amd64: xgo
-	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/amd64 -v $(shell build/flags.sh) ./cmd/geth
+	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/amd64 -v $(shell build/flags.sh) ./cmd/gur
 	@echo "Linux amd64 cross compilation done:"
 	@ls -ld $(GOBIN)/gur-linux-* | grep amd64
 
@@ -40,22 +40,22 @@ gur-linux-arm: gur-linux-arm-5 gur-linux-arm-6 gur-linux-arm-7 gur-linux-arm64
 	@ls -ld $(GOBIN)/gur-linux-* | grep arm
 
 gur-linux-arm-5: xgo
-	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/arm-5 -v $(shell build/flags.sh) ./cmd/geth
+	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/arm-5 -v $(shell build/flags.sh) ./cmd/gur
 	@echo "Linux ARMv5 cross compilation done:"
 	@ls -ld $(GOBIN)/gur-linux-* | grep arm-5
 
 gur-linux-arm-6: xgo
-	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/arm-6 -v $(shell build/flags.sh) ./cmd/geth
+	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/arm-6 -v $(shell build/flags.sh) ./cmd/gur
 	@echo "Linux ARMv6 cross compilation done:"
 	@ls -ld $(GOBIN)/gur-linux-* | grep arm-6
 
 gur-linux-arm-7: xgo
-	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/arm-7 -v $(shell build/flags.sh) ./cmd/geth
+	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/arm-7 -v $(shell build/flags.sh) ./cmd/gur
 	@echo "Linux ARMv7 cross compilation done:"
 	@ls -ld $(GOBIN)/gur-linux-* | grep arm-7
 
 gur-linux-arm64: xgo
-	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/arm64 -v $(shell build/flags.sh) ./cmd/geth
+	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=linux/arm64 -v $(shell build/flags.sh) ./cmd/gur
 	@echo "Linux ARM64 cross compilation done:"
 	@ls -ld $(GOBIN)/gur-linux-* | grep arm64
 
@@ -64,12 +64,12 @@ gur-darwin: gur-darwin-386 gur-darwin-amd64
 	@ls -ld $(GOBIN)/gur-darwin-*
 
 gur-darwin-386: xgo
-	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=darwin/386 -v $(shell build/flags.sh) ./cmd/geth
+	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=darwin/386 -v $(shell build/flags.sh) ./cmd/gur
 	@echo "Darwin 386 cross compilation done:"
 	@ls -ld $(GOBIN)/gur-darwin-* | grep 386
 
 gur-darwin-amd64: xgo
-	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=darwin/amd64 -v $(shell build/flags.sh) ./cmd/geth
+	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=darwin/amd64 -v $(shell build/flags.sh) ./cmd/gur
 	@echo "Darwin amd64 cross compilation done:"
 	@ls -ld $(GOBIN)/gur-darwin-* | grep amd64
 
@@ -78,22 +78,22 @@ gur-windows: gur-windows-386 gur-windows-amd64
 	@ls -ld $(GOBIN)/gur-windows-*
 
 gur-windows-386: xgo
-	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=windows/386 -v $(shell build/flags.sh) ./cmd/geth
+	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=windows/386 -v $(shell build/flags.sh) ./cmd/gur
 	@echo "Windows 386 cross compilation done:"
 	@ls -ld $(GOBIN)/gur-windows-* | grep 386
 
 gur-windows-amd64: xgo
-	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=windows/amd64 -v $(shell build/flags.sh) ./cmd/geth
+	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=windows/amd64 -v $(shell build/flags.sh) ./cmd/gur
 	@echo "Windows amd64 cross compilation done:"
 	@ls -ld $(GOBIN)/gur-windows-* | grep amd64
 
 gur-android: xgo
-	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=android-21/aar -v $(shell build/flags.sh) ./cmd/geth
+	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=android-21/aar -v $(shell build/flags.sh) ./cmd/gur
 	@echo "Android cross compilation done:"
 	@ls -ld $(GOBIN)/gur-android-*
 
 gur-ios: xgo
-	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=ios-7.0/framework -v $(shell build/flags.sh) ./cmd/geth
+	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=ios-7.0/framework -v $(shell build/flags.sh) ./cmd/gur
 	@echo "iOS framework cross compilation done:"
 	@ls -ld $(GOBIN)/gur-ios-*
 
