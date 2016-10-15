@@ -17,6 +17,10 @@ gur:
 	@echo "Done building."
 	@echo "Run \"$(GOBIN)/gur\" to launch gur."
 
+gur-release: gur-linux-386 gur-linux-amd64 gur-linux-arm64 gur-darwin gur-windows
+	@echo "Release compilation done:"
+	@ls -ld $(GOBIN)/gur-*
+
 gur-cross: gur-linux gur-darwin gur-windows gur-android gur-ios
 	@echo "Full cross compilation done:"
 	@ls -ld $(GOBIN)/gur-*
