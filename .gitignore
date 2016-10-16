@@ -39,3 +39,4 @@ profile.cov
 
 # vagrant
 .vagrant
+build/release
