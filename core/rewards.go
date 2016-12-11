@@ -142,10 +142,8 @@ func isSignupTx(from common.Address, value *big.Int, data []byte) bool {
 	return IsPrivilegedAddress(from) && value.Cmp(big.NewInt(1)) == 0 && len(data) > 0 && data[0] == currentSignupMessageVersion
 }
 
-func isSignupTransaction(tx *types.Transaction) bool {
-	addr, _ := tx.From()
-	data := tx.Data()
-	return isSignupTx(addr, tx.Value(), data)
+func isSignupTransaction(msg types.Message) bool {
+	return isSignupTx(msg.From(), msg.Value(), msg.Data())
 }
 
 func IsPrivilegedAddress(address common.Address) bool {
@@ -169,15 +167,15 @@ func calculateTxManagementFee(nSignups, totaWei *big.Int) *big.Int {
 	return common.Big0
 }
 
-func calculateBlockTotals(cNSignups, cTotalWei *big.Int, header *types.Header, uncles []*types.Header, txs []*types.Transaction) (*big.Int, *big.Int) {
+func calculateBlockTotals(cNSignups, cTotalWei *big.Int, header *types.Header, uncles []*types.Header, msgs []types.Message) (*big.Int, *big.Int) {
 	newNSignups := new(big.Int).Set(cNSignups)
 	newTotalWei := new(big.Int).Set(cTotalWei)
 	blockMngFee := calculateTxManagementFee(cNSignups, cTotalWei)
 	for _, r := range calculateAccumulatedRewards(header, uncles) {
 		newTotalWei.Add(newTotalWei, r)
 	}
-	for _, t := range txs {
-		if isSignupTransaction(t) {
+	for _, m := range msgs {
+		if isSignupTransaction(m) {
 			newNSignups.Add(newNSignups, common.Big1)
 			newTotalWei.Add(newTotalWei, new(big.Int).Add(big9007, blockMngFee))
 		}
@@ -186,6 +184,18 @@ func calculateBlockTotals(cNSignups, cTotalWei *big.Int, header *types.Header, u
 }
 
 // returns number of sign
-func UpdateBlockTotals(parent, header *types.Header, uncles []*types.Header, txs []*types.Transaction) {
-	header.NSignups, header.TotalWei = calculateBlockTotals(parent.NSignups, parent.TotalWei, header, uncles, txs)
+func UpdateBlockTotals(parent, header *types.Header, uncles []*types.Header, msgs []types.Message) {
+	header.NSignups, header.TotalWei = calculateBlockTotals(parent.NSignups, parent.TotalWei, header, uncles, msgs)
+}
+
+func TransactionsToMessages(txs types.Transactions, signer types.Signer) ([]types.Message, error) {
+	msgs := make([]types.Message, 0, len(txs))
+	for _, t := range txs {
+		msg, err := t.AsMessage(signer)
+		if err != nil {
+			return nil, err
+		}
+		msgs = append(msgs, msg)
+	}
+	return msgs, nil
 }

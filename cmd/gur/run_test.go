@@ -32,14 +32,14 @@ import (
 )
 
 func tmpdir(t *testing.T) string {
-	dir, err := ioutil.TempDir("", "geth-test")
+	dir, err := ioutil.TempDir("", "gur-test")
 	if err != nil {
 		t.Fatal(err)
 	}
 	return dir
 }
 
-type testgeth struct {
+type testgur struct {
 	// For total convenience, all testing methods are available.
 	*testing.T
 	// template variables for expect
@@ -56,7 +56,7 @@ type testgeth struct {
 }
 
 func init() {
-	// Run the app if we're the child process for runGeth.
+	// Run the app if we're the child process for runGur.
 	if os.Getenv("GETH_TEST_CHILD") != "" {
 		if err := app.Run(os.Args); err != nil {
 			fmt.Fprintln(os.Stderr, err)
@@ -66,10 +66,10 @@ func init() {
 	}
 }
 
-// spawns geth with the given command line args. If the args don't set --datadir, the
+// spawns gur with the given command line args. If the args don't set --datadir, the
 // child g gets a temporary data directory.
-func runGeth(t *testing.T, args ...string) *testgeth {
-	tt := &testgeth{T: t, Executable: os.Args[0]}
+func runGur(t *testing.T, args ...string) *testgur {
+	tt := &testgur{T: t, Executable: os.Args[0]}
 	for i, arg := range args {
 		switch {
 		case arg == "-datadir" || arg == "--datadir":
@@ -98,7 +98,7 @@ func runGeth(t *testing.T, args ...string) *testgeth {
 		}()
 	}
 
-	// Boot "geth". This actually runs the test binary but the init function
+	// Boot "gur". This actually runs the test binary but the init function
 	// will prevent any tests from running.
 	tt.stderr = &testlogger{t: t}
 	tt.cmd = exec.Command(os.Args[0], args...)
@@ -121,13 +121,13 @@ func runGeth(t *testing.T, args ...string) *testgeth {
 // InputLine writes the given text to the childs stdin.
 // This method can also be called from an expect template, e.g.:
 //
-//     geth.expect(`Passphrase: {{.InputLine "password"}}`)
-func (tt *testgeth) InputLine(s string) string {
+//     gur.expect(`Passphrase: {{.InputLine "password"}}`)
+func (tt *testgur) InputLine(s string) string {
 	io.WriteString(tt.stdin, s+"\n")
 	return ""
 }
 
-func (tt *testgeth) setTemplateFunc(name string, fn interface{}) {
+func (tt *testgur) setTemplateFunc(name string, fn interface{}) {
 	if tt.Func == nil {
 		tt.Func = make(map[string]interface{})
 	}
@@ -139,7 +139,7 @@ func (tt *testgeth) setTemplateFunc(name string, fn interface{}) {
 //
 // If the template starts with a newline, the newline is removed
 // before matching.
-func (tt *testgeth) expect(tplsource string) {
+func (tt *testgur) expect(tplsource string) {
 	// Generate the expected output by running the template.
 	tpl := template.Must(template.New("").Funcs(tt.Func).Parse(tplsource))
 	wantbuf := new(bytes.Buffer)
@@ -155,7 +155,7 @@ func (tt *testgeth) expect(tplsource string) {
 	tt.Logf("Matched stdout text:\n%s", want)
 }
 
-func (tt *testgeth) matchExactOutput(want []byte) error {
+func (tt *testgur) matchExactOutput(want []byte) error {
 	buf := make([]byte, len(want))
 	n := 0
 	tt.withKillTimeout(func() { n, _ = io.ReadFull(tt.stdout, buf) })
@@ -186,7 +186,7 @@ func (tt *testgeth) matchExactOutput(want []byte) error {
 // Note that an arbitrary amount of output may be consumed by the
 // regular expression. This usually means that expect cannot be used
 // after expectRegexp.
-func (tt *testgeth) expectRegexp(resource string) (*regexp.Regexp, []string) {
+func (tt *testgur) expectRegexp(resource string) (*regexp.Regexp, []string) {
 	var (
 		re      = regexp.MustCompile(resource)
 		rtee    = &runeTee{in: tt.stdout}
@@ -209,7 +209,7 @@ func (tt *testgeth) expectRegexp(resource string) (*regexp.Regexp, []string) {
 
 // expectExit expects the child process to exit within 5s without
 // printing any additional text on stdout.
-func (tt *testgeth) expectExit() {
+func (tt *testgur) expectExit() {
 	var output []byte
 	tt.withKillTimeout(func() {
 		output, _ = ioutil.ReadAll(tt.stdout)
@@ -223,20 +223,20 @@ func (tt *testgeth) expectExit() {
 	}
 }
 
-func (tt *testgeth) interrupt() {
+func (tt *testgur) interrupt() {
 	tt.cmd.Process.Signal(os.Interrupt)
 }
 
 // stderrText returns any stderr output written so far.
 // The returned text holds all log lines after expectExit has
 // returned.
-func (tt *testgeth) stderrText() string {
+func (tt *testgur) stderrText() string {
 	tt.stderr.mu.Lock()
 	defer tt.stderr.mu.Unlock()
 	return tt.stderr.buf.String()
 }
 
-func (tt *testgeth) withKillTimeout(fn func()) {
+func (tt *testgur) withKillTimeout(fn func()) {
 	timeout := time.AfterFunc(5*time.Second, func() {
 		tt.Log("killing the child process (timeout)")
 		tt.cmd.Process.Kill()

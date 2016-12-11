@@ -1,34 +1,20 @@
-## UR Go
+## Ethereum Go
 
-Official golang implementation of the UR protocol
-
-          | Linux   | OSX | ARM | Windows | Tests
-----------|---------|-----|-----|---------|------
-develop   | [![Build+Status](https://build.ethdev.com/buildstatusimage?builder=Linux%20Go%20develop%20branch)](https://build.ethdev.com/builders/Linux%20Go%20develop%20branch/builds/-1) | [![Build+Status](https://build.ethdev.com/buildstatusimage?builder=Linux%20Go%20develop%20branch)](https://build.ethdev.com/builders/OSX%20Go%20develop%20branch/builds/-1) | [![Build+Status](https://build.ethdev.com/buildstatusimage?builder=ARM%20Go%20develop%20branch)](https://build.ethdev.com/builders/ARM%20Go%20develop%20branch/builds/-1) | [![Build+Status](https://build.ethdev.com/buildstatusimage?builder=Windows%20Go%20develop%20branch)](https://build.ethdev.com/builders/Windows%20Go%20develop%20branch/builds/-1) | [![Buildr+Status](https://travis-ci.org/ur-technology/go-ur.svg?branch=develop)](https://travis-ci.org/ur-technology/go-ur) [![codecov.io](http://codecov.io/github/ur-technology/go-ur/coverage.svg?branch=develop)](http://codecov.io/github/ur-technology/go-ur?branch=develop)
-master    | [![Build+Status](https://build.ethdev.com/buildstatusimage?builder=Linux%20Go%20master%20branch)](https://build.ethdev.com/builders/Linux%20Go%20master%20branch/builds/-1) | [![Build+Status](https://build.ethdev.com/buildstatusimage?builder=OSX%20Go%20master%20branch)](https://build.ethdev.com/builders/OSX%20Go%20master%20branch/builds/-1) | [![Build+Status](https://build.ethdev.com/buildstatusimage?builder=ARM%20Go%20master%20branch)](https://build.ethdev.com/builders/ARM%20Go%20master%20branch/builds/-1) | [![Build+Status](https://build.ethdev.com/buildstatusimage?builder=Windows%20Go%20master%20branch)](https://build.ethdev.com/builders/Windows%20Go%20master%20branch/builds/-1) | [![Buildr+Status](https://travis-ci.org/ur-technology/go-ur.svg?branch=master)](https://travis-ci.org/ur-technology/go-ur) [![codecov.io](http://codecov.io/github/ur-technology/go-ur/coverage.svg?branch=master)](http://codecov.io/github/ur-technology/go-ur?branch=master)
+Official golang implementation of the Ethereum protocol.
 
 [![API Reference](
 https://camo.githubusercontent.com/915b7be44ada53c290eb157634330494ebe3e30a/68747470733a2f2f676f646f632e6f72672f6769746875622e636f6d2f676f6c616e672f6764646f3f7374617475732e737667
-)](https://godoc.org/github.com/ur-technology/go-ur)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ur-technology/go-ur?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+)](https://godoc.org/github.com/ethereum/go-ur)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ethereum/go-ur?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-## Automated development builds
-
-The following builds are build automatically by our build servers after each push to the [develop](https://github.com/ur-technology/go-ur/tree/develop) branch.
-
-* [Docker](https://registry.hub.docker.com/u/ur-technology/client-go/)
-* [OS X](http://build.ethdev.com/builds/OSX%20Go%20develop%20branch/Mist-OSX-latest.dmg)
-* Ubuntu
-  [trusty](https://build.ethdev.com/builds/Linux%20Go%20develop%20deb%20i386-trusty/latest/) |
-  [utopic](https://build.ethdev.com/builds/Linux%20Go%20develop%20deb%20i386-utopic/latest/)
-* [Windows 64-bit](https://build.ethdev.com/builds/Windows%20Go%20develop%20branch/Geth-Win64-latest.zip)
-* [ARM](https://build.ethdev.com/builds/ARM%20Go%20develop%20branch/gur-ARM-latest.tar.bz2)
+Automated builds are available for stable releases and the unstable master branch.
+Binary archives are published at https://gur.ethereum.org/downloads/.
 
 ## Building the source
 
 For prerequisites and detailed build instructions please read the
-[Installation Instructions](https://github.com/ur-technology/go-ur/wiki/Building-Ethereum)
-on the Ethereum wiki and replace eth with ur, Ethereum with UR, etc.
+[Installation Instructions](https://github.com/ethereum/go-ur/wiki/Building-Ethereum)
+on the wiki.
 
 Building gur requires both a Go and a C compiler.
 You can install them using your favourite package manager.
@@ -46,18 +32,21 @@ The go-ur project comes with several wrappers/executables found in the `cmd` dir
 
 | Command    | Description |
 |:----------:|-------------|
-| **`gur`** | Our main UR CLI client. It is the entry point into the Ethereum network (main-, test- or private net), capable of running as a full node (default) archive node (retaining all historical state) or a light node (retrieving data live). It can be used by other processes as an gateway into the Ethereum network via JSON RPC endpoints exposed on top of HTTP, WebSocket and/or IPC transports. Please see our [Command Line Options](https://github.com/ur-technology/go-ur/wiki/Command-Line-Options) wiki page for details. |
-| `abigen` | Source code generator to convert Ethereum contract definitions into easy to use, compile-time type-safe Go packages. It operates on plain [Ethereum contract ABIs](https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI) with expanded functionality if the contract bytecode is also available. However it also accepts Solidity source files, making development much more streamlined. Please see our [Native DApps](https://github.com/ur-technology/go-ur/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts) wiki page for details. |
+| **`gur`** | Our main Ethereum CLI client. It is the entry point into the Ethereum network (main-, test- or private net), capable of running as a full node (default) archive node (retaining all historical state) or a light node (retrieving data live). It can be used by other processes as a gateway into the Ethereum network via JSON RPC endpoints exposed on top of HTTP, WebSocket and/or IPC transports. `gur --help` and the [CLI Wiki page](https://github.com/ethereum/go-ur/wiki/Command-Line-Options) for command line options |
+| `abigen` | Source code generator to convert Ethereum contract definitions into easy to use, compile-time type-safe Go packages. It operates on plain [Ethereum contract ABIs](https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI) with expanded functionality if the contract bytecode is also available. However it also accepts Solidity source files, making development much more streamlined. Please see our [Native DApps](https://github.com/ethereum/go-ur/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts) wiki page for details. |
 | `bootnode` | Stripped down version of our Ethereum client implementation that only takes part in the network node discovery protocol, but does not run any of the higher level application protocols. It can be used as a lightweight bootstrap node to aid in finding peers in private networks. |
 | `disasm` | Bytecode disassembler to convert EVM (Ethereum Virtual Machine) bytecode into more user friendly assembly-like opcodes (e.g. `echo "6001" | disasm`). For details on the individual opcodes, please see pages 22-30 of the [Ethereum Yellow Paper](http://gavwood.com/paper.pdf). |
-| `evm` | Developer utility version of the EVM (Ethereum Virtual Machine) that is capable of running bytecode snippets within a configurable environment and execution mode. Its purpose is to allow insolated, fine graned debugging of EVM opcodes (e.g. `evm --code 60ff60ff --debug`). |
-| `gethrpctest` | Developer utility tool to support our [ethereum/rpc-test](https://github.com/ethereum/rpc-tests) test suite which validates baseline conformity to the [Ethereum JSON RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC) specs. Please see the [test suite's readme](https://github.com/ethereum/rpc-tests/blob/master/README.md) for details. |
+| `evm` | Developer utility version of the EVM (Ethereum Virtual Machine) that is capable of running bytecode snippets within a configurable environment and execution mode. Its purpose is to allow insolated, fine-grained debugging of EVM opcodes (e.g. `evm --code 60ff60ff --debug`). |
+| `gurrpctest` | Developer utility tool to support our [ethereum/rpc-test](https://github.com/ethereum/rpc-tests) test suite which validates baseline conformity to the [Ethereum JSON RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC) specs. Please see the [test suite's readme](https://github.com/ethereum/rpc-tests/blob/master/README.md) for details. |
 | `rlpdump` | Developer utility tool to convert binary RLP ([Recursive Length Prefix](https://github.com/ethereum/wiki/wiki/RLP)) dumps (data encoding used by the Ethereum protocol both network as well as consensus wise) to user friendlier hierarchical representation (e.g. `rlpdump --hex CE0183FFFFFFC4C304050583616263`). |
+| `bzzd`    | swarm daemon. This is the entrypoint for the swarm network. `bzzd --help` for command line options. See https://swarm-guide.readthedocs.io for swarm documentation. |
+| `bzzup`   | swarm command line file uploader. `bzzup --help` for command line options |
+| `bzzhash`   | command to calculate the swarm hash of a file or directory. `bzzhash --help` for command line options |
 
-## Running geth
+## Running gur
 
 Going through all the possible command line flags is out of scope here (please consult our
-[CLI Wiki page](https://github.com/ur-technology/go-ur/wiki/Command-Line-Options)), but we've
+[CLI Wiki page](https://github.com/ethereum/go-ur/wiki/Command-Line-Options)), but we've
 enumerated a few common parameter combos to get you up to speed quickly on how you can run your
 own Gur instance.
 
@@ -74,16 +63,16 @@ $ gur --fast --cache=512 console
 
 This command will:
 
- * Start geth in fast sync mode (`--fast`), causing it to download more data in exchange for avoiding
+ * Start gur in fast sync mode (`--fast`), causing it to download more data in exchange for avoiding
    processing the entire history of the Ethereum network, which is very CPU intensive.
  * Bump the memory allowance of the database to 512MB (`--cache=512`), which can help significantly in
    sync times especially for HDD users. This flag is optional and you can set it as high or as low as
    you'd like, though we'd recommend the 512MB - 2GB range.
- * Start up Geth's built-in interactive [JavaScript console](https://github.com/ur-technology/go-ur/wiki/JavaScript-Console),
+ * Start up Gur's built-in interactive [JavaScript console](https://github.com/ethereum/go-ur/wiki/JavaScript-Console),
    (via the trailing `console` subcommand) through which you can invoke all official [`web3` methods](https://github.com/ethereum/wiki/wiki/JavaScript-API)
-   as well as Geth's own [management APIs](https://github.com/ur-technology/go-ur/wiki/Management-APIs).
+   as well as Gur's own [management APIs](https://github.com/ethereum/go-ur/wiki/Management-APIs).
    This too is optional and if you leave it out you can always attach to an already running Gur instance
-   with `geth --attach`.
+   with `gur --attach`.
 
 ### Full node on the Ethereum test network
 
@@ -93,7 +82,7 @@ entire system. In other words, instead of attaching to the main network, you wan
 network with your node, which is fully equivalent to the main network, but with play-Ether only.
 
 ```
-$ geth --testnet --fast --cache=512 console
+$ gur --testnet --fast --cache=512 console
 ```
 
 The `--fast`, `--cache` flags and `console` subcommand have the exact same meaning as above and they
@@ -109,19 +98,31 @@ Specifying the `--testnet` flag however will reconfigure your Gur instance a bit
 
 *Note: Although there are some internal protective measures to prevent transactions from crossing
 over between the main network and test network (different starting nonces), you should make sure to
-always use separate accounts for play-money and real-money. Unless you manually move accounts, Geth
+always use separate accounts for play-money and real-money. Unless you manually move accounts, Gur
 will by default correctly separate the two networks and will not make any accounts available between
 them.*
+
+#### Docker quick start
+
+One of the quickest ways to get Ethereum up and running on your machine is by using Docker:
+
+```
+docker run -d --name ethereum-node -v /Users/alice/ethereum:/root \
+           -p 8545:8545 -p 30303:30303 \
+           ethereum/client-go --fast --cache=512
+```
+
+This will start gur in fast sync mode with a DB memory allowance of 512MB just as the above command does.  It will also create a persistent volume in your home directory for saving your blockchain as well as map the default ports. There is also an `alpine` tag available for a slim version of the image.
 
 ### Programatically interfacing Gur nodes
 
 As a developer, sooner rather than later you'll want to start interacting with Gur and the Ethereum
 network via your own programs and not manually through the console. To aid this, Gur has built in
 support for a JSON-RPC based APIs ([standard APIs](https://github.com/ethereum/wiki/wiki/JSON-RPC) and
-[Gur specific APIs](https://github.com/ur-technology/go-ur/wiki/Management-APIs)). These can be
+[Gur specific APIs](https://github.com/ethereum/go-ur/wiki/Management-APIs)). These can be
 exposed via HTTP, WebSockets and IPC (unix sockets on unix based platroms, and named pipes on Windows).
 
-The IPC interface is enabled by default and exposes all the APIs supported by Geth, whereas the HTTP
+The IPC interface is enabled by default and exposes all the APIs supported by Gur, whereas the HTTP
 and WS interfaces need to manually be enabled and only expose a subset of APIs due to security reasons.
 These can be turned on/off and configured as you'd expect.
 
@@ -129,16 +130,16 @@ HTTP based JSON-RPC API options:
 
   * `--rpc` Enable the HTTP-RPC server
   * `--rpcaddr` HTTP-RPC server listening interface (default: "localhost")
-  * `--rpcport` HTTP-RPC server listening port (default: 9595)
-  * `--rpcapi` API's offered over the HTTP-RPC interface (default: "ur,net,web3")
+  * `--rpcport` HTTP-RPC server listening port (default: 8545)
+  * `--rpcapi` API's offered over the HTTP-RPC interface (default: "eth,net,web3")
   * `--rpccorsdomain` Comma separated list of domains from which to accept cross origin requests (browser enforced)
   * `--ws` Enable the WS-RPC server
   * `--wsaddr` WS-RPC server listening interface (default: "localhost")
-  * `--wsport` WS-RPC server listening port (default: 9596)
-  * `--wsapi` API's offered over the WS-RPC interface (default: "ur,net,web3")
+  * `--wsport` WS-RPC server listening port (default: 8546)
+  * `--wsapi` API's offered over the WS-RPC interface (default: "eth,net,web3")
   * `--wsorigins` Origins from which to accept websockets requests
   * `--ipcdisable` Disable the IPC-RPC server
-  * `--ipcapi` API's offered over the IPC-RPC interface (default: "admin,debug,ur,miner,net,personal,shh,txpool,web3")
+  * `--ipcapi` API's offered over the IPC-RPC interface (default: "admin,debug,eth,miner,net,personal,shh,txpool,web3")
   * `--ipcpath` Filename for IPC socket/pipe within the datadir (explicit paths escape it)
 
 You'll need to use your own programming environments' capabilities (libraries, tools, etc) to connect
@@ -190,7 +191,7 @@ With the genesis state defined in the above JSON file, you'll need to initialize
 with it prior to starting it up to ensure all blockchain parameters are correctly set:
 
 ```
-$ geth init path/to/genesis.json
+$ gur init path/to/genesis.json
 ```
 
 #### Creating the rendezvous point
@@ -219,7 +220,7 @@ via the `--bootnodes` flag. It will probably also be desirable to keep the data 
 private network separated, so do also specify a custom `--datadir` flag.
 
 ```
-$ geth --datadir=path/to/custom/data/folder --bootnodes=<bootnode-enode-url-from-above>
+$ gur --datadir=path/to/custom/data/folder --bootnodes=<bootnode-enode-url-from-above>
 ```
 
 *Note: Since your network will be completely cut off from the main and test networks, you'll also
@@ -234,15 +235,15 @@ repository.
 
 In a private network setting however, a single CPU miner instance is more than enough for practical
 purposes as it can produce a stable stream of blocks at the correct intervals without needing heavy
-resources (consider running on a single thread, no need for multiple ones either). To start a Geth
+resources (consider running on a single thread, no need for multiple ones either). To start a Gur
 instance for mining, run it with all your usual flags, extended by:
 
 ```
-$ geth <usual-flags> --mine --minerthreads=1 --urbase=0x0000000000000000000000000000000000000000
+$ gur <usual-flags> --mine --minerthreads=1 --etherbase=0x0000000000000000000000000000000000000000
 ```
 
 Which will start mining bocks and transactions on a single CPU thread, crediting all proceedings to
-the account specified by `--urbase`. You can further tune the mining by changing the default gas
+the account specified by `--etherbase`. You can further tune the mining by changing the default gas
 limit blocks converge to (`--targetgaslimit`) and the price transactions are accepted at (`--gasprice`).
 
 ## Contribution
@@ -252,7 +253,7 @@ anyone on the internet, and are grateful for even the smallest of fixes!
 
 If you'd like to contribute to go-ur, please fork, fix, commit and send a pull request
 for the maintainers to review and merge into the main code base. If you wish to submit more
-complex changes though, please check up with the core devs first on [our gitter channel](https://gitter.im/ur-technology/go-ur)
+complex changes though, please check up with the core devs first on [our gitter channel](https://gitter.im/ethereum/go-ur)
 to ensure those changes are in line with the general philosophy of the project and/or get some
 early feedback which can make both your efforts much lighter as well as our review and merge
 procedures quick and simple.
@@ -261,19 +262,19 @@ Please make sure your contributions adhere to our coding guidelines:
 
  * Code must adhere to the official Go [formatting](https://golang.org/doc/effective_go.html#formatting) guidelines (i.e. uses [gofmt](https://golang.org/cmd/gofmt/)).
  * Code must be documented adhering to the official Go [commentary](https://golang.org/doc/effective_go.html#commentary) guidelines.
- * Pull requests need to be based on and opened against the `develop` branch.
+ * Pull requests need to be based on and opened against the `master` branch.
  * Commit messages should be prefixed with the package(s) they modify.
    * E.g. "eth, rpc: make trace configs optional"
 
-Please see the [Developers' Guide](https://github.com/ur-technology/go-ur/wiki/Developers'-Guide)
+Please see the [Developers' Guide](https://github.com/ethereum/go-ur/wiki/Developers'-Guide)
 for more details on configuring your environment, managing project dependencies and testing procedures.
 
 ## License
 
 The go-ur library (i.e. all code outside of the `cmd` directory) is licensed under the
-[GNU Lesser General Public License v3.0](http://www.gnu.org/licenses/lgpl-3.0.en.html), also
+[GNU Lesser General Public License v3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html), also
 included in our repository in the `COPYING.LESSER` file.
 
 The go-ur binaries (i.e. all code inside of the `cmd` directory) is licensed under the
-[GNU General Public License v3.0](http://www.gnu.org/licenses/gpl-3.0.en.html), also included
+[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html), also included
 in our repository in the `COPYING` file.

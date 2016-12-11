@@ -1,4 +1,4 @@
-// Copyright 2015 The go-ur Authors
+// Copyright 2016 The go-ur Authors
 // This file is part of the go-ur library.
 //
 // The go-ur library is free software: you can redistribute it and/or modify

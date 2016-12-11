@@ -25,6 +25,7 @@ import (
 	"github.com/ur-technology/go-ur/core/types"
 	"github.com/ur-technology/go-ur/core/vm"
 	"github.com/ur-technology/go-ur/ethdb"
+	"github.com/ur-technology/go-ur/params"
 )
 
 func TestMipmapUpgrade(t *testing.T) {
@@ -32,7 +33,7 @@ func TestMipmapUpgrade(t *testing.T) {
 	addr := common.BytesToAddress([]byte("jeff"))
 	genesis := core.WriteGenesisBlockForTesting(db)
 
-	chain, receipts := core.GenerateChain(nil, nil, genesis, db, 10, func(i int, gen *core.BlockGen) {
+	chain, receipts := core.GenerateChain(params.TestChainConfig, nil, genesis, db, 10, func(i int, gen *core.BlockGen) {
 		var receipts types.Receipts
 		switch i {
 		case 1:
@@ -61,7 +62,7 @@ func TestMipmapUpgrade(t *testing.T) {
 		if err := core.WriteHeadBlockHash(db, block.Hash()); err != nil {
 			t.Fatalf("failed to insert block number: %v", err)
 		}
-		if err := core.WriteBlockReceipts(db, block.Hash(), receipts[i]); err != nil {
+		if err := core.WriteBlockReceipts(db, block.Hash(), block.NumberU64(), receipts[i]); err != nil {
 			t.Fatal("error writing block receipts:", err)
 		}
 	}

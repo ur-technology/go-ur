@@ -113,7 +113,7 @@ func (a *RemoteAgent) GetWork() ([3]string, error) {
 		block := a.currentWork.Block
 
 		res[0] = block.HashNoNonce().Hex()
-		seedHash, _ := ethash.GetSeedHash(block.NumberU64())
+		seedHash, _ := urhash.GetSeedHash(block.NumberU64())
 		res[1] = common.BytesToHash(seedHash).Hex()
 		// Calculate the "target" to be returned to the external miner
 		n := big.NewInt(1)

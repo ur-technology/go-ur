@@ -28,7 +28,9 @@ import (
 	"github.com/ur-technology/go-ur/logger"
 	"github.com/ur-technology/go-ur/logger/glog"
 	"github.com/ur-technology/go-ur/p2p/discover"
+	"github.com/ur-technology/go-ur/p2p/discv5"
 	"github.com/ur-technology/go-ur/p2p/nat"
+	"github.com/ur-technology/go-ur/p2p/netutil"
 )
 
 const (
@@ -72,13 +74,25 @@ type Config struct {
 	// or not. Disabling is usually useful for protocol debugging (manual topology).
 	Discovery bool
 
+	// DiscoveryV5 specifies whether the the new topic-discovery based V5 discovery
+	// protocol should be started or not.
+	DiscoveryV5 bool
+
+	// Listener address for the V5 discovery protocol UDP traffic.
+	DiscoveryV5Addr string
+
 	// Name sets the node name of this server.
 	// Use common.MakeName to create a name that follows existing conventions.
 	Name string
 
-	// Bootstrap nodes are used to establish connectivity
+	// BootstrapNodes are used to establish connectivity
 	// with the rest of the network.
 	BootstrapNodes []*discover.Node
+
+	// BootstrapNodesV5 are used to establish connectivity
+	// with the rest of the network using the V5 discovery
+	// protocol.
+	BootstrapNodesV5 []*discv5.Node
 
 	// Static nodes are used as pre-configured connections which are always
 	// maintained and re-connected on disconnects.
@@ -87,6 +101,11 @@ type Config struct {
 	// Trusted nodes are used as pre-configured connections which are always
 	// allowed to connect, even above the peer limit.
 	TrustedNodes []*discover.Node
+
+	// Connectivity can be restricted to certain IP networks.
+	// If this option is set to a non-nil value, only hosts which match one of the
+	// IP networks contained in the list are considered.
+	NetRestrict *netutil.Netlist
 
 	// NodeDatabase is the path to the database containing the previously seen
 	// live nodes in the network.
@@ -135,6 +154,7 @@ type Server struct {
 	listener     net.Listener
 	ourHandshake *protoHandshake
 	lastLookup   time.Time
+	DiscV5       *discv5.Network
 
 	// These are for Peers, PeerCount (and nothing else).
 	peerOp     chan peerOpFunc
@@ -142,6 +162,7 @@ type Server struct {
 
 	quit          chan struct{}
 	addstatic     chan *discover.Node
+	removestatic  chan *discover.Node
 	posthandshake chan *conn
 	addpeer       chan *conn
 	delpeer       chan *Peer
@@ -257,6 +278,14 @@ func (srv *Server) AddPeer(node *discover.Node) {
 	}
 }
 
+// RemovePeer disconnects from the given node
+func (srv *Server) RemovePeer(node *discover.Node) {
+	select {
+	case srv.removestatic <- node:
+	case <-srv.quit:
+	}
+}
+
 // Self returns the local node's endpoint information.
 func (srv *Server) Self() *discover.Node {
 	srv.lock.Lock()
@@ -327,12 +356,13 @@ func (srv *Server) Start() (err error) {
 	srv.delpeer = make(chan *Peer)
 	srv.posthandshake = make(chan *conn)
 	srv.addstatic = make(chan *discover.Node)
+	srv.removestatic = make(chan *discover.Node)
 	srv.peerOp = make(chan peerOpFunc)
 	srv.peerOpDone = make(chan struct{})
 
 	// node table
 	if srv.Discovery {
-		ntab, err := discover.ListenUDP(srv.PrivateKey, srv.ListenAddr, srv.NAT, srv.NodeDatabase)
+		ntab, err := discover.ListenUDP(srv.PrivateKey, srv.ListenAddr, srv.NAT, srv.NodeDatabase, srv.NetRestrict)
 		if err != nil {
 			return err
 		}
@@ -342,11 +372,22 @@ func (srv *Server) Start() (err error) {
 		srv.ntab = ntab
 	}
 
+	if srv.DiscoveryV5 {
+		ntab, err := discv5.ListenUDP(srv.PrivateKey, srv.DiscoveryV5Addr, srv.NAT, "", srv.NetRestrict) //srv.NodeDatabase)
+		if err != nil {
+			return err
+		}
+		if err := ntab.SetFallbackNodes(srv.BootstrapNodesV5); err != nil {
+			return err
+		}
+		srv.DiscV5 = ntab
+	}
+
 	dynPeers := (srv.MaxPeers + 1) / 2
 	if !srv.Discovery {
 		dynPeers = 0
 	}
-	dialer := newDialState(srv.StaticNodes, srv.ntab, dynPeers)
+	dialer := newDialState(srv.StaticNodes, srv.ntab, dynPeers, srv.NetRestrict)
 
 	// handshake
 	srv.ourHandshake = &protoHandshake{Version: baseProtocolVersion, Name: srv.Name, ID: discover.PubkeyID(&srv.PrivateKey.PublicKey)}
@@ -395,6 +436,7 @@ type dialer interface {
 	newTasks(running int, peers map[discover.NodeID]*Peer, now time.Time) []task
 	taskDone(task, time.Time)
 	addStatic(*discover.Node)
+	removeStatic(*discover.Node)
 }
 
 func (srv *Server) run(dialstate dialer) {
@@ -458,6 +500,15 @@ running:
 			// it will keep the node connected.
 			glog.V(logger.Detail).Infoln("<-addstatic:", n)
 			dialstate.addStatic(n)
+		case n := <-srv.removestatic:
+			// This channel is used by RemovePeer to send a
+			// disconnect request to a peer and begin the
+			// stop keeping the node connected
+			glog.V(logger.Detail).Infoln("<-removestatic:", n)
+			dialstate.removeStatic(n)
+			if p, ok := peers[n.ID]; ok {
+				p.Disconnect(DiscRequested)
+			}
 		case op := <-srv.peerOp:
 			// This channel is used by Peers and PeerCount.
 			op(peers)
@@ -506,6 +557,9 @@ running:
 	// Terminate discovery. If there is a running lookup it will terminate soon.
 	if srv.ntab != nil {
 		srv.ntab.Close()
+	}
+	if srv.DiscV5 != nil {
+		srv.DiscV5.Close()
 	}
 	// Disconnect all peers.
 	for _, p := range peers {
@@ -586,8 +640,19 @@ func (srv *Server) listenLoop() {
 			}
 			break
 		}
+
+		// Reject connections that do not match NetRestrict.
+		if srv.NetRestrict != nil {
+			if tcp, ok := fd.RemoteAddr().(*net.TCPAddr); ok && !srv.NetRestrict.Contains(tcp.IP) {
+				glog.V(logger.Debug).Infof("Rejected conn %v because it is not whitelisted in NetRestrict", fd.RemoteAddr())
+				fd.Close()
+				slots <- struct{}{}
+				continue
+			}
+		}
+
 		fd = newMeteredConn(fd, true)
-		glog.V(logger.Debug).Infof("Accepted conn %v\n", fd.RemoteAddr())
+		glog.V(logger.Debug).Infof("Accepted conn %v", fd.RemoteAddr())
 
 		// Spawn the handler. It will give the slot back when the connection
 		// has been established.
@@ -708,7 +773,7 @@ type NodeInfo struct {
 	Protocols  map[string]interface{} `json:"protocols"`
 }
 
-// Info gathers and returns a collection of metadata known about the host.
+// NodeInfo gathers and returns a collection of metadata known about the host.
 func (srv *Server) NodeInfo() *NodeInfo {
 	node := srv.Self()
 

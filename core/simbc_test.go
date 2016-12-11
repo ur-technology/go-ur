@@ -15,8 +15,6 @@ import (
 	"github.com/ur-technology/go-ur/params"
 )
 
-var defaultChainConfig = core.MakeChainConfig()
-
 type Simulator struct {
 	account    core.GenesisAccount
 	db         ethdb.Database
@@ -31,7 +29,7 @@ func newSimulator(account core.GenesisAccount) (*ethdb.MemDatabase, *core.BlockC
 		return nil, nil, err
 	}
 	core.WriteGenesisBlockForTesting(db, account)
-	blockchain, err := core.NewBlockChain(db, defaultChainConfig, &core.FakePow{}, &event.TypeMux{})
+	blockchain, err := core.NewBlockChain(db, params.TestnetChainConfig, &core.FakePow{}, &event.TypeMux{})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -63,7 +61,7 @@ func (b *Simulator) Commit() (commitedTxs []*TxData, err error) {
 			panic(p)
 		}
 	}()
-	blocks, _ := core.GenerateChain(defaultChainConfig, b.BlockChain, b.BlockChain.CurrentBlock(), b.db, 1, func(n int, block *core.BlockGen) {
+	blocks, _ := core.GenerateChain(params.TestnetChainConfig, b.BlockChain, b.BlockChain.CurrentBlock(), b.db, 1, func(n int, block *core.BlockGen) {
 		block.SetCoinbase(b.Coinbase)
 		for _, stx := range b.pendingTxs {
 			tx, err := sendTx(block, stx)
@@ -124,10 +122,12 @@ func (t *TxData) String() string {
 
 func sendTx(bg *core.BlockGen, simTx *TxData) (*types.Transaction, error) {
 	nonce := bg.TxNonce(crypto.PubkeyToAddress(simTx.From.PublicKey))
-	tx, err := types.NewTransaction(nonce, simTx.To, simTx.Value, new(big.Int).Mul(params.TxGas, big.NewInt(100)), nil, simTx.Data).SignECDSA(simTx.From)
+	signer := types.MakeSigner(params.TestnetChainConfig, bg.Number())
+	tx := types.NewTransaction(nonce, simTx.To, simTx.Value, new(big.Int).Mul(params.TxGas, big.NewInt(100)), nil, simTx.Data)
+	signedTx, err := tx.SignECDSA(signer, simTx.From)
 	if err != nil {
 		return nil, err
 	}
-	bg.AddTx(tx)
-	return tx, nil
+	bg.AddTx(signedTx)
+	return signedTx, nil
 }

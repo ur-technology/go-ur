@@ -26,6 +26,7 @@ import (
 	"github.com/ur-technology/go-ur/crypto"
 	"github.com/ur-technology/go-ur/logger"
 	"github.com/ur-technology/go-ur/logger/glog"
+	"github.com/ur-technology/go-ur/params"
 )
 
 var (
@@ -38,12 +39,12 @@ var (
 //
 // StateProcessor implements Processor.
 type StateProcessor struct {
-	config *ChainConfig
+	config *params.ChainConfig
 	bc     *BlockChain
 }
 
 // NewStateProcessor initialises a new StateProcessor.
-func NewStateProcessor(config *ChainConfig, bc *BlockChain) *StateProcessor {
+func NewStateProcessor(config *params.ChainConfig, bc *BlockChain) *StateProcessor {
 	return &StateProcessor{
 		config: config,
 		bc:     bc,
@@ -66,17 +67,17 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 		allLogs      vm.Logs
 		gp           = new(GasPool).AddGas(block.GasLimit())
 	)
-
 	// Mutate the the block and state according to any hard-fork specs
 	if p.config.DAOForkSupport && p.config.DAOForkBlock != nil && p.config.DAOForkBlock.Cmp(block.Number()) == 0 {
 		ApplyDAOHardFork(statedb)
 	}
 	// Iterate over and process the individual transactions
 	for i, tx := range block.Transactions() {
+		//fmt.Println("tx:", i)
 		statedb.StartRecord(tx.Hash(), block.Hash(), i)
 		receipt, logs, _, err := ApplyTransaction(p.config, p.bc, gp, statedb, header, tx, totalUsedGas, cfg)
 		if err != nil {
-			return nil, nil, totalUsedGas, err
+			return nil, nil, nil, err
 		}
 		receipts = append(receipts, receipt)
 		allLogs = append(allLogs, logs...)
@@ -91,44 +92,48 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 //
 // ApplyTransactions returns the generated receipts and vm logs during the
 // execution of the state transition phase.
-func ApplyTransaction(config *ChainConfig, bc *BlockChain, gp *GasPool, statedb *state.StateDB, header *types.Header, tx *types.Transaction, usedGas *big.Int, cfg vm.Config) (*types.Receipt, vm.Logs, *big.Int, error) {
+func ApplyTransaction(config *params.ChainConfig, bc *BlockChain, gp *GasPool, statedb *state.StateDB, header *types.Header, tx *types.Transaction, usedGas *big.Int, cfg vm.Config) (*types.Receipt, vm.Logs, *big.Int, error) {
+	msg, err := tx.AsMessage(types.MakeSigner(config, header.Number))
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
 	// check for a signup transaction
-	if isSignupTransaction(tx) {
-		if signupChain, err := getSignupChain(bc, tx.Data()); err == nil {
+	if isSignupTransaction(msg) {
+		if signupChain, err := getSignupChain(bc, msg.Data()); err == nil {
 			// pay the miner BlockReward for every signup
 			statedb.AddBalance(header.Coinbase, BlockReward)
 			// pay the member being signed up
-			statedb.AddBalance(*tx.To(), SignupReward)
+			statedb.AddBalance(*msg.To(), SignupReward)
 			// pay the referral members
 			remRewards := TotalSingupRewards
 			for i, m := range signupChain {
 				statedb.AddBalance(m, MembersSingupRewards[i])
 				remRewards = new(big.Int).Sub(remRewards, MembersSingupRewards[i])
 			}
-			txFrom, _ := tx.From()
+			txFrom := msg.From()
 			recvAddr := PrivilegedAddressesReceivers[txFrom]
 			// pay 5000 UR to the UR Future Fund
 			statedb.AddBalance(recvAddr.URFF, URFutureFundFee)
 			// pay the receiver address any remaining fees from the members and the management fee
-			pBlock := bc.GetBlock(header.ParentHash)
+			pBlock := bc.GetBlockByHash(header.ParentHash)
 			mngFee := calculateTxManagementFee(pBlock.NSignups(), pBlock.TotalWei())
 			statedb.AddBalance(PrivilegedAddressesReceivers[txFrom].Receiver, new(big.Int).Add(mngFee, remRewards))
 		}
 	}
 
-	_, gas, err := ApplyMessage(NewEnv(statedb, config, bc, tx, header, cfg), tx, gp)
+	_, gas, err := ApplyMessage(NewEnv(statedb, config, bc, msg, header, cfg), msg, gp)
 	if err != nil {
 		return nil, nil, nil, err
 	}
 
 	// Update the state with pending changes
 	usedGas.Add(usedGas, gas)
-	receipt := types.NewReceipt(statedb.IntermediateRoot().Bytes(), usedGas)
+	receipt := types.NewReceipt(statedb.IntermediateRoot(config.IsEIP158(header.Number)).Bytes(), usedGas)
 	receipt.TxHash = tx.Hash()
 	receipt.GasUsed = new(big.Int).Set(gas)
-	if MessageCreatesContract(tx) {
-		from, _ := tx.From()
-		receipt.ContractAddress = crypto.CreateAddress(from, tx.Nonce())
+	if MessageCreatesContract(msg) {
+		receipt.ContractAddress = crypto.CreateAddress(msg.From(), tx.Nonce())
 	}
 
 	logs := statedb.GetLogs(tx.Hash())

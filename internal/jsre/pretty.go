@@ -1,4 +1,4 @@
-// Copyright 2015 The go-ur Authors
+// Copyright 2016 The go-ur Authors
 // This file is part of the go-ur library.
 //
 // The go-ur library is free software: you can redistribute it and/or modify
@@ -116,7 +116,7 @@ func (ctx ppctx) printValue(v otto.Value, level int, inArray bool) {
 
 func (ctx ppctx) printObject(obj *otto.Object, level int, inArray bool) {
 	switch obj.Class() {
-	case "Array":
+	case "Array", "GoArray":
 		lv, _ := obj.Get("length")
 		len, _ := lv.ToInteger()
 		if len == 0 {

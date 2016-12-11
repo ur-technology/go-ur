@@ -1,6 +1,6 @@
 #### System information
 
-Geth version: `geth version`
+Gur version: `geth version`
 OS & Version: Windows/Linux/OSX
 Commit hash : (if `develop`)
 

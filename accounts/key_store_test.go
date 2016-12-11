@@ -31,7 +31,7 @@ import (
 )
 
 func tmpKeyStore(t *testing.T, encrypted bool) (dir string, ks keyStore) {
-	d, err := ioutil.TempDir("", "geth-keystore-test")
+	d, err := ioutil.TempDir("", "gur-keystore-test")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -238,4 +238,16 @@ func TestKeyForDirectICAP(t *testing.T) {
 	if !strings.HasPrefix(key.Address.Hex(), "0x00") {
 		t.Errorf("Expected first address byte to be zero, have: %s", key.Address.Hex())
 	}
+}
+
+func TestV3_31_Byte_Key(t *testing.T) {
+	t.Parallel()
+	tests := loadKeyStoreTestV3("testdata/v3_test_vector.json", t)
+	testDecryptV3(tests["31_byte_key"], t)
+}
+
+func TestV3_30_Byte_Key(t *testing.T) {
+	t.Parallel()
+	tests := loadKeyStoreTestV3("testdata/v3_test_vector.json", t)
+	testDecryptV3(tests["30_byte_key"], t)
 }

@@ -35,7 +35,7 @@ var (
 	}
 	vmoduleFlag = cli.GenericFlag{
 		Name:  "vmodule",
-		Usage: "Per-module verbosity: comma-separated list of <pattern>=<level> (e.g. ur/*=6,p2p=5)",
+		Usage: "Per-module verbosity: comma-separated list of <pattern>=<level> (e.g. eth/*=6,p2p=5)",
 		Value: glog.GetVModule(),
 	}
 	backtraceAtFlag = cli.GenericFlag{
@@ -51,6 +51,11 @@ var (
 		Name:  "pprofport",
 		Usage: "pprof HTTP server listening port",
 		Value: 6060,
+	}
+	pprofAddrFlag = cli.StringFlag{
+		Name:  "pprofaddr",
+		Usage: "pprof HTTP server listening interface",
+		Value: "127.0.0.1",
 	}
 	memprofilerateFlag = cli.IntFlag{
 		Name:  "memprofilerate",
@@ -74,7 +79,7 @@ var (
 // Flags holds all command-line flags required for debugging.
 var Flags = []cli.Flag{
 	verbosityFlag, vmoduleFlag, backtraceAtFlag,
-	pprofFlag, pprofPortFlag,
+	pprofFlag, pprofAddrFlag, pprofPortFlag,
 	memprofilerateFlag, blockprofilerateFlag, cpuprofileFlag, traceFlag,
 }
 
@@ -101,7 +106,7 @@ func Setup(ctx *cli.Context) error {
 
 	// pprof server
 	if ctx.GlobalBool(pprofFlag.Name) {
-		address := fmt.Sprintf("127.0.0.1:%d", ctx.GlobalInt(pprofPortFlag.Name))
+		address := fmt.Sprintf("%s:%d", ctx.GlobalString(pprofAddrFlag.Name), ctx.GlobalInt(pprofPortFlag.Name))
 		go func() {
 			glog.V(logger.Info).Infof("starting pprof server at http://%s/debug/pprof", address)
 			glog.Errorln(http.ListenAndServe(address, nil))
