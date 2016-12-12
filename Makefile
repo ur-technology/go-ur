@@ -121,36 +121,3 @@ gur-windows-amd64:
 	build/env.sh go run build/ci.go xgo -- --go=$(GO) --dest=$(GOBIN) --targets=windows/amd64 -v ./cmd/gur
 	@echo "Windows amd64 cross compilation done:"
 	@ls -ld $(GOBIN)/gur-windows-* | grep amd64
-
-gur-android: xgo
-	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=android-21/aar -v $(shell build/flags.sh) ./cmd/gur
-	@echo "Android cross compilation done:"
-	@ls -ld $(GOBIN)/gur-android-*
-
-gur-ios: xgo
-	build/env.sh $(GOBIN)/xgo --go=$(GO) --dest=$(GOBIN) --targets=ios-7.0/framework -v $(shell build/flags.sh) ./cmd/gur
-	@echo "iOS framework cross compilation done:"
-	@ls -ld $(GOBIN)/gur-ios-*
-
-evm:
-	build/env.sh $(GOROOT)/bin/go install -v $(shell build/flags.sh) ./cmd/evm
-	@echo "Done building."
-	@echo "Run \"$(GOBIN)/evm to start the evm."
-
-all:
-	for cmd in `ls ./cmd/`; do \
-		 build/env.sh go build -i -v $(shell build/flags.sh) -o $(GOBIN)/$$cmd ./cmd/$$cmd; \
-	done
-
-test: all
-	build/env.sh go test ./...
-
-travis-test-with-coverage: all
-	build/env.sh go vet ./...
-	build/env.sh build/test-global-coverage.sh
-
-xgo:
-	build/env.sh go get github.com/karalabe/xgo
-
-clean:
-	rm -fr build/_workspace/pkg/ Godeps/_workspace/pkg $(GOBIN)/*

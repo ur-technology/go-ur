@@ -1,4 +1,4 @@
-FROM alpine:3.3
+FROM alpine:3.4
 
 ADD . /go-ur
 RUN \
@@ -8,7 +8,8 @@ RUN \
   apk del git go make gcc musl-dev                  && \
   rm -rf /go-ur && rm -rf /var/cache/apk/*
 
-EXPOSE 8545
-EXPOSE 30303
+EXPOSE 9595
+#EXPOSE 30303
+EXPOSE 19595
 
 ENTRYPOINT ["/gur"]
