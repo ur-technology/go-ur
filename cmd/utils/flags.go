@@ -633,38 +633,27 @@ func MakeAddress(accman *accounts.Manager, account string) (accounts.Account, er
 // command line flags or from the keystore if CLI indexed.
 func MakeEtherbase(accman *accounts.Manager, ctx *cli.Context) common.Address {
 	accounts := accman.Accounts()
-	if !ctx.GlobalIsSet(EtherbaseFlag.Name) && len(accounts) == 0 {
-		glog.V(logger.Error).Infoln("WARNING: No etherbase set and no accounts found as default")
+	urFlg := ctx.GlobalIsSet(UrbaseFlag.Name)
+	ethFlg := ctx.GlobalIsSet(EtherbaseFlag.Name)
+	if !urFlg && !ethFlg && len(accounts) == 0 {
+		glog.V(logger.Error).Infoln("WARNING: No urbase/etherbase set and no accounts found as default")
 		return common.Address{}
 	}
-	etherbase := ctx.GlobalString(EtherbaseFlag.Name)
-	if etherbase == "" {
+	var urbase, flg string
+	if urFlg {
+		flg = UrbaseFlag.Name
+	} else if ethFlg {
+		flg = EtherbaseFlag.Name
+	} else {
+		return accounts[0].Address
+	}
+	urbase = ctx.GlobalString(flg)
+	if urbase == "" {
 		return common.Address{}
 	}
-	// If the specified etherbase is a valid address, return it
-	account, err := MakeAddress(accman, etherbase)
+	account, err := MakeAddress(accman, urbase)
 	if err != nil {
-		Fatalf("Option %q: %v", EtherbaseFlag.Name, err)
-	}
-	return account.Address
-}
-
-// MakeUrbase retrieves the urbase either from the directly specified
-// command line flags or from the keystore if CLI indexed.
-func MakeUrbase(accman *accounts.Manager, ctx *cli.Context) common.Address {
-	accounts := accman.Accounts()
-	if !ctx.GlobalIsSet(EtherbaseFlag.Name) && len(accounts) == 0 {
-		glog.V(logger.Error).Infoln("WARNING: No urbase set and no accounts found as default")
-		return common.Address{}
-	}
-	etherbase := ctx.GlobalString(UrbaseFlag.Name)
-	if etherbase == "" {
-		return common.Address{}
-	}
-	// If the specified etherbase is a valid address, return it
-	account, err := MakeAddress(accman, etherbase)
-	if err != nil {
-		Fatalf("Option %q: %v", UrbaseFlag.Name, err)
+		Fatalf("Option %q: %v", flg, err)
 	}
 	return account.Address
 }
