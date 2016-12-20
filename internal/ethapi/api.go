@@ -25,7 +25,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ur-technology/urhash"
+	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/syndtr/goleveldb/leveldb/util"
 	"github.com/ur-technology/go-ur/accounts"
 	"github.com/ur-technology/go-ur/common"
 	"github.com/ur-technology/go-ur/core"
@@ -38,8 +39,7 @@ import (
 	"github.com/ur-technology/go-ur/p2p"
 	"github.com/ur-technology/go-ur/rlp"
 	"github.com/ur-technology/go-ur/rpc"
-	"github.com/syndtr/goleveldb/leveldb"
-	"github.com/syndtr/goleveldb/leveldb/util"
+	"github.com/ur-technology/urhash"
 	"golang.org/x/net/context"
 )
 
@@ -653,6 +653,8 @@ func (s *PublicBlockChainAPI) rpcOutputBlock(b *types.Block, inclTx bool, fullTx
 		"timestamp":        rpc.NewHexNumber(head.Time),
 		"transactionsRoot": head.TxHash,
 		"receiptsRoot":     head.ReceiptHash,
+		"totalWei":         head.TotalWei,
+		"nSignups":         head.NSignups,
 	}
 
 	if inclTx {
