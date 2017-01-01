@@ -28,6 +28,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/hashicorp/golang-lru"
 	"github.com/ur-technology/go-ur/common"
 	"github.com/ur-technology/go-ur/core/state"
 	"github.com/ur-technology/go-ur/core/types"
@@ -42,7 +43,6 @@ import (
 	"github.com/ur-technology/go-ur/pow"
 	"github.com/ur-technology/go-ur/rlp"
 	"github.com/ur-technology/go-ur/trie"
-	"github.com/hashicorp/golang-lru"
 )
 
 var (
@@ -1227,8 +1227,10 @@ Hash: 0x%x
 %v
 
 Error: %v
+
+%v
 ##############################
-`, bc.config, block.Number(), block.Hash(), receiptString, err)
+`, bc.config, block.Number(), block.Hash(), receiptString, err, block.String())
 	}
 }
 

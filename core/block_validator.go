@@ -138,10 +138,10 @@ func (v *BlockValidator) ValidateState(block, parent *types.Block, statedb *stat
 	}
 	vfyNSignups, vfyTotalWei := calculateBlockTotals(parent.NSignups(), parent.TotalWei(), header, block.Uncles(), msgs)
 	if vfyNSignups.Cmp(header.NSignups) != 0 {
-		return fmt.Errorf("number of signups mismatch: got %s, expected %s", vfyNSignups, header.NSignups)
+		return fmt.Errorf("number of signups mismatch: got %s, expected %s", header.NSignups, vfyNSignups)
 	}
 	if vfyTotalWei.Cmp(header.TotalWei) != 0 {
-		return fmt.Errorf("total wei mismatch: got %s, expected %s", vfyTotalWei, header.TotalWei)
+		return fmt.Errorf("total wei mismatch: got %s, expected %s", header.TotalWei, vfyTotalWei)
 	}
 
 	return nil
