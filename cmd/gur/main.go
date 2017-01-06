@@ -28,7 +28,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ur-technology/urhash"
 	"github.com/ur-technology/go-ur/cmd/utils"
 	"github.com/ur-technology/go-ur/common"
 	"github.com/ur-technology/go-ur/console"
@@ -42,6 +41,7 @@ import (
 	"github.com/ur-technology/go-ur/node"
 	"github.com/ur-technology/go-ur/params"
 	"github.com/ur-technology/go-ur/rlp"
+	"github.com/ur-technology/urhash"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -177,7 +177,6 @@ participating.
 		utils.NetworkIdFlag,
 		utils.RPCCORSDomainFlag,
 		utils.EthStatsURLFlag,
-		utils.MetricsEnabledFlag,
 		utils.FakePoWFlag,
 		utils.SolcPathFlag,
 		utils.GpoMinGasPriceFlag,
@@ -186,7 +185,7 @@ participating.
 		utils.GpobaseStepDownFlag,
 		utils.GpobaseStepUpFlag,
 		utils.GpobaseCorrectionFactorFlag,
-		utils.ExtraDataFlag,
+		// utils.ExtraDataFlag,
 	}
 	app.Flags = append(app.Flags, debug.Flags...)
 

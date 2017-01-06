@@ -220,10 +220,10 @@ var (
 		Usage: "Minimal gas price to accept for mining a transactions",
 		Value: new(big.Int).Mul(big.NewInt(20), common.Shannon).String(),
 	}
-	ExtraDataFlag = cli.StringFlag{
-		Name:  "extradata",
-		Usage: "Block extra data set by the miner (default = client version)",
-	}
+	// ExtraDataFlag = cli.StringFlag{
+	// 	Name:  "extradata",
+	// 	Usage: "Block extra data set by the miner (default = client version)",
+	// }
 	// Account settings
 	UnlockedAccountFlag = cli.StringFlag{
 		Name:  "unlock",
@@ -661,9 +661,9 @@ func MakeEtherbase(accman *accounts.Manager, ctx *cli.Context) common.Address {
 // MakeMinerExtra resolves extradata for the miner from the set command line flags
 // or returns a default one composed on the client, runtime and OS metadata.
 func MakeMinerExtra(extra []byte, ctx *cli.Context) []byte {
-	if ctx.GlobalIsSet(ExtraDataFlag.Name) {
-		return []byte(ctx.GlobalString(ExtraDataFlag.Name))
-	}
+	// if ctx.GlobalIsSet(ExtraDataFlag.Name) {
+	// 	return []byte(ctx.GlobalString(ExtraDataFlag.Name))
+	// }
 	return extra
 }
 

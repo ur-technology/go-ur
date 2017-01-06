@@ -137,7 +137,7 @@ var AppHelpFlagGroups = []flagGroup{
 			utils.UrbaseFlag,
 			utils.TargetGasLimitFlag,
 			utils.GasPriceFlag,
-			utils.ExtraDataFlag,
+			// utils.ExtraDataFlag,
 		},
 	},
 	{

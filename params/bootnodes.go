@@ -25,16 +25,16 @@ import (
 // the main Ethereum network.
 var MainnetBootnodes = []*discover.Node{
 	// ETH/DEV Go Bootnodes
-	discover.MustParseNode("enode://fcf730cf678d6296ffa75a1b2c06aa07d9558788762d0bbefbc209ccbfb4e840f7dcfc2f7a188eb2e65056d989de3722df3fc4df286eb3690d4586992c1c6d82@159.203.14.117:19595"), // IE
-	discover.MustParseNode("enode://d846b3c0445b7a91cfeb56fbeaece55ca9e559a6e5810cc41c54e2b88790fa7a24444508f16eb983630da1367ab73a6db1b705cc36134d9e61a2df070284d3f4@159.203.36.102:19595"), // BR
+	discover.MustParseNode("enode://ffd02ea41bb0d73c099fb323a95be937c91fd51488981d76c59c78e0f3d2b0f13d95747888b369f7f99d133c2d6bf7276af802f613380a31411fac8e68ee4286@159.203.44.174:19595"), // IE
+	discover.MustParseNode("enode://f7c9142dbfe23490389f42738998f9e18103d017fe925e3cac0728701023e420f0839e964f5996bfec296280c5aa267632d6a77ca3dddfd58a7befdcf372afc8@138.197.143.33:19595"), // BR
 }
 
 // TestnetBootnodes are the enode URLs of the P2P bootstrap nodes running on the
 // Morden test network.
 var TestnetBootnodes = []*discover.Node{
-	// ETH/DEV Go Bootnodes
-	discover.MustParseNode("enode://fcf730cf678d6296ffa75a1b2c06aa07d9558788762d0bbefbc209ccbfb4e840f7dcfc2f7a188eb2e65056d989de3722df3fc4df286eb3690d4586992c1c6d82@138.197.138.155:19595"),
-	discover.MustParseNode("enode://d846b3c0445b7a91cfeb56fbeaece55ca9e559a6e5810cc41c54e2b88790fa7a24444508f16eb983630da1367ab73a6db1b705cc36134d9e61a2df070284d3f4@138.197.138.202:19595"),
+// ETH/DEV Go Bootnodes
+// discover.MustParseNode("enode://fcf730cf678d6296ffa75a1b2c06aa07d9558788762d0bbefbc209ccbfb4e840f7dcfc2f7a188eb2e65056d989de3722df3fc4df286eb3690d4586992c1c6d82@138.197.138.155:19595"),
+// discover.MustParseNode("enode://d846b3c0445b7a91cfeb56fbeaece55ca9e559a6e5810cc41c54e2b88790fa7a24444508f16eb983630da1367ab73a6db1b705cc36134d9e61a2df070284d3f4@138.197.138.202:19595"),
 }
 
 // DiscoveryV5Bootnodes are the enode URLs of the P2P bootstrap nodes for the
