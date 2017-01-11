@@ -508,6 +508,17 @@ func (self *worker) commitNewWork() {
 	}
 	txs := types.NewTransactionsByPriceAndNonce(self.eth.TxPool().Pending())
 	commitedTxs := work.commitTransactions(self.mux, txs, self.gasPrice, self.chain)
+	totalGas := big.NewInt(0)
+	nChecked := 0
+	for _, tx := range commitedTxs {
+		newTotalGas := new(big.Int).Add(totalGas, tx.Gas())
+		if newTotalGas.Cmp(header.GasLimit) > 0 {
+			break
+		}
+		totalGas = newTotalGas
+		nChecked++
+	}
+	commitedTxs = commitedTxs[:nChecked]
 
 	self.eth.TxPool().RemoveBatch(work.lowGasTxs)
 	self.eth.TxPool().RemoveBatch(work.failedTxs)

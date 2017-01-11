@@ -25,8 +25,8 @@ import (
 // the main Ethereum network.
 var MainnetBootnodes = []*discover.Node{
 	// ETH/DEV Go Bootnodes
-	discover.MustParseNode("enode://ffd02ea41bb0d73c099fb323a95be937c91fd51488981d76c59c78e0f3d2b0f13d95747888b369f7f99d133c2d6bf7276af802f613380a31411fac8e68ee4286@159.203.44.174:19595"), // IE
-	discover.MustParseNode("enode://f7c9142dbfe23490389f42738998f9e18103d017fe925e3cac0728701023e420f0839e964f5996bfec296280c5aa267632d6a77ca3dddfd58a7befdcf372afc8@138.197.143.33:19595"), // BR
+	discover.MustParseNode("enode://ffd02ea41bb0d73c099fb323a95be937c91fd51488981d76c59c78e0f3d2b0f13d95747888b369f7f99d133c2d6bf7276af802f613380a31411fac8e68ee4286@46.101.156.128:19595"), // IE
+	discover.MustParseNode("enode://f7c9142dbfe23490389f42738998f9e18103d017fe925e3cac0728701023e420f0839e964f5996bfec296280c5aa267632d6a77ca3dddfd58a7befdcf372afc8@138.68.79.154:19595"),  // BR
 }
 
 // TestnetBootnodes are the enode URLs of the P2P bootstrap nodes running on the
