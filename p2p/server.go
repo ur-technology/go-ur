@@ -701,6 +701,14 @@ func (srv *Server) setupConn(fd net.Conn, flags connFlag, dialDest *discover.Nod
 		c.close(err)
 		return
 	}
+	// check protocol version
+	if phs.Version < pinnedBaseProtocolVersion {
+		errStr := "disconnecting: protocol version to low"
+		glog.V(logger.Debug).Info(errStr)
+		c.close(fmt.Errorf(errStr))
+		return
+	}
+
 	if phs.ID != c.id {
 		glog.V(logger.Debug).Infof("%v wrong proto handshake identity: %x", c, phs.ID[:8])
 		c.close(DiscUnexpectedIdentity)

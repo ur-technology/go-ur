@@ -32,7 +32,10 @@ import (
 )
 
 const (
-	baseProtocolVersion    = 4
+	protocolVersionOffset     = 100
+	pinnedBaseProtocolVersion = 104
+	baseProtocolVersion       = protocolVersionOffset + 4
+	// baseProtocolVersion    = 4
 	baseProtocolLength     = uint64(16)
 	baseProtocolMaxMsgSize = 2 * 1024
 
