@@ -32,12 +32,12 @@ import (
 )
 
 const (
-	protocolVersionOffset     = 100
-	pinnedBaseProtocolVersion = 104
-	baseProtocolVersion       = protocolVersionOffset + 4
-	// baseProtocolVersion    = 4
-	baseProtocolLength     = uint64(16)
-	baseProtocolMaxMsgSize = 2 * 1024
+	protocolVersionOffset       = 101
+	baseStandardProtocolVersion = 4
+	baseProtocolVersion         = protocolVersionOffset + baseStandardProtocolVersion
+	pinnedBaseProtocolVersion   = baseProtocolVersion
+	baseProtocolLength          = uint64(16)
+	baseProtocolMaxMsgSize      = 2 * 1024
 
 	pingInterval = 15 * time.Second
 )
