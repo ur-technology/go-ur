@@ -171,7 +171,7 @@ func calculateBlockTotals(cNSignups, cTotalWei *big.Int, header *types.Header, u
 	newNSignups := new(big.Int).Set(cNSignups)
 	newTotalWei := new(big.Int).Set(cTotalWei)
 	blockMngFee := calculateTxManagementFee(cNSignups, cTotalWei)
-	for _, r := range calculateAccumulatedRewards(header, uncles) {
+	for _, r := range CalculateAccumulatedRewards(header, uncles) {
 		newTotalWei.Add(newTotalWei, r)
 	}
 	for _, m := range msgs {

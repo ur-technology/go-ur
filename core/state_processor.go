@@ -145,7 +145,7 @@ func ApplyTransaction(config *params.ChainConfig, bc *BlockChain, gp *GasPool, s
 	return receipt, logs, gas, err
 }
 
-func calculateAccumulatedRewards(header *types.Header, uncles []*types.Header) map[common.Address]*big.Int {
+func CalculateAccumulatedRewards(header *types.Header, uncles []*types.Header) map[common.Address]*big.Int {
 	rew := make(map[common.Address]*big.Int, len(uncles)+1)
 	reward := new(big.Int).Set(BlockReward)
 	r := new(big.Int)
@@ -179,7 +179,7 @@ func calculateAccumulatedRewards(header *types.Header, uncles []*types.Header) m
 // and rewards for included uncles. The coinbase of each uncle block is
 // also rewarded.
 func AccumulateRewards(statedb *state.StateDB, header *types.Header, uncles []*types.Header) {
-	rewards := calculateAccumulatedRewards(header, uncles)
+	rewards := CalculateAccumulatedRewards(header, uncles)
 	for a, r := range rewards {
 		statedb.AddBalance(a, r)
 	}
