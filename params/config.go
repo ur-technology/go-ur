@@ -42,9 +42,8 @@ var TestnetChainConfig = &ChainConfig{
 	DAOForkBlock:   nil,
 	DAOForkSupport: true,
 	EIP150Block:    big.NewInt(0),
-	EIP150Hash:     common.HexToHash("0x41941023680923e0fe4d74a34bdac8141f2540e3ae90623718e47d66d1ca4a2d"),
-	EIP155Block:    big.NewInt(10),
-	EIP158Block:    big.NewInt(10),
+	EIP155Block:    TestNetSpuriousDragon,
+	EIP158Block:    TestNetSpuriousDragon,
 }
 
 // ChainConfig is the core config which determines the blockchain settings.

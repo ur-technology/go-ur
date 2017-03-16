@@ -101,23 +101,24 @@ func ApplyTransaction(config *params.ChainConfig, bc *BlockChain, gp *GasPool, s
 	// check for a signup transaction
 	if isSignupTransaction(msg) {
 		if signupChain, err := getSignupChain(bc, msg.Data()); err == nil {
-			// pay the miner BlockReward for every signup
-			statedb.AddBalance(header.Coinbase, BlockReward)
+			pBlock := bc.GetBlockByHash(header.ParentHash)
+			rewards := ScaledRewards[GetFactor(pBlock.NSignups())]
+			// pay the miner reward for every signup
+			statedb.AddBalance(header.Coinbase, rewards.MinerReward)
 			// pay the member being signed up
-			statedb.AddBalance(*msg.To(), SignupReward)
+			statedb.AddBalance(*msg.To(), rewards.SignupReward)
 			// pay the referral members
-			remRewards := TotalSingupRewards
+			remRewards := rewards.TotalSignupRewards
 			for i, m := range signupChain {
-				statedb.AddBalance(m, MembersSingupRewards[i])
-				remRewards = new(big.Int).Sub(remRewards, MembersSingupRewards[i])
+				statedb.AddBalance(m, rewards.MembersSignupRewards[i])
+				remRewards = new(big.Int).Sub(remRewards, rewards.MembersSignupRewards[i])
 			}
 			txFrom := msg.From()
 			recvAddr := PrivilegedAddressesReceivers[txFrom]
 			// pay 5000 UR to the UR Future Fund
-			statedb.AddBalance(recvAddr.URFF, URFutureFundFee)
+			statedb.AddBalance(recvAddr.URFF, rewards.URFutureFundFee)
 			// pay the receiver address any remaining fees from the members and the management fee
-			pBlock := bc.GetBlockByHash(header.ParentHash)
-			mngFee := calculateTxManagementFee(pBlock.NSignups(), pBlock.TotalWei())
+			mngFee := CalculateTxManagementFee(pBlock.NSignups(), pBlock.TotalWei())
 			statedb.AddBalance(PrivilegedAddressesReceivers[txFrom].Receiver, new(big.Int).Add(mngFee, remRewards))
 		}
 	}

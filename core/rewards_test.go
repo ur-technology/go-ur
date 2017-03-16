@@ -215,6 +215,7 @@ func TestManagementFee(t *testing.T) {
 	expNSignups := big.NewInt(0)
 	expTotalWei := big.NewInt(0)
 
+	rewards := core.ScaledRewards[core.FullRatio]
 	for i := 0; i < 10000; i++ {
 		blk := sim.BlockChain.CurrentBlock()
 		// miner block reward
@@ -227,7 +228,7 @@ func TestManagementFee(t *testing.T) {
 			})
 			if expNSignups.Cmp(common.Big0) == 0 || new(big.Int).Div(expTotalWei, expNSignups).Cmp(core.Big10k) <= 0 {
 				// receive management fee
-				expTotalWei.Add(expTotalWei, core.ManagementFee)
+				expTotalWei.Add(expTotalWei, rewards.ManagementFee)
 			}
 			// miner signup reward
 			expTotalWei.Add(expTotalWei, core.BlockReward)
@@ -258,6 +259,7 @@ func TestManagementFee(t *testing.T) {
 
 func signupMembers(sim *Simulator, node *memberNode, minerAddr common.Address, chain []common.Address, balances map[common.Address]*big.Int) {
 	var err error
+	rewards := core.ScaledRewards[core.FullRatio]
 	for _, m := range node.signups {
 		m.signBlock, m.signTx, err = signMember(sim, m.addr, node.signBlock, node.signTx, node.addr == privKeyAddr)
 		if err != nil {
@@ -267,16 +269,16 @@ func signupMembers(sim *Simulator, node *memberNode, minerAddr common.Address, c
 		// the receiver address for the company receives 1000 UR of management fee if applicable
 		blk := sim.BlockChain.CurrentBlock()
 		if blk.NSignups().Cmp(common.Big0) == 0 || new(big.Int).Div(blk.TotalWei(), blk.NSignups()).Cmp(core.Big10k) <= 0 {
-			addToBalance(balances, privRecv.Receiver, core.ManagementFee)
+			addToBalance(balances, privRecv.Receiver, rewards.ManagementFee)
 		}
 		// the receiver address for the UR Future Fund receives 5000 UR
-		addToBalance(balances, privRecv.URFF, core.URFutureFundFee)
+		addToBalance(balances, privRecv.URFF, rewards.URFutureFundFee)
 		// the miner receives 7 UR for the block, 7 UR for the signup
 		for i := 0; i < 2; i++ {
 			addToBalance(balances, minerAddr, core.BlockReward)
 		}
 		// the member being signed up receives 2000 UR
-		addToBalance(balances, m.addr, core.SignupReward)
+		addToBalance(balances, m.addr, rewards.SignupReward)
 		// build new reward chain
 		newChain := make([]common.Address, 1, len(chain)+1)
 		newChain[0] = m.addr
@@ -285,10 +287,10 @@ func signupMembers(sim *Simulator, node *memberNode, minerAddr common.Address, c
 			newChain = newChain[:8]
 		}
 		// the remaining members receive depending on the level
-		rem := core.TotalSingupRewards
+		rem := rewards.TotalSignupRewards
 		for i, a := range newChain[1:] {
-			addToBalance(balances, a, core.MembersSingupRewards[i])
-			rem = new(big.Int).Sub(rem, core.MembersSingupRewards[i])
+			addToBalance(balances, a, rewards.MembersSignupRewards[i])
+			rem = new(big.Int).Sub(rem, rewards.MembersSignupRewards[i])
 		}
 		// the receiver address for the privileged address receives the remaining rewards if any
 		addToBalance(balances, privRecv.Receiver, rem)
@@ -418,4 +420,100 @@ func addressHasBalance(bchain *core.BlockChain, addr common.Address, exp *big.In
 		return nil
 	}
 	return fmt.Errorf("got a different balance than expected at address %s: %s (expected %s)", addr.Hex(), bal.String(), exp.String())
+}
+
+func TestRewardsScaling(t *testing.T) {
+	big100k := big.NewInt(100000)
+	for i := range core.ReductionFactors {
+		core.ReductionFactors[i].NSignups.Div(core.ReductionFactors[i].NSignups, big100k)
+	}
+	defer func() {
+		for i := range core.ReductionFactors {
+			core.ReductionFactors[i].NSignups.Mul(core.ReductionFactors[i].NSignups, big100k)
+		}
+	}()
+
+	// simulated blockchain
+	sim, err := NewSimulator(genesisAccount)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	// setup the miner account
+	_, minerAddr, err := newKeyAddr()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	// set coinbase
+	sim.Coinbase = minerAddr
+
+	addrs := make(chan *common.Address, 1024)
+	go func() {
+		for i := 0; i < 100000; i++ {
+			_, userAddr, err := newKeyAddr()
+			if err != nil {
+				panic(err)
+			}
+			addrs <- &userAddr
+		}
+		close(addrs)
+	}()
+	expSignups := big.NewInt(0)
+	expTotalWei := big.NewInt(0)
+	minerBal := big.NewInt(0)
+	urffBal := big.NewInt(0)
+	urrecBal := big.NewInt(0)
+	for userAddr := range addrs {
+		rewards := core.ScaledRewards[core.GetFactor(sim.BlockChain.CurrentBlock().Number())]
+		sim.AddPendingTx(&TxData{
+			From:  privKey,
+			To:    *userAddr,
+			Value: big.NewInt(1),
+			Data:  []byte{0x01},
+		})
+		blk := sim.BlockChain.CurrentBlock()
+		if _, err := sim.Commit(); err != nil {
+			t.Error(err)
+			return
+		}
+		cBlk := sim.BlockChain.CurrentBlock()
+		expSignups.Add(expSignups, common.Big1)
+		expTotalWei.Add(expTotalWei, new(big.Int).Add(
+			new(big.Int).Add(rewards.Total, core.BlockReward),
+			core.CalculateTxManagementFee(blk.NSignups(), blk.TotalWei())))
+		minerBal.Add(minerBal, new(big.Int).Add(core.BlockReward, rewards.MinerReward))
+		urffBal.Add(urffBal, rewards.URFutureFundFee)
+		urrecBal.Add(urrecBal, new(big.Int).Add(rewards.TotalSignupRewards, core.CalculateTxManagementFee(blk.NSignups(), blk.TotalWei())))
+		// check number of signups
+		if expSignups.Cmp(cBlk.NSignups()) != 0 {
+			t.Error("got a different number of signups")
+			return
+		}
+		// check expected wei
+		if expTotalWei.Cmp(cBlk.TotalWei()) != 0 {
+			t.Error("got a different total wei")
+			return
+		}
+		// miner's balance
+		if err := addressHasBalance(sim.BlockChain, minerAddr, minerBal); err != nil {
+			t.Error(err)
+			return
+		}
+		// UR Future Fund
+		if err := addressHasBalance(sim.BlockChain, core.PrivilegedAddressesReceivers[privKeyAddr].URFF, urffBal); err != nil {
+			t.Error(err)
+			return
+		}
+		// receiver address
+		if err := addressHasBalance(sim.BlockChain, core.PrivilegedAddressesReceivers[privKeyAddr].Receiver, urrecBal); err != nil {
+			t.Error(err)
+			return
+		}
+		// member just signed up
+		if err := addressHasBalance(sim.BlockChain, *userAddr, rewards.SignupReward); err != nil {
+			t.Error(err)
+			return
+		}
+	}
 }

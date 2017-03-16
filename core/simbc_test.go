@@ -23,13 +23,16 @@ type Simulator struct {
 	Coinbase   common.Address
 }
 
+
+var chainConfig = params.TestnetChainConfig
+
 func newSimulator(account core.GenesisAccount) (*ethdb.MemDatabase, *core.BlockChain, error) {
 	db, err := ethdb.NewMemDatabase()
 	if err != nil {
 		return nil, nil, err
 	}
 	core.WriteGenesisBlockForTesting(db, account)
-	blockchain, err := core.NewBlockChain(db, params.TestnetChainConfig, &core.FakePow{}, &event.TypeMux{})
+	blockchain, err := core.NewBlockChain(db, chainConfig, &core.FakePow{}, &event.TypeMux{})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -61,7 +64,7 @@ func (b *Simulator) Commit() (commitedTxs []*TxData, err error) {
 			panic(p)
 		}
 	}()
-	blocks, _ := core.GenerateChain(params.TestnetChainConfig, b.BlockChain, b.BlockChain.CurrentBlock(), b.db, 1, func(n int, block *core.BlockGen) {
+	blocks, _ := core.GenerateChain(chainConfig, b.BlockChain, b.BlockChain.CurrentBlock(), b.db, 1, func(n int, block *core.BlockGen) {
 		block.SetCoinbase(b.Coinbase)
 		for _, stx := range b.pendingTxs {
 			tx, err := sendTx(block, stx)
@@ -122,7 +125,7 @@ func (t *TxData) String() string {
 
 func sendTx(bg *core.BlockGen, simTx *TxData) (*types.Transaction, error) {
 	nonce := bg.TxNonce(crypto.PubkeyToAddress(simTx.From.PublicKey))
-	signer := types.MakeSigner(params.TestnetChainConfig, bg.Number())
+	signer := types.MakeSigner(chainConfig, bg.Number())
 	tx := types.NewTransaction(nonce, simTx.To, simTx.Value, new(big.Int).Mul(params.TxGas, big.NewInt(100)), nil, simTx.Data)
 	signedTx, err := tx.SignECDSA(signer, simTx.From)
 	if err != nil {

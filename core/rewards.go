@@ -9,22 +9,39 @@ import (
 	"github.com/ur-technology/go-ur/core/types"
 )
 
+type rewards struct {
+	URFutureFundFee      *big.Int
+	ManagementFee        *big.Int
+	SignupReward         *big.Int
+	MembersSignupRewards []*big.Int
+	TotalSignupRewards   *big.Int
+	MinerReward          *big.Int
+	Total                *big.Int
+}
+
 // privileged addresses
 var (
-	URFutureFundFee      = floatUrToWei("5000")
-	ManagementFee        = floatUrToWei("1000")
-	SignupReward         = floatUrToWei("2000")
-	MembersSingupRewards = []*big.Int{
-		floatUrToWei("60.60"),
-		floatUrToWei("60.60"),
-		floatUrToWei("121.21"),
-		floatUrToWei("181.81"),
-		floatUrToWei("303.03"),
-		floatUrToWei("484.84"),
-		floatUrToWei("787.91"),
+	FullRatio     = big.NewInt(100)
+	ScaledRewards = map[*big.Int]rewards{
+		FullRatio: rewards{
+			URFutureFundFee: floatUrToWei("5000"),
+			ManagementFee:   floatUrToWei("1000"),
+			SignupReward:    floatUrToWei("2000"),
+			MembersSignupRewards: []*big.Int{
+				floatUrToWei("60.60"),
+				floatUrToWei("60.60"),
+				floatUrToWei("121.21"),
+				floatUrToWei("181.81"),
+				floatUrToWei("303.03"),
+				floatUrToWei("484.84"),
+				floatUrToWei("787.91"),
+			},
+			MinerReward:        BlockReward,
+			TotalSignupRewards: floatUrToWei("2000"),
+			Total:              new(big.Int).Add(floatUrToWei("9000"), BlockReward),
+		},
 	}
 
-	TotalSingupRewards       = floatUrToWei("2000")
 	privSendReceiveAddresses = map[string]receiverAddressPairString{
 		"0x482cf297b08d4523c97ec3a54e80d2d07acd76fa": receiverAddressPairString{
 			receiver: "0x59ab9bb134b529709333f7ae68f3f93c204d280b",
@@ -54,8 +71,30 @@ var (
 			receiver: "0x53372c0fce8ce636ac77cf502c51d5f15868dc64",
 			urff:     "4e2c9b2b57fd17a45d28fb4a6d42e932468afaee",
 		},
+		// temp key
+		"0x987181d1385ed1a6fa3a6f645f4f3c9d299a2a12": receiverAddressPairString{
+			receiver: "0x0123456789abcdef0123456789abcdef01234567",
+			urff:     "89abcdef0123456789abcdef0123456789abcdef",
+		},
 	}
 	PrivilegedAddressesReceivers map[common.Address]ReceiverAddressPair
+
+	ReductionFactors = []struct {
+		NSignups *big.Int
+		Factor   *big.Int
+	}{
+		{NSignups: big.NewInt(100000), Factor: big.NewInt(90)},
+		{NSignups: big.NewInt(300000), Factor: big.NewInt(80)},
+		{NSignups: big.NewInt(1000000), Factor: big.NewInt(70)},
+		{NSignups: big.NewInt(3000000), Factor: big.NewInt(60)},
+		{NSignups: big.NewInt(10000000), Factor: big.NewInt(50)},
+		{NSignups: big.NewInt(30000000), Factor: big.NewInt(40)},
+		{NSignups: big.NewInt(100000000), Factor: big.NewInt(30)},
+		{NSignups: big.NewInt(300000000), Factor: big.NewInt(20)},
+		{NSignups: big.NewInt(1000000000), Factor: big.NewInt(10)},
+		{NSignups: big.NewInt(3000000000), Factor: big.NewInt(5)},
+		{NSignups: big.NewInt(7500000000), Factor: big.NewInt(0)},
+	}
 )
 
 type receiverAddressPairString struct{ receiver, urff string }
@@ -69,6 +108,54 @@ func init() {
 			URFF:     common.HexToAddress(r.urff),
 		}
 	}
+	fr := ScaledRewards[FullRatio]
+	for i := range ReductionFactors {
+		fact := ReductionFactors[i].Factor
+		sr := rewards{
+			URFutureFundFee: scaleReward(fr.URFutureFundFee, fact),
+			ManagementFee:   scaleReward(fr.ManagementFee, fact),
+			SignupReward:    scaleReward(fr.SignupReward, fact),
+			MembersSignupRewards: []*big.Int{
+				scaleReward(fr.MembersSignupRewards[0], fact),
+				scaleReward(fr.MembersSignupRewards[1], fact),
+				scaleReward(fr.MembersSignupRewards[2], fact),
+				scaleReward(fr.MembersSignupRewards[3], fact),
+				scaleReward(fr.MembersSignupRewards[4], fact),
+				scaleReward(fr.MembersSignupRewards[5], fact),
+				scaleReward(fr.MembersSignupRewards[6], fact),
+			},
+			MinerReward: scaleReward(fr.MinerReward, fact),
+		}
+		sr.TotalSignupRewards = big.NewInt(0)
+		for _, i := range sr.MembersSignupRewards {
+			sr.TotalSignupRewards.Add(sr.TotalSignupRewards, i)
+		}
+		sr.Total = new(big.Int).Set(sr.TotalSignupRewards)
+		for _, i := range []*big.Int{
+			sr.URFutureFundFee,
+			sr.SignupReward,
+			sr.MinerReward,
+		} {
+			sr.Total.Add(sr.Total, i)
+		}
+		ScaledRewards[fact] = sr
+	}
+}
+
+func scaleReward(v, f *big.Int) *big.Int {
+	return new(big.Int).Div(new(big.Int).Mul(v, f), FullRatio)
+}
+
+func GetFactor(nSignups *big.Int) *big.Int {
+	r := FullRatio
+	for _, f := range ReductionFactors {
+		if nSignups.Cmp(f.NSignups) > 0 {
+			r = f.Factor
+		} else {
+			break
+		}
+	}
+	return r
 }
 
 func floatUrToWei(ur string) *big.Int {
@@ -151,18 +238,16 @@ func IsPrivilegedAddress(address common.Address) bool {
 	return ok
 }
 
-var (
-	big9007 = new(big.Int).Mul(common.Ether, big.NewInt(9007))
-	Big10k  = new(big.Int).Mul(common.Ether, big.NewInt(10000))
-)
+var Big10k = new(big.Int).Mul(common.Ether, big.NewInt(10000))
 
-func calculateTxManagementFee(nSignups, totaWei *big.Int) *big.Int {
+func CalculateTxManagementFee(nSignups, totaWei *big.Int) *big.Int {
+	mngFee := ScaledRewards[GetFactor(nSignups)].ManagementFee
 	if nSignups.Cmp(common.Big0) == 0 {
-		return ManagementFee
+		return mngFee
 	}
 	avg := new(big.Int).Div(totaWei, nSignups)
 	if avg.Cmp(Big10k) <= 0 {
-		return ManagementFee
+		return mngFee
 	}
 	return common.Big0
 }
@@ -170,14 +255,16 @@ func calculateTxManagementFee(nSignups, totaWei *big.Int) *big.Int {
 func calculateBlockTotals(cNSignups, cTotalWei *big.Int, header *types.Header, uncles []*types.Header, msgs []types.Message) (*big.Int, *big.Int) {
 	newNSignups := new(big.Int).Set(cNSignups)
 	newTotalWei := new(big.Int).Set(cTotalWei)
-	blockMngFee := calculateTxManagementFee(cNSignups, cTotalWei)
+	blockMngFee := CalculateTxManagementFee(cNSignups, cTotalWei)
+	fact := GetFactor(cNSignups)
+	rewards := ScaledRewards[fact]
 	for _, r := range calculateAccumulatedRewards(header, uncles) {
 		newTotalWei.Add(newTotalWei, r)
 	}
 	for _, m := range msgs {
 		if isSignupTransaction(m) {
 			newNSignups.Add(newNSignups, common.Big1)
-			newTotalWei.Add(newTotalWei, new(big.Int).Add(big9007, blockMngFee))
+			newTotalWei.Add(newTotalWei, new(big.Int).Add(rewards.Total, blockMngFee))
 		}
 	}
 	return newNSignups, newTotalWei
